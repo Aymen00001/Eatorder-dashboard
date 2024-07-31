@@ -1,0 +1,13 @@
+<div>
+  <h2>Categories</h2>
+  <ul>
+    <li *ngFor="let category of displayedCategories">{{ category.name }}</li>
+  </ul>
+
+  <div class="pagination">
+    <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
+    <span>Page {{ currentPage }} of {{ totalPages }}</span>
+    <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
+  </div>
+</div>
+cscscs

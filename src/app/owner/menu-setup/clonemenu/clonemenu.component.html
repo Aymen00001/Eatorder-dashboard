@@ -1,0 +1,46 @@
+<div class="container center-map">
+ 
+
+    <!-- Votre contenu existant -->
+    <div class="card custom-border justify-content-center ">
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-6">
+            
+                <div class="modal-header">
+                    <h4 class="modal-title">Select Store Clone:</h4>
+                </div>
+                <div class="modal-body">
+                  
+                    <select class="single-select form-select" [(ngModel)]="selectstore" [ngClass]="{'is-invalid': messageErrors['selectstore']}"  >
+                        <option hidden>Select Stores</option>
+                        <option *ngFor="let str of store" [value]="str._id">{{str.name}}</option>
+                    </select>
+                    <div class="invalid-feedback">
+                        <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['selectstore'] }}
+                    </div>
+                    <div *ngIf="loadingCategories" class="spinner-container">
+                        <div class="spinner-grow text-warning" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <div class="spinner-grow text-warning" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <div class="spinner-grow text-warning" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" (click)="selectStore()">CloneMenu</button>
+                </div>
+            </div>
+            <div class="col-3"></div>
+        </div>
+        
+        <br>
+        <br>
+       
+    </div>
+</div>

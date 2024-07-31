@@ -1,0 +1,152 @@
+{
+    "siteTitle": "Multilingual angular application",
+    "welcome": "Welcome",
+    "addOwner": "Add Owner",
+    "phone": "Phone",
+    "name": "Name",
+    "status": "Status",
+    "stores": "Stores",
+    "actions": "Actions",
+    "noDataFound": "Data not found",
+    "show": "Show",
+    "enable": "Enable",
+    "disable": "Disable",
+    "active":"Active",
+    "pending": "Pending",
+    "suspended": "Suspended",
+    "rejected": "Rejected",
+    "search": "Search",
+    "dashboard": "Dashboard",
+    "users": "Users",
+    "ecommerce": "E-commerce",
+    "firstName": "First Name",
+    "lastName": " Last Name",
+    "gender": "Gender",
+    "male": "Male",
+    "female": "Female",
+    "phoneNumber": "Phone Number",
+    "password": "Choose a password",
+    "confirmPassword": "Confirm Password",
+    "btnAddOwner": "Add",
+    "messageNameRequered": "First Name is required",
+    "messageLastNameRequered": "Last Name is required",
+    "messageEmailRequered": "Email is required",
+    "messageValideEmail":"Email must be a valid email address",
+    "messagePhoneRequered": "Phone number is required",
+    "messagePasswordRequered": "Password is required",
+    "messageMatchRequered": "Passwords must match",
+    "messagePAsswordLongRequered": "Password must be at least 6 characters",
+    "congratulation": "Congratulation",
+    "messageAddedOwner": "Owner successfully added",
+    "loading": "Loading...",
+    "disableOwnermessage": "Do you want to deactivate this owner",
+    "enableOwnermessage": "Do you want to activate this owner",
+    "previous": "Previous",
+    "next": "Next",
+    "powered":"Powered by",
+    "theme": "Theme Customizer",
+    "date": "Date",
+    "details": "View Details",
+    "listOwner": "List Owners",
+    "allOwner": "All Owners",
+    "analytics": "Analytics",
+    "application": "Application",
+    "email": "Email",
+    "fileManager": "File manager",
+    "contacts": "Contact list",
+    "invoice": "Invoices",
+    "calender": "Calendar",
+    "chatBox" :"Chat Box",
+    "allStores": "All Stores",
+    "requestedStore": "Requested Stores",
+    "rejectedtedStore": "Rejected Stores",
+    "admin": "Admin",
+    "profile": "Profile",
+    "earnings": "Earnings",
+    "logout": "Logout",
+    "downloads": "Downloads",
+    "notification": "Notifications",
+    "adresseEmail": "Email Address",
+    "all": "All",
+    "description": "Description",
+    "userProfile": "User Profile",
+    "saveChanges": "Save Changes",
+    "disableStore": "Do you want to suspend this store ?",
+    "enableStore": "Do you want to activate this store ?",
+    "rejeterStore": "Do you want to reject this store ?",
+    "approuverStore": "Do you want to endorse this store ?",
+    "deleteStores": "Do you want to delete this store ?",
+    "addFile": "Add File",
+    "allFile": "All Files",
+    "documents": "Documents",
+    "images": "Images",
+    "storage": "My storage",
+    "folders": "Folder",
+    "files": "File",
+    "recentFiles": "Recent Files",
+    "used":"Used",
+    "upgrade":"Upgrade",
+    "msgUploadType": "Unauthorized file type. Only PNG, JPEG, WebP, PDF and DOCX files are allowed.",
+    "msgUploadSize":"The file size exceeds the allowed limit (500 KB).",
+    "chooseFile": "Choose file",
+    "close": "Close",
+    "preview": "Preview",
+    "msgDeleteFile":"Are you sure you want to delete this file ?",
+    "seConnecter": "Sign In",
+    "createAccountmsg": "You dont have an account ?",
+    "seconnecterEmail":"LOG IN WITH EMAIL",
+    "forgetPasswordMsg":"Forget Password ?",
+    "passwordForm": "Password",
+    "emptyField": "Required",
+    "tapEmailAdresse": "Enter your email address",
+    "send": "Send",
+    "retout":"Back",
+    "createPassword": "Create a new password",
+    "msgRenitiliser":"We have received your password reset request. Please enter your new password!",
+    "updatePasword": "Update"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+    
+
+
+
+}

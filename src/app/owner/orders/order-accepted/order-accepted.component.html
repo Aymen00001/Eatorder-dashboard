@@ -1,0 +1,289 @@
+<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+
+    <div class="breadcrumb-title pe-3">Orders</div>
+    <div class="ps-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item"><a href="#" (click)="$event.preventDefault()"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Orders</li>
+            </ol>
+        </nav>
+    </div>
+
+</div>
+<!--end breadcrumb-->
+<div class="card">
+    <div class="card-body">
+      <div class="d-lg-flex align-items-center mb-4 gap-3">
+        <div class="d-flex align-items-center flex-grow-1" style="margin-right: auto;"> <!-- Ajoutez une marge à droite pour déplacer le bouton vers la droite -->
+            <div class="position-relative flex-grow-1">
+                <input type="text" class="form-control ps-5 radius-30" placeholder="Search Order" [(ngModel)]="searchTerm" [formControl]="searchTermControl" name="searchTerm">
+                <span class="position-absolute top-50 product-show translate-middle-y"><i class="bx bx-search"></i></span>
+            </div>
+        </div>
+        <button class="ms-4 btn btn-outline-danger" (click)="deleteSelectedOrders()"><i class='bx bxs-trash'></i>Delete All</button>
+    </div>
+    
+        <div class="table-responsive">               
+          <table class="table align-middle mb-0 table-hover" id="Transaction-History" >
+                <thead class="table-light">
+                    <tr>
+                        <th>Order#</th>
+                        <th>Customer Name</th>
+                        <th>Mode</th>
+                        <th>Created at</th>
+                        <th>Must be ready at</th>
+                        <th>   <div (click)="sortmodeByorder()" style="cursor: pointer;">TOTAL SPENT
+                          <i class="lni" [ngClass]="sortDirectionorder === 'asc' ? 'lni-arrow-up' : 'lni-arrow-down'"></i>
+
+                      </div></th>
+                                
+                                    <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let p of filteredStores() | paginate: { itemsPerPage: selectedItemsPerPage, currentPage: p }; let i = index;">
+                    <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-2">
+                                    <td>
+                                        <input type="checkbox" [(ngModel)]="selectedOrders[p._id]" />
+                                        {{ p.lastFourDigits }}</td>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{p. client_first_name }}{{p. client_last_name }}</td>
+                        <td>{{p.type}}</td>
+                        <td>{{ p.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
+                        <td>{{p.preparedAt | date:'yyyy-MM-dd HH:mm'}}</td>
+                        <td>{{p.price_total}}</td>
+
+                         <!-- all.component.html -->
+                         <td>
+                            <div class="badge rounded-pill text-uppercase px-3" [ngStyle]="getStatusStyle(p.status)" >
+                              <i class='bx bx-radio-circle-marked bx-burst bx-rotate-90 align-middle font-18 me-1'></i>
+                              {{ p.status }}
+                            </div>
+                          </td>
+                          <td>
+                            <div class="d-flex align-items-center">
+                                <a (click)="deleteorder(p._id)" class="ms-3 btn2"><i class='bx bxs-trash'></i></a>
+                                <button type="button" class="btn btn-primary btn-sm radius-30 px-4 ms-3" (click)="openModal(modalContent, p._id)">View Details</button>
+                            </div>
+                        </td>       
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="pagination-container">
+    <pagination-controls (pageChange)="p = $event" class="pagination-controls"></pagination-controls>
+  </div>
+
+  <!--Afficher order-->
+  <ng-template #modalContent let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Order Details</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <div class="custom-card">
+        <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="custom-label-container">
+                <label for="name" class="form-label custom-label"> First Name:</label>
+                <div class="custom-input">
+                  {{ orderData.client_first_name }}
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="custom-label-container">
+                <label for="description" class="form-label custom-label">Last Name:</label>
+                <div class="custom-input">
+                  {{ orderData.client_last_name }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="custom-label-container">
+                <label for="name" class="form-label custom-label"> Email:</label>
+                <div class="custom-input">
+                  {{ orderData.client_email }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+                <div class="custom-label-container">
+                  <label for="Phone" class="form-label custom-label">Created At:</label>
+                  <div class="custom-input">
+                    {{ orderData.createdAt | date:'yyyy-MM-dd HH:mm'}}
+                  </div>
+                </div>
+              </div>
+            <div class="col-md-6">
+              <div class="custom-label-container">
+                <label for="Latitude" class="form-label custom-label">Must be ready at:</label>
+                <div class="custom-input">
+                    {{ orderData.fulfillmentAt }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="custom-label-container">
+                <label for="Address" class="form-label custom-label">Mode:</label>
+                <div class="custom-input">
+                    {{ orderData.type }}
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="custom-label-container">
+                <label for="Range Delivery" class="form-label custom-label">Status:</label>
+                <div class="custom-input">{{ orderData.status }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+
+          <div class="col-md-6">
+            <div class="custom-label-container">
+              <label for="Range Delivery" class="form-label custom-label">Adresse:</label>
+              <div class="custom-input">{{ orderData.deliveryAdress }}
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="custom-label-container">
+              <label for="Range Delivery" class="form-label custom-label">Phone:</label>
+              <div class="custom-input">{{ orderData.client_phone}}
+              </div>
+            </div>
+          </div>
+          </div>
+          <div class="container"><div class="row"><div class="col-3"></div>
+          <div class="col-6 border rounded p-3">
+            <!-- Affichage des détails des articles -->
+            <ng-container *ngIf="orderData.items && orderData.items.length > 0">
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <h5>Order :</h5>
+                        <ul>
+                            <li *ngFor="let item of orderData.items">
+                              <div class="d-flex justify-content-between">
+                                <div>
+                                    <b>{{ item.quantity }} {{ item.name }} ({{ item.size }})</b>
+                                </div>
+                                <div >
+                                    {{ item.item_price.toFixed(2) }}€
+                                </div>
+                            </div>
+                                <ul>
+                                    <li *ngFor="let option of item.options">
+                                      
+                                        <b>{{ option.optionGroupeName }}:</b><br>
+                                        <div class="d-flex justify-content-between">
+                                          <div>
+                                               {{ option.name }}:
+                                          </div>
+                                          <div >
+                                            {{ option.price_opt * option.quantity }}€
+                                          </div>
+                                      </div>
+                                   
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </ng-container>
+        
+            <!-- Affichage des détails des promotions -->
+            <ng-container *ngIf="orderData.promo && orderData.promo.length > 0">
+              <div class="row mb-3">
+                  <div class="col-md-12">
+                      <h5>Promotions:</h5>
+                      <ul>
+                          <li *ngFor="let promo of orderData.promo">
+                            <div class="d-flex justify-content-between">
+
+                              {{ promo.name }} - Discount: {{ promo.discount }} 
+                            </div>
+                              <ul>
+
+                                  <li *ngFor="let item of promo.items">
+                                    <div class="d-flex justify-content-between">
+                                    <div>{{ item.name }}</div>
+                                    <div>{{ item.item_price}}</div>
+                                    </div>
+                                    
+                                    <ul>
+                                      <li *ngFor="let option of item.options">
+                                        
+                                          <b>{{ option.optionGroupeName }}:</b><br>
+                                          <div class="d-flex justify-content-between">
+                                            <div>
+                                                 {{ option.name }}:
+                                            </div>
+                                            <div >
+                                              {{ option.price_opt * option.quantity }}€
+                                            </div>
+                                        </div>
+                                     
+                                      </li>
+                                  </ul>
+                                  <hr>
+                                      <div class="d-flex justify-content-between">
+                                        <div>Total HTVA</div>
+                                        <div>{{ item.priceHt }}</div>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                          <div>Prix TTC</div>
+                                          <div>{{ item.price}}</div>
+                                          </div>
+
+                                  </li>
+                              </ul>
+                            
+                          </li>
+                      </ul>
+                  </div>
+              </div>
+          </ng-container>
+          
+            <div class="row">
+                    <div class="custom-label-container text-center ">
+                      <hr>
+                      <div class="d-flex justify-content-between">
+                        <div> Total HTVA:</div>
+                        <div > {{ orderData.priceHt_total }}€ </div>
+                    </div>
+                        <hr>
+                        <div class="d-flex justify-content-between">
+                          <div> Price Total: </div>
+                          <div > {{ orderData.price_total }}€  </div>
+                      </div>
+                    </div>
+            </div>
+        </div>
+          <div class="col-3"></div></div>
+          </div>
+          
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+    </div>
+  </ng-template>

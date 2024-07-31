@@ -1,0 +1,33 @@
+.btn:hover {
+    color: #fff;
+    background-color: #DF8F17;
+    border-color: #DF8F17;
+  }
+  .btn {
+    color: #DF8F17;
+    background-color: #fff;
+    border-color: #DF8F17;
+  }
+  .pagination-controls {
+    background-color: #f8f9fa; 
+    padding: 10px 20px; 
+    border-radius: 5px;
+    display: inline-block;
+    position: relative; 
+    left: 17%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    align-items: center; 
+  
+  }
+  .pagination-container {
+    position: fixed;
+    bottom: 0px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    padding: 10px 20px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+  //  z-index: 1000;
+  }

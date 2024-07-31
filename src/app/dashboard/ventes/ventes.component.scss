@@ -1,0 +1,49 @@
+.btn:hover {
+  color: #fff;
+  background-color: #DF8F17;
+  border-color: #DF8F17;
+  }
+  .btn {
+  color: #DF8F17;
+  background-color: #fff;
+  border-color: #DF8F17;
+  }
+  .chart-container {
+      position: relative;
+      margin: auto;
+      height: 400px; /* Définissez la hauteur souhaitée pour votre graphique */
+      width: 55%; /* Définissez la largeur souhaitée pour votre graphique */
+    }
+    .table-margin {
+      margin-top: 20px; 
+  }
+    .pagination-controls {
+      background-color: #f8f9fa; 
+      padding: 10px 20px; 
+      border-radius: 5px;
+      display: inline-block;
+      position: relative; 
+      left: 18%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      align-items: center; 
+    
+    }
+    .pagination-container {
+      position: fixed;
+      bottom: 0px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      padding: 10px 20px;
+      background-color: #f8f9fa;
+      border-radius: 5px;
+    //  z-index: 1000;
+    }
+    .spinner-container {
+      position: fixed; /* Utilisez position: fixed pour centrer par rapport à la fenêtre */
+      top: 50%; /* Placez le haut du conteneur à 50% de la fenêtre */
+      left: 50%; /* Placez la gauche du conteneur à 50% de la fenêtre */
+      transform: translate(-50%, -50%); /* Utilisez translate pour centrer le contenu */
+  }
+  

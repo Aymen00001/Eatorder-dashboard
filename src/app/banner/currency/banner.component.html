@@ -1,0 +1,46 @@
+<div class="card border-top border-0 border-4 border-primary">
+  <div class="card-body p-5">
+    <hr>
+    <form class="row g-3">
+      <div class="col-md-6">
+        <label for="name" class="form-label" >Name</label>
+       <input type="text" class="form-control" id="name" [(ngModel)]="currenyData.name" name="name">
+      </div>
+      <div class="col-md-6">
+        <label for="inputLastName" class="form-label" >Description</label>
+        <input type="text" class="form-control" id="inputLastName" name="description" [(ngModel)]="currenyData.description">
+      </div>
+      <div class="col-md-6">
+        <label for="adresse" class="form-label" >Address</label>
+        <input type="text" class="form-control" id="adresse" [(ngModel)]="currenyData.address" name="address">
+      </div>
+      <div class="col-md-6">
+        <label for="phoneNumber" class="form-label" >Phone</label>
+        <input type="number" class="form-control" id="phoneNumber" [(ngModel)]="currenyData.phoneNumber" name="phoneNumber">
+      </div>
+      <div class="col-md-6">
+        <label for="latitude" class="form-label" >Latitude </label>
+        <input type="number" class="form-control" id="latitude" [(ngModel)]="currenyData.latitude" name="latitude">
+      </div>
+      <div class="col-md-6">
+        <label for="longitude" class="form-label">Longitude</label>
+        <input type="number" class="form-control" id="longitude" [(ngModel)]="currenyData.longitude" name="longitude">
+      </div>
+      <div class="col-md-6">
+        <label for="rangeDelivery" class="form-label">Range Delivery ({{ currenyData.rangeValue }} KM)</label>
+        <input type="range" class="form-range" id="rangeDelivery" [(ngModel)]="currenyData.rangeValue" [ngModelOptions]="{standalone: true}" (input)="updateRangeValue($event)">
+      </div>
+      <div class="col-12">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="gridCheck">
+          <label class="form-check-label" for="gridCheck">Check me out</label>
+        </div>
+      </div>
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary px-5" (click)="addStores()">Register</button>
+      </div>
+    </form>
+  </div>
+</div>
+<!-- Display latitude and longitude -->
+<div id="map"></div>

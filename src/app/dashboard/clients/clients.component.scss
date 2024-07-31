@@ -1,0 +1,39 @@
+.align{
+    display: flex;
+    justify-content: flex-end;
+}
+.pagination-container {
+    position: fixed;
+    bottom: 23px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    padding: 15px 5px;
+    background-color: #f8f9fa;
+    border-radius: 20px;
+}
+
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pagination-controls .btn {
+    margin: 0 5px; /* Ajoute un espacement entre les boutons */
+}
+
+  .pagination-controls  .ngx-pagination li.current {
+  padding: 200px;
+  background: #DF8F17 !important;
+  }
+  .btn:hover {
+    color: #fff;
+    background-color: #DF8F17;
+    border-color: #DF8F17;
+    }
+    .btn {
+    color: #DF8F17;
+    background-color: #fff;
+    border-color: #DF8F17;
+    }

@@ -1,0 +1,209 @@
+<div *ngIf="!isManagerRole()" >
+
+<h1 class="chart-wrapper"><i class="lni lni-invest-monitor "></i><b>Revenue</b></h1>
+<div class="d-flex align-items-center justify-content-center">
+    <div class="col-md-3">
+
+    <div class="input-group mb-3">
+        <label for="yearInput" class="input-group-text">Year:</label>
+        <input type="number" id="yearInput" [(ngModel)]="selectedYear" class="form-control" min="1900" max="2100" >
+        <button  type="submit" name="View" class="btn btn-outline-info m-1" (click)="getchiffrecompany(selectedYear);getventecompany(selectedYear) ">View</button>
+      </div>
+    </div>
+</div>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 justify-content-center">
+    <div *ngIf="loadingCategories" class="spinner-container">
+        <div class="spinner-grow text-warning" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="spinner-grow text-warning" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="spinner-grow text-warning" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <ng-container *ngIf="!loadingCategories">
+
+    <div class="col">
+        <div class="card radius-10 green-card custom-card">
+            <div class="card-body ">
+                <div class="d-flex align-items-center">
+                    <div >
+                        <p class="mb-0">TTC</p>
+                        <h5 class="mb-0 total-amount prix"><i class="lni lni-euro"></i>{{totalRevenue}}</h5>
+                    </div>
+                    <div class="ms-auto">
+                        <i class='bx bx-dots-horizontal-rounded font-22 text-dark'></i>
+                    </div>
+                </div>
+                <div class="" id="chart2"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card radius-10 green-card2 custom-card">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div >
+                        <p class="mb-0">HT </p>
+                        <h5 class="mb-0 total-amount prix"><i class="lni lni-euro"></i>{{totalHtRevenue}}</h5>
+                    </div>
+                    <div class="ms-auto">
+                        <i class='bx bx-dots-horizontal-rounded font-22 text-dark'></i>
+                    </div>
+                </div>
+                <div class="" id="chart2"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card radius-10 green-card3 custom-card">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div>
+                        <p class="mb-0">TVA </p>
+                        <h5 class="mb-0 total-amount prix"><i class="lni lni-euro"></i>{{ (totalRevenue - totalHtRevenue).toFixed(2) }}</h5>
+                    </div>
+                    <div class="ms-auto">
+                        <i class='bx bx-dots-horizontal-rounded font-22 text-dark'></i>
+                    </div>
+                </div>
+                <div class="" id="chart2"></div>
+            </div>
+        </div>
+    </div>
+    </ng-container>
+    </div>
+
+
+
+<div class="chart-container">
+    <canvas id="salesChart"></canvas>
+</div>
+<br>
+<br>
+<div class="card radius-10">
+    <div class="card-body">
+        <div class="d-flex align-items-center">
+            <div>
+                <h5>
+                    <i class="bx bx-store">Stores</i>
+                </h5>
+            </div>
+            <div class="font-22 ms-auto"><i class='bx bx-dots-horizontal-rounded'></i>
+            </div>
+        </div>
+        <hr />
+        <div class="table-responsive table-margin">
+            <table class="table align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>NAME</th>
+                        <th>Total Sales</th>
+                        <th>
+                            <div (click)="sortClientsByTotalSpent()" style="cursor: pointer;">PERCENTAGE
+                                <i class="lni lni-arrow-up"
+                                    [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+                            </div>
+                        </th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let vente of storevente | paginate: { itemsPerPage: selectedItemsPerPage, currentPage: currentPage }; let i = index;">
+                        <td> <div class="d-flex align-items-center">
+                                <div class="ms-2">
+                        <td>{{ vente.orderNumber }}</td> </div> </div> </td>
+    <td>{{vente.storeName}}</td>
+    <td>{{vente.totalOrders}} </td>
+    <td>{{ vente.percentage }}%</td>
+    <td>  <button type="button" class="btn btn-primary btn-sm radius-30 px-4"(click)="openModal(modalContent, vente.storeId)" >View Details</button>
+    </td>
+    </tr>
+    <tr>
+        <td>Total =</td>
+        <td></td>
+        <td style="color:rgb(37, 163, 37);"><b>{{ calculateTotalVentes() }}</b></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    </tbody>
+    </table>
+</div>
+</div>
+<div class="pagination-container">
+<pagination-controls (pageChange)="currentPage = $event" class="pagination-controls"></pagination-controls>
+</div>
+</div>
+
+<!--affiche detail de store-->
+<ng-template #modalContent let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Store Details</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <div class="custom-card">
+        <img class="card-img-top logo-image" [src]="'http://localhost:8000/' + currenyData.logo" alt="Card image cap" />
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <div class="custom-label-container">
+              <label for="name" class="form-label custom-label">Nom:</label>
+              <div class="custom-input">   {{ currenyData.name }} </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="custom-label-container">
+              <label for="description" class="form-label custom-label">Description:</label>
+              <div class="custom-input"> {{ currenyData.description }}  </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <div class="custom-label-container">
+              <label for="Address" class="form-label custom-label">Address:</label>
+              <div class="custom-input"> {{ currenyData.address }} </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="custom-label-container">
+              <label for="Phone" class="form-label custom-label">Phone:</label>
+              <div class="custom-input">  {{ currenyData.phoneNumber }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <div class="custom-label-container">
+              <label for="Range Delivery" class="form-label custom-label">Range Delivery:</label>
+              <div class="custom-input">({{ currenyData.rangeValue }} KM) </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="custom-label-container">
+              <label for="Status" class="form-label custom-label">Status:</label>
+              <div class="custom-input">  {{ currenyData.status }}</div>
+            </div>
+          </div>
+        </div>
+      
+        
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+    </div>
+  </ng-template>
+</div>
+<div *ngIf="isManagerRole()">
+  <div class="alert alert-danger" role="alert">
+    Access denied: Managers do not have access to this form.
+  </div>
+</div>

@@ -1,0 +1,83 @@
+.logo-image {
+  width: 150px;
+  height: 150px;
+  position: absolute;
+  bottom: -42px; /* Ajustez cette valeur selon le chevauchement souhaité */
+  left: 10%; /* Centrer horizontalement */
+  transform: translateX(-50%); /* Centrer précisément */
+  border: 3px solid white; /* Optionnel : pour ajouter une bordure blanche autour du logo */
+  border-radius: 50%; /* Optionnel : pour rendre le logo circulaire */
+  background-color: white; /* Optionnel : pour ajouter un fond blanc derrière le logo */
+  padding: 5px; /* Optionnel : pour ajouter un peu d'espace autour du logo */
+}
+.btn:hover {
+  color: #fff;
+  background-color: #DF8F17;
+  border-color: #DF8F17;
+}
+.btn {
+  color: #DF8F17;
+  background-color: #fff;
+  border-color: #DF8F17;
+}
+.pagination-controls {
+  background-color: #f8f9fa; 
+  padding: 10px 20px; 
+  border-radius: 5px;
+  display: inline-block;
+  position: relative; 
+  left: 18%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  align-items: center; 
+
+}
+.pagination-container {
+  position: fixed;
+  bottom: 0px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  padding: 10px 20px;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+//  z-index: 1000;
+}
+.pagination-controls  .ngx-pagination li.current {
+  padding: 200px;
+  background: #DF8F17 !important;
+}
+.color-display {
+width: 30px;
+height: 30px;
+border: 1px solid #000;
+}
+.active {
+background-color: green;
+}
+.active-label {
+color: green;
+}
+.inactive {
+background-color: red;
+}
+.inactive-label {
+color: red;
+}
+.custom-checkbox .form-check-input {
+// background-color: white;
+border-color: #CED4DA;
+}
+.btn2 {
+  color: #DF8F17;
+  background-color: #fff;
+  border-color: #DF8F17;
+  }
+  .banner-image {
+    width: 100%; /* La largeur sera égale à celle de son conteneur parent */
+    height: 200px; /* Hauteur fixe de 200px */
+    object-fit: cover; /* Assure que l'image couvre toute la zone définie sans déformer */
+  }
+  .banner-container {
+    position: relative;
+  }

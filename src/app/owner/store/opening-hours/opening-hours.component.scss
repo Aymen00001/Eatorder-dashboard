@@ -1,0 +1,59 @@
+.btn-link {
+    background: none;
+    border: none;
+    color: green;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  .btn-link:hover {
+    text-decoration: none;
+  }
+  .time-input-container {
+    display: inline-block;
+  }
+  .custom-orange-btn {
+    color: #FF9800;
+    border-color: #FF9800;
+  }
+  .custom-orange-btn:hover {
+    background-color: #FF9800;
+    color: #fff;
+  }
+  .inline-day {
+    display: inline;
+    margin-right: 10px;
+  }
+  .inline-container {
+    white-space: nowrap;
+  }
+  .inline-day,
+  .inline-container p {
+    display: inline;
+    margin-right: 5px;
+  }
+  .espace{
+    justify-content: space-between;
+  }
+.order-actions a {
+  border: none;
+  background: none;
+  align-items: flex-start;
+}
+.card{
+  padding: 10px;
+}
+.small-btn {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+}
+.custom-border {
+  border-top: 4px solid #DF8F17;
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 0;
+}
+.btn2 {
+  color: #DF8F17;
+  background-color: #fff;
+  border-color: #DF8F17;
+}

@@ -1,0 +1,256 @@
+
+
+<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+    <div class="breadcrumb-title pe-3">Tax</div>
+    <div class="ps-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item"><a href="#" (click)="$event.preventDefault()"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Add New Tax</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="ms-auto">
+        <div class="btn-group">
+            <button type="button" class="btn btn-primary">Settings</button>
+            <button type="button" class="btn btn-primary split-bg-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">	<span class="visually-hidden">Toggle Dropdown</span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">	<a class="dropdown-item" href="#" (click)="$event.preventDefault()">Action</a>
+                <a class="dropdown-item" href="#" (click)="$event.preventDefault()">Another action</a>
+                <a class="dropdown-item" href="#" (click)="$event.preventDefault()">Something else here</a>
+                <div class="dropdown-divider"></div>	<a class="dropdown-item" href="#" (click)="$event.preventDefault()">Separated link</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="card">
+  <form >
+  <div class="card-body p-4">
+      <h5 class="card-title">Add New Tax</h5>
+      <hr/>
+       <div class="form-body mt-4">
+        <div class="row">
+           <div class="col-lg-12">
+           <div class="border border-3 p-4 rounded">
+            <div class="mb-3">
+                <label for="inputProductTitle" class="form-label">Tax Title</label>
+                <input type="text" class="form-control" [(ngModel)]="tax" name="tax"   class="form-control"  id="inputProductTitle" placeholder="Enter tax title">
+            
+              </div>
+              <div class="mb-3">
+              <div class="input-group">
+                <input type="text"  class="form-control" [(ngModel)]="ratetax" name="ratetax"  placeholder="Enter Rate " > <span class="input-group-text">%</span>
+               
+            </div> </div>
+            <div class="col-12">
+                <div class="d-grid">
+                   <button type="submit" (click)="addTax(tax, ratetax)"  class="btn btn-primary">Save Tax</button>
+                </div>
+            </div>
+            </div>
+           
+           </div>
+       
+       </div>
+    </div>
+  </div></form>
+
+</div>
+<div class="table-responsive mt-3">
+    <table class="table table-striped table-hover table-sm mb-0">
+        <thead>
+            <tr>
+              <th>Name</th>
+              <th>Rate</th>
+              <th>option</th>
+              <th>Add Tax To Product</th>
+              <th>Add Tax To Category</th>
+              <th>Add Tax To Option</th>
+
+            </tr>
+        </thead>
+        <tbody>
+<tr  *ngFor="let tax of taxes">
+    <td>{{ tax.name }}</td>
+    <td> {{ tax.rate }}%</td>
+   
+    <td>  
+          <a href="javascript:void(0)" 
+        class="me-3 text-danger" title="Delete"  data-bs-toggle="modal"
+        [attr.data-bs-target]="'#exampleScrollableModal_' + tax._id"  >
+        <i class="bx bx-trash font-24"></i>
+    </a>
+    <a href="javascript:void(0)" class="me-3 text-primary" (click)="openModifyTaxModal(tax._id)" data-bs-toggle="modal" [attr.data-bs-target]="'#exampleScrollableModal1_' + tax._id" title="Modify Tax">
+        <i class="bx bx-edit font-24"></i>
+     </a>
+    </td>
+    <td>
+      <a href="javascript:void(0)" class="me-3 text-primary"  data-bs-toggle="modal" [attr.data-bs-target]="'#exampleScrollableModal2_' + tax._id" title="add Tax to Product">
+        <i class="bx bx-plus-circle font-24"></i>
+      </a>
+</td>
+<td>
+  <a href="javascript:void(0)" class="me-3 text-primary"  data-bs-toggle="modal" [attr.data-bs-target]="'#exampleScrollableModal3_' + tax._id" title="add Tax to Category">
+    <i class="bx bx-plus-circle font-24"></i>
+  </a>
+</td>
+<td>
+  <a href="javascript:void(0)" class="me-3 text-primary"  data-bs-toggle="modal" [attr.data-bs-target]="'#exampleScrollableModal4_' + tax._id" title="add Tax to Option">
+    <i class="bx bx-plus-circle font-24"></i>
+  </a>
+</td>
+ <!-- Add other tax information here as needed -->
+ <div class="modal fade" [attr.id]="'exampleScrollableModal_' + tax._id" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><span class="text-danger"> Delete Tax </span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete tax?</p>
+
+                <p>All information associated to this tva will be permanently deleted. <span class="text-danger">This operation can not be undone.</span>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> 
+                 <!-- <button type="button" (click)="deleteCategoryWithProduct(item._id)" data-bs-dismiss="modal" class="btn btn-danger">Delete category with product</button> -->
+                <button type="button"  class="btn btn-danger"  (click)="deleteTax(tax._id)"  data-bs-dismiss="modal" >deleate Tax</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ... Other existing code ... -->
+
+<div class="modal fade" [attr.id]="'exampleScrollableModal1_' + tax._id" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><span class="text-primary"> Modify Tax </span></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Input fields for modifying tax details -->
+          <div class="mb-3">
+            <label for="inputModifiedTaxTitle" class="form-label">Modified Tax Title</label>
+            <input type="text" class="form-control" [(ngModel)]="modifiedTax" name="modifiedTax" id="inputModifiedTaxTitle" placeholder="Enter modified tax title">
+          </div>
+          <div class="mb-3">
+            <div class="input-group">
+              <input type="text" class="form-control" [(ngModel)]="modifiedRateTax" name="modifiedRateTax" placeholder="Enter modified Rate">
+              <span class="input-group-text">%</span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" (click)="saveModifiedTax(tax._id)" data-bs-dismiss="modal">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" [attr.id]="'exampleScrollableModal2_' + tax._id" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><span class="text-primary"> Add Tax To Product </span></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Input fields for modifying tax details -->
+  		<select class="form-select form-select-sm mb-3" aria-label=".form-select-sm example" [(ngModel)]="storeId" (change)="getstoreid($event.target.value)">
+            <option selected>Select your store</option>
+            <option *ngFor="let str of store" value="{{str._id}}"> {{str.name}}</option>
+        </select>
+        <select class="form-select form-select-sm mb-3" aria-label=".form-select-sm example"  [(ngModel)]="productId" (change)="getproductid($event.target.value)" >
+            <option selected>Select your product</option>
+            <option *ngFor="let prd of product" value="{{prd._id}}"> {{prd.name}}</option>
+        </select>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" (click)="addTaxToProduct(productId,tax._id)" data-bs-dismiss="modal">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" [attr.id]="'exampleScrollableModal3_' + tax._id" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><span class="text-primary"> Add Tax To Category </span></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Input fields for modifying tax details -->
+  		<select class="form-select form-select-sm mb-3" aria-label=".form-select-sm example" [(ngModel)]="storeId" (change)="getstoreid($event.target.value)">
+            <option selected>Select your store</option>
+            <option *ngFor="let str of store" value="{{str._id}}"> {{str.name}}</option>
+        </select>
+        <select class="form-select form-select-sm mb-3" aria-label=".form-select-sm example"  [(ngModel)]="selectedCategory" (change)="getcategoryid($event.target.value)" >
+            <option selected>Select your product</option>
+            <option *ngFor="let ctg of Categorys" value="{{ctg._id}}"> {{ctg.name}}</option>
+        </select>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" (click)="addTaxToCategory(selectedCategory,tax._id)" data-bs-dismiss="modal">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--Option-->
+  <div class="modal fade" [attr.id]="'exampleScrollableModal4_' + tax._id" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><span class="text-primary">Add Tax To Option</span></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Input fields for modifying tax details -->
+          <select class="form-select form-select-sm mb-3" aria-label=".form-select-sm example" [(ngModel)]="storeId" (change)="onStoreChange($event.target.value)">
+            <option selected>Select your store</option>
+            <option *ngFor="let str of store" [value]="str._id">{{str.name}}</option>
+          </select>
+          <select class="form-select form-select-sm mb-3" aria-label=".form-select-sm example" [(ngModel)]="optionId">
+            <option selected>Select your option</option>
+            <option *ngFor="let option of optionGroups" [value]="option._id">{{option.name}}</option>
+          </select>
+          <label>Mode</label>
+          <hr>
+          <div class="form-check" *ngFor="let mode of consumationModes">
+            <input class="form-check-input" type="checkbox" id="mode-{{mode._id}}" [value]="mode._id" [checked]="isModeSelected(mode._id)" (change)="toggleModeSelection(mode._id)">
+            <label class="form-check-label" for="mode-{{mode._id}}">
+              {{mode.mode.name}}
+            </label>
+          </div>
+          <hr>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" (click)="addTaxToOption(optionId, selectedModes, tax._id)" data-bs-dismiss="modal">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</tr>
+</tbody>
+    </table>
+    <div class="d-flex justify-content-center">
+        <nav >
+          <ul class="pagination">
+            <li class="page-item"><a class="page-link" (click)="onPrevPage()" >Previous</a></li>
+            <li class="page-item"><div class="page-link">Page {{ currentPage }} of {{ totalPages }}</div> </li>
+            
+            <li class="page-item"><a class="page-link" (click)="onNextPage()" >Next</a></li>
+          </ul>
+        </nav></div>
+    </div>
+  
+  <!-- Pagination Controls -->

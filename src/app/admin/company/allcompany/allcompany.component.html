@@ -1,0 +1,575 @@
+<!--breadcrumb-->
+<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+    <div class="breadcrumb-title pe-3">All Company</div>
+    <div class="ps-3">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0 p-0">
+          <li class="breadcrumb-item"><a href="#"><i class="bx bx-home-alt"></i></a>
+          </li>
+          <li class="breadcrumb-item " aria-current="page">Company</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="d-lg-flex align-items-center mb-4 gap-3">
+        <div class="position-relative">
+          <input type="text" class="form-control ps-5 radius-30" placeholder="Search Order" name="searchTerm"
+            [(ngModel)]="searchTerm">
+          <span class="position-absolute top-50 product-show translate-middle-y"><i class="bx bx-search"></i></span>
+        </div>
+        <div class="ms-auto"><a (click)="ajouter()" class="btn btn-primary radius-30 mt-2 mt-lg-0"><i
+              class="bx bxs-plus-square"></i>Add New Company</a></div>
+      </div>
+      <div class="table-responsive">
+        <table class="table align-middle mb-0 table-hover" id="Transaction-History">
+          <thead class="table-light">
+            <tr>
+              <th>Order#</th>
+              <th>Image</th>
+              <th>name</th>
+              <th>Status</th>
+              <th>email</th>
+              <th>Adress</th>
+              <th>Phone</th>
+             <!--<th>Strip Account</th>-->
+              <th>Stores</th>
+              <th>View Details</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let p of filterCompany() | paginate: { itemsPerPage: selectedItemsPerPage, currentPage: p }; let i=index  ">
+              <td>
+                <div class="d-flex align-items-center">
+                  <div class="ms-2">
+                    <h6 class="mb-0 font-14">{{ p.orderNumber }}</h6>
+                  </div>
+                </div>
+              </td>
+              <!--http://localhost:8000/-->
+              <td> <img class="imagecompany" [src]="'https://server.eatorder.fr:8000/' + p.CompanyLogo" alt="Card image cap" />
+              </td>
+              <td>{{p.name}} </td>
+              <td>{{ p.legalstatus}}</td>
+              <td>{{p.email}}</td>
+                <td>{{p.address.city}}</td>
+                    <td>
+                      {{p.phone_details.country_code }}
+                      {{p.phone_details.phone_number }}
+                    </td>
+                   <!--<td>
+                      <div class="form-check form-switch custom-checkbox">
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheck{{p._id}}"
+                        name="active" >
+                      </div>
+                    </td>-->
+              <td><button class="btn btn-primary btn-sm radius-30 px-4"
+                  (click)="openModalAndFetchStores(modalContent2, p._id)">View</button></td>
+              <td><button type="button" class="btn btn-primary btn-sm radius-30 px-4"
+                  (click)="openDetailsModal(modalContent,p._id)">View Details</button></td>
+              <td>
+                <div class="d-flex order-actions">
+                  <a class="ms-3" (click)="openModal2(modalContent22, p._id)"><i class='bx bxs-edit'></i></a>
+                  <a (click)="deletecompany(p._id)" class="ms-3"><i class='bx bxs-trash'></i></a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="d-flex justify-content-center mt-4">
+        <pagination-controls (pageChange)="p = $event" class="pagination-controls"></pagination-controls>
+      </div>
+    </div>
+  </div>
+
+  <!--Afficher Company-->
+<ng-template #modalContent let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Company Details</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-4">
+              <img class="card-img-top logo-image" [src]="'https://server.eatorder.fr:8000/' + selectedcompany.CompanyLogo"
+                alt="Company Logo">
+            </div>
+            <div class="col-md-8">
+              <h5 class="card-title">Name:{{ selectedcompany.name }}</h5>
+              <p class="card-text">Email:{{ selectedcompany.email }}</p>
+              <p class="card-text">Phone_number:{{ selectedcompany.phone_details.country_code }}{{
+                selectedcompany.phone_details.phone_number }}</p>
+              <p class="card-text">Status:{{ selectedcompany.legalstatus }}</p>
+              <p class="card-text"><strong>Owner:</strong> {{ owner.firstName }} {{ owner.lastName }}</p>
+              <p class="card-text"> <strong>Email_Owner:</strong> {{ owner.email }}</p>
+              <p class="card-text"> <strong>Phone:</strong> {{ owner.phoneNumber }}</p>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-md-6">
+              <p class="card-text"><strong>Address:</strong></p>
+              <div class="row">
+                <div class="col-md-6"><strong>Street:</strong> {{ selectedcompany.address.street }}</div>
+                <div class="col-md-6"><strong>City:</strong> {{ selectedcompany.address.city }}</div>
+              </div>
+              <div class="row">
+                <div class="col-md-6"><strong>State:</strong> {{ selectedcompany.address.state }}</div>
+                <div class="col-md-6"><strong>ZipCode:</strong> {{ selectedcompany.address.zipcode }}</div>
+              </div>
+              <p class="card-text"><strong>Country:</strong> {{ selectedcompany.address.country_iso2 }}</p>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-md-6">
+              <p class="card-text"><strong>Uber:</strong></p>
+              <div class="row">
+                <div ><strong>Id Uber:</strong> {{ selectedcompany.uberOrganizationId}}</div>
+              </div>
+           
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+    </div>
+  </ng-template>
+  <!--Affichage Stores-->
+<ng-template #modalContent2 let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Store Details</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div *ngIf="noStoresFound; else storeDetails">
+      <div class="alert alert-warning d-flex align-items-center" role="alert">
+        <svg class="bi flex-shrink-0 me-2 imagepromo" role="img" aria-label="Warning:">
+          <use xlink:href="#exclamation-triangle-fill" />
+        </svg>
+        <div>
+          <p>"No Stores found for this Company!!!"</p>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="accordion" id="accordionStores">
+        <div class="ms-auto"><a (click)="openaddstore(companyid)"
+            class="btn btn-primary radius-30 mt-2 mt-lg-0"><i class="bx bxs-plus-square"></i>Add New Store</a></div><br>
+              <!--Add Stores-->
+  <!-- Utilisez *ngIf pour conditionner l'affichage du contenu -->
+  <div *ngIf="showAddStoreContent">
+    <div class="modal-header">
+      <h4 class="modal-title">Add Store</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="showAddStoreContent = false"></button>
+    </div>
+    <div class="modal-body">
+      <form class="row g-3">
+        <div class="col-md-6">
+          <label for="name" class="form-label">Name</label>
+          <div class="input-group">
+            <span class="input-group-text bg-transparent"><i class='bx bx-store'></i></span>
+          <input type="text" class="form-control" id="name" [(ngModel)]="currenyData.name" name="name"  [ngClass]="{'is-invalid': messageErrors['name']}" (input)="clearError('name')"></div>
+          <div class="invalid-feedback">
+            <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['name'] }}
+          </div>
+          <div class="error-message"></div>
+        </div>
+        <div class="col-md-6">
+          <label for="inputLastName" class="form-label">Description</label>
+          <div class="input-group">
+            <span class="input-group-text bg-transparent"><i class='bx bx-message-square-detail'></i></span>
+          <input type="text" class="form-control" id="inputLastName" name="description"
+            [(ngModel)]="currenyData.description" [ngClass]="{'is-invalid': messageErrors['description']}"
+            (input)="clearError('description')"></div>
+          <div class="invalid-feedback">
+            <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['description'] }}
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label for="adresse" class="form-label">Address</label>
+          <div class="input-group"> <span class="input-group-text bg-transparent"><i class='bx bx-map' ></i></span>
+          <input type="text" class="form-control" id="adresse" [disabled]="someCondition"
+            [(ngModel)]="currenyData.address" name="address" [ngClass]="{'is-invalid': messageErrors['address']}"
+            (input)="clearError('address')"></div>
+          <div class="invalid-feedback">
+            <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['address'] }}
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label for="phoneNumber" class="form-label">Phone</label>
+          <div class="input-group">
+            <ngx-intl-tel-input [(ngModel)]="currenyData.phoneNumber" name="phoneNumber"></ngx-intl-tel-input>
+          </div>
+          <div class="invalid-feedback">
+            <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['phoneNumber'] }}
+          </div>
+        </div>
+        <div class="col-md-6" *ngIf="!someCondition">
+          <label for="latitude" class="form-label">Latitude</label>
+          <input type="number" class="form-control" id="latitude" [(ngModel)]="currenyData.latitude" name="latitude"
+            [ngClass]="{'is-invalid': messageErrors['latitude']}" (input)="clearError('latitude')">
+          <div class="invalid-feedback">
+            <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['latitude'] }}
+          </div>
+        </div>
+        <div class="col-md-6" *ngIf="!someCondition">
+          <label for="longitude" class="form-label">Longitude</label>
+          <input type="number" class="form-control" id="longitude" [(ngModel)]="currenyData.longitude" name="longitude"
+            [ngClass]="{'is-invalid': messageErrors['longitude']}" (input)="clearError('longitude')">
+          <div class="invalid-feedback">
+            <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['longitude'] }}
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div id="map"></div>
+        </div> <br>
+        <div class="col-md-6">
+          <label for="rangeDelivery" class="form-label">Range Delivery ({{ currenyData.rangeValue }} KM)</label>
+          <input type="range" class="form-range" id="rangeDelivery" [(ngModel)]="currenyData.rangeValue"
+            [ngModelOptions]="{standalone: true}" (input)="updateRangeValue($event)" max="7">
+          <label for="inputLastName" class="form-label">Logo</label>
+          <input type="file" class="form-control" id="image" name="image" (change)="onImageChanges($event)">
+          <br>
+          <div class="col-md-6">
+            <label for="Primary Color" class="form-label custom-label">Primary Color:</label>
+            <div class="d-flex align-items-center">
+              <input type="color" class="form-colorstore" id="primairecolor" [(ngModel)]="currenyData.primairecolor"
+                name="primairecolor" [ngModelOptions]="{standalone: true}">
+            </div>
+            <div style="margin-left: 10px;">
+            </div> <br>
+            <label for="Secondary Color" class="form-label custom-label">Secondary Color:</label>
+            <div class="d-flex align-items-center">
+              <input type="color" class="form-colorstore" id="secondairecolor" [(ngModel)]="currenyData.secondairecolor"
+                name="secondairecolor" [ngModelOptions]="{standalone: true}">
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <div class="col-xs-12 text-right">
+        <button type="submit" class="btn btn-primary px-5" (click)="addStores()">Register</button>
+      </div>
+    </div>
+  </div>
+        <div class="accordion-item" *ngFor="let p of store">
+          <h2 class="accordion-header">
+            <button class="accordion-button btn" type="button" data-bs-toggle="collapse"
+              [attr.data-bs-target]="'#storeCollapse' + p._id" aria-expanded="true"
+              [attr.aria-controls]="'storeCollapse' + p._id">
+              <div class="d-flex justify-content-between w-100" style="margin-right: 20px;">
+                <div>
+                  {{ p.name }}
+                </div>
+                <div class="d-flex order-actions">
+                  <a class="ms-3" (click)="openeditstore(modalContentt1,p._id)"><i class='bx bxs-edit'></i></a>
+                  <a (click)="deletteStore(p._id,p.companyId)" class="ms-3"><i class='bx bxs-trash'></i></a>
+                </div>
+              </div>
+            </button>
+          </h2>
+          <div [id]="'storeCollapse' + p._id" class="accordion-collapse collapse show"
+            [attr.aria-labelledby]="'storeHeading' + p._id" data-bs-parent="#accordionStores">
+            <div class="accordion-body">
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <img class="card-img-top logo-image" [src]="'https://server.eatorder.fr:8000/' + p.logo" alt="Card image cap" />
+                </div>
+                <div class="col-md-6">
+                  <div class="custom-label-container">
+                    <label for="name" class="form-label custom-label">Nom:</label>
+                    <div class="custom-input"> {{p.name }} </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <div class="custom-label-container">
+                    <label for="address" class="form-label custom-label">Address:</label>
+                    <div class="custom-input"> {{p.address}} </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="custom-label-container">
+                    <label for="phoneNumber" class="form-label custom-label">Phone Number:</label>
+                    <div class="custom-input"> {{p.phoneNumber}} </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <div class="custom-label-container">
+                    <label for="rangeValue" class="form-label custom-label">RangeValue:</label>
+                    <div class="custom-input"> {{p.rangeValue}}KM</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="custom-label-container">
+                    <label for="Longitude" class="form-label custom-label">Status:</label>
+                    <div class="custom-input"> {{ p.status }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="custom-label-container">
+                  <label for="description" class="form-label custom-label">Description:</label>
+                  <div class="custom-input"> {{p.description}} </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+    </div>
+  </ng-template>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+    <symbol id="check-circle-fill" viewBox="0 0 16 16">
+      <path
+        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+    </symbol>
+    <symbol id="info-fill" viewBox="0 0 16 16">
+      <path
+        d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
+    </symbol>
+    <symbol id="exclamation-triangle-fill" viewBox="0 0 16 16">
+      <path
+        d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+    </symbol>
+  </svg>
+  <!--Edit Company-->
+  <ng-template #modalContent22 let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Update Company</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <div class="custom-card">
+        <label for="imageInput" class="image-upload">
+          <img class="card-img-top logo-image" [src]="'https://server.eatorder.fr:8000/' + selectedcompanys.CompanyLogo"
+            alt="Card image cap" />
+        </label>
+        <input type="file" class="form-control" id="imageInput" name="image" accept="image/*"
+          (change)="onImageChange($event)" style="display: none;" />
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <div class="custom-label-container">
+              <label for="name" class="form-label custom-label">Nom Company :</label>
+              <div class="input-group">
+                <span class="input-group-text bg-transparent"><i class='bx bx-store'></i></span>
+              <div class="custom-input"> <input type="text" id="street" class="form-control"
+                  [(ngModel)]="selectedcompanys.name" name="street"> </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="custom-label-container">
+              <label for="Latitude" class="form-label custom-label">email:</label>
+              <div class="custom-input">
+                <div class="input-group"> <span class="input-group-text bg-transparent"><i class='bx bxs-message' ></i></span>
+                  <input type="text" id="email" class="form-control"
+                  [(ngModel)]="selectedcompanys.email" name="email"> </div>
+            </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="custom-label-container">
+              <label for="Phone" class="form-label custom-label">Phone:</label>
+              <div class="custom-input">
+                <div class="input-group">
+                  <span class="input-group-text bg-transparent"><i class="lni lni-phone" ></i></span>
+                  <ngx-intl-tel-input name="phoneNumber" [(ngModel)]="phone"></ngx-intl-tel-input>
+                </div>
+                <span>Phone already entered:{{ selectedcompanys.phone_details.phone_number }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="custom-label-container">
+              <label for="website" class="form-label custom-label">Web Site:</label>
+              <div class="custom-input">
+                <div class="input-group"> <span class="input-group-text bg-transparent"><i class="lni lni-website" ></i></span>
+                <input name="website" type="text" id="website" class="form-control"  [(ngModel)]="selectedcompanys.website"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="custom-label-container">
+              <label for="description" class="form-label custom-label">Status:</label>
+              <select class="form-select small-horizontal-select" [(ngModel)]="selectedcompanys.legalstatus"
+                name="legalstatus">
+                <option *ngFor="let country of countries" [value]="country">{{ country }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="custom-label-container">
+              <label for="owner" class="form-label custom-label">Owner:{{owner.firstName}} {{owner.lastName}}</label>
+            </div>
+            <select class="single-select form-select" name="ownerId" [(ngModel)]="selectedcompanys.owners">
+              <option hidden>Select an owner</option>
+              <option *ngFor="let owner of owners" [value]="owner._id">{{owner.firstName}} {{owner.lastName}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="address-container">
+          <div class="address-header">
+            <h5>Address</h5>
+          </div>
+          <div class="address-body">
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <div class="custom-input">
+                  <label for="city" class="form-label">City:</label>
+                  <input type="text" id="city" class="form-control" [(ngModel)]="selectedcompanys.address.city"
+                    name="city">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="custom-input">
+                  <label for="street" class="form-label">Street:</label>
+                  <div class="input-group"> <span class="input-group-text bg-transparent"><i class='bx bx-map' ></i></span>
+                  <input type="text" id="street" class="form-control" [(ngModel)]="selectedcompanys.address.street"
+                    name="street"></div>
+                </div>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <div class="custom-input">
+                  <label for="state" class="form-label">State:</label>
+                  <div class="input-group"> <span class="input-group-text bg-transparent"><i class='bx bx-map' ></i></span>
+                  <input type="text" id="state" class="form-control" [(ngModel)]="selectedcompanys.address.state"name="state"></div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="custom-input">
+                  <label for="zipcode" class="form-label">Zip Code:</label>
+                  <div class="input-group"> <span class="input-group-text bg-transparent"><i class='bx bx-map' ></i></span>
+                  <input type="number" id="zipcode" class="form-control" [(ngModel)]="selectedcompanys.address.zipcode"  name="zipcode">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <div class="custom-input">
+                  <label for="country_iso2" class="form-label">Country ISO2:</label>
+                  <div class="input-group"> <span class="input-group-text bg-transparent"><i class='bx bx-map' ></i></span>
+                  <input type="text" id="country_iso2" class="form-control" [(ngModel)]="selectedcompanys.address.country_iso2" name="country_iso2">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-light" (click)="updatecompany(selectedcompanys._id)">Update</button>
+      <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+    </div>
+  </ng-template>
+  <!--Edit stores-->
+  <ng-template #modalContentt1 let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Update Store</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <form class="row g-3">
+        <div class="col-md-6">
+          <label for="name" class="form-label">Name</label>
+          <div class="input-group">
+            <span class="input-group-text bg-transparent"><i class='bx bx-store'></i></span>
+          <input type="text" class="form-control" id="name" [(ngModel)]="currenyData.name" name="name"></div>
+        </div>
+        <div class="col-md-6">
+          <label for="inputLastName" class="form-label" >Description</label>
+          <div class="input-group">
+            <span class="input-group-text bg-transparent"><i class='bx bx-message-square-detail'></i></span>
+          <input type="text" class="form-control" id="inputLastName" name="description" [(ngModel)]="currenyData.description">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label for="adresse" class="form-label">Address</label>
+          <div class="input-group"> <span class="input-group-text bg-transparent"><i class='bx bx-map' ></i></span>
+          <input type="text" class="form-control" id="adresse" [(ngModel)]="currenyData.address" name="address"
+            [disabled]="someCondition"></div>
+        </div>
+        <div class="col-md-6">
+          <label for="phone" class="form-label">Phone</label>
+          <div class="input-group ">
+            <ngx-intl-tel-input name="phone" [(ngModel)]="currenyData.phone"></ngx-intl-tel-input>
+          </div>
+          <span>Phone already entered:{{ currenyData.phoneNumber }}</span>
+        </div>
+        <div class="col-md-6" *ngIf="!someCondition">
+          <label for="latitude" class="form-label">Latitude </label>
+          <input type="number" class="form-control" id="latitude" [(ngModel)]="currenyData.latitude" name="latitude">
+        </div>
+        <div class="col-md-6" *ngIf="!someCondition">
+          <label for="longitude" class="form-label">Longitude</label>
+          <input type="number" class="form-control" id="longitude" [(ngModel)]="currenyData.longitude" name="longitude">
+        </div>
+        <div class="col-md-6">
+          <div id="map"></div>
+        </div> <br>
+        <div class="col-md-6">
+          <label for="rangeDelivery" class="form-label">Range Delivery ({{ currenyData.rangeValue }} KM)</label>
+          <input type="range" class="form-range" id="rangeDelivery" [(ngModel)]="currenyData.rangeValue"
+            [ngModelOptions]="{standalone: true}" (input)="updateRangeValue($event)" max="7">
+          <label for="inputLastName" class="form-label">Logo</label>*
+          <img class="card-img-top logo-image" [src]="'https://server.eatorder.fr:8000/' + currenyData.logo" alt="Card image cap" />
+          <input type="file" class="form-control" id="image" name="image" accept="image/*"
+            (change)="onImageChangess($event)">
+          <div class="col-md-6">
+            <label for="Primary Color" class="form-label custom-label">Primary Color:</label>
+            <div class="d-flex align-items-center">
+              <input type="color" class="form-colorstore" id="primairecolor" [(ngModel)]="currenyData.primairecolor"
+                name="primairecolor" [ngModelOptions]="{standalone: true}">
+            </div>
+            <div style="margin-left: 10px;">
+            </div> <br>
+            <label for="Secondary Color" class="form-label custom-label">Secondary Color:</label>
+            <div class="d-flex align-items-center">
+              <input type="color" class="form-colorstore" id="secondairecolor" [(ngModel)]="currenyData.secondairecolor"
+                name="secondairecolor" [ngModelOptions]="{standalone: true}">
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <div class="col-12 text-right">
+        <button type="submit" class="btn btn-primary px-5" (click)="UpdateStores()">Update</button>
+      </div>
+    </div>
+  </ng-template>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  

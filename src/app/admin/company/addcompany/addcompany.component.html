@@ -1,0 +1,137 @@
+<div class="card custom-border">
+    <div class="card-body p-5">
+        <hr>
+<div>
+    <form class="row g-3" >
+        <div class="col-md-6">
+        <label class="form-label" for="name">Nom :</label>
+        <div class="input-group">
+          <span class="input-group-text bg-transparent"><i class='bx bx-store'></i></span>
+        <input type="text" id="name"  class="form-control" [(ngModel)]="companyData.name" name="name" required [ngClass]="{'is-invalid': messageErrors['name']}" (input)="clearError('name')">
+        </div>
+        <div class="invalid-feedback">
+            <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['name'] }}
+        </div>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label" for="duns">DUNS:</label>
+            <input type="text" id="duns"  class="form-control" [(ngModel)]="companyData.duns" name="duns" required [ngClass]="{'is-invalid': messageErrors['duns']}" (input)="clearError('duns')">
+            <div class="invalid-feedback">
+                <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['duns'] }}
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="street">Street:</label>
+            <div class="input-group"> <span class="input-group-text bg-transparent"><i class='bx bx-map' ></i></span>
+            <input type="text" id="street" class="form-control" [(ngModel)]="companyData.address.street" name="street" required [ngClass]="{'is-invalid': messageErrors['address.street']}" (input)="clearError('address.street')">
+            </div>
+            <div class="invalid-feedback">
+                <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['address.street'] }}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label" for="city">City:</label>
+            <div class="input-group"> <span class="input-group-text bg-transparent"><i class='bx bx-map' ></i></span>
+            <input type="text" id="city" class="form-control" [(ngModel)]="companyData.address.city" name="city" required [ngClass]="{'is-invalid': messageErrors['address.city']}" (input)="clearError('address.city')">
+            </div> <div class="invalid-feedback">
+                <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['address.city'] }}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label" for="state">State:</label>
+            <div class="input-group"> <span class="input-group-text bg-transparent"><i class='bx bx-map' ></i></span>
+            <input type="text" id="state" class="form-control" [(ngModel)]="companyData.address.state" name="state" required [ngClass]="{'is-invalid': messageErrors['address.state']}" (input)="clearError('address.state')">
+            </div>
+            <div class="invalid-feedback">
+                <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['address.state'] }}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label" for="zipcode">Zipcode:</label>
+            <div class="input-group"> <span class="input-group-text bg-transparent"><i class='bx bx-map' ></i></span>
+            <input type="number" id="zipcode" class="form-control" [(ngModel)]="companyData.address.zipcode" name="zipcode" required [ngClass]="{'is-invalid': messageErrors['address.zipcode']}" (input)="clearError('address.zipcode')">
+            </div>
+            <div class="invalid-feedback">
+                <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['address.zipcode'] }}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label" for="country_iso2">Country ISO:</label>
+            <div class="input-group"> <span class="input-group-text bg-transparent"><i class='bx bx-map' ></i></span>
+            <input type="text" id="country_iso2" class="form-control" [(ngModel)]="companyData.address.country_iso2" name="country_iso2" required [ngClass]="{'is-invalid': messageErrors['address.country_iso2']}" (input)="clearError('address.country_iso2')">
+            </div>
+            <div class="invalid-feedback">
+                <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['address.country_iso2'] }}
+            </div>
+        </div>
+      <div class="col-md-6">
+        <label for="phoneNumber" class="form-label">Phone</label>
+        <div class="input-group">
+          <span class="input-group-text bg-transparent"><i class="lni lni-phone" ></i></span>
+          <ngx-intl-tel-input name="phoneNumber" [(ngModel)]="companyData.phoneNumber"></ngx-intl-tel-input>
+        </div>
+        <div class="invalid-feedback">
+          <i class="bi bi-exclamation-triangle"></i>  {{ messageErrors['phoneNumber'] }}
+      </div>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label" for="email">Email:</label>
+        <div class="input-group"> <span class="input-group-text bg-transparent"><i class='bx bxs-message' ></i></span>
+        <input type="email" id="duns"  class="form-control" [(ngModel)]="companyData.email" name="email" required [ngClass]="{'is-invalid': messageErrors['email']}" (input)="clearError('email')">
+        </div>
+        <div class="invalid-feedback">
+            <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['email'] }}
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label" for="website">Web Site:</label>
+        <div class="input-group"> <span class="input-group-text bg-transparent"><i class="lni lni-website" ></i></span>
+        <input type="text" id="website"  class="form-control" [(ngModel)]="companyData.website" name="website" required [ngClass]="{'is-invalid': messageErrors['website']}" (input)="clearError('website')">
+        </div>
+        <div class="invalid-feedback">
+            <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['website'] }}
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label" for="legalstatus">Status:</label>
+        <select class="form-select small-horizontal-select" [(ngModel)]="companyData.legalstatus" name="legalstatus" required [ngClass]="{'is-invalid': messageErrors['legalstatus']}" (input)="clearError('legalstatus')">
+            <option *ngFor="let country of countries" [value]="country">{{ country }}</option>
+        </select>
+        <div class="invalid-feedback">
+            <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['legalstatus'] }}
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label for="stores" class="form-label">Select your Owner</label>
+    <select  class="single-select form-select" [(ngModel)]="companyData.ownerId" name="ownerId" [ngClass]="{'is-invalid': messageErrors['ownerId']}"  (input)="clearError('ownerId')">
+        <option hidden></option>
+        <option *ngFor="let str of owners" value="{{str._id}}" [attr.selected]="str._id === selectedOption ? 'selected' : null"  > {{str.firstName}} {{str.lastName}}</option>
+    </select>
+    <div class="invalid-feedback">
+      <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['ownerId'] }}
+  </div>
+    </div>
+      <div class="col-md-6">
+   <label for="inputLastName" class="form-label">Logo</label>
+   <input type="file" class="form-control" id="image" name="image" (change)="onImageChange($event)"></div>
+   <div class="col-md-6">
+    <label for="inputLastName" class="form-label">Banner</label>
+    <input type="file" class="form-control" id="image2" name="image2" (change)="onImageChange2($event)"></div>
+      <br>
+      <hr>
+      <div class="row">
+        <div class="col-xs-12 text-right">
+      <button type="submit" (click)=" addCompany()" class="btn btn-primary px-2">Add Company</button></div></div>
+    </form>
+  </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+

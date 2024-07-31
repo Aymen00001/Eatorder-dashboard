@@ -1,0 +1,546 @@
+<!--breadcrumb-->
+<div >{{ message}}</div>
+
+<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+
+    <div class="breadcrumb-title pe-3">Orders</div>
+    <div class="ps-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item"><a href="#" (click)="$event.preventDefault()"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Orders</li>
+            </ol>
+        </nav>
+    </div>
+
+</div>
+<!--end breadcrumb-->
+<div class="card">
+    <div class="card-body">
+      <div class="d-lg-flex align-items-center mb-4 gap-3">
+        <div class="d-flex align-items-center flex-grow-1" style="margin-right: auto;"> <!-- Ajoutez une marge à droite pour déplacer le bouton vers la droite -->
+            <div class="position-relative flex-grow-1">
+                <input type="text" class="form-control ps-5 radius-30" placeholder="Search Order" [(ngModel)]="searchTerm" [formControl]="searchTermControl" name="searchTerm">
+                <span class="position-absolute top-50 product-show translate-middle-y"><i class="bx bx-search"></i></span>
+            </div>
+        </div>
+        <button class="ms-4 btn btn-outline-danger" (click)="deleteSelectedOrders()"><i class='bx bxs-trash'></i>Delete All</button>
+    </div>
+    
+        <div class="table-responsive">               
+          <table class="table align-middle mb-0 table-hover" id="Transaction-History" >
+                <thead class="table-light">
+                    <tr>
+                        <th>Order#</th>
+                        <th>Customer Name</th>
+                        <th>Mode</th>
+                        <th>Created at</th>
+                        <th>Must be ready at</th>
+                        <th>
+                          <div (click)="sortordersByTotalSpent()" style="cursor: pointer;">
+                              TOTAL SPENT
+                              <i class="lni lni-arrow-up" [ngClass]="sortDirection === 'asc' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
+                          </div>
+                      </th>          
+                                    <th>Status</th>
+                        <th>Actions</th>
+                        <th *ngIf="deliveryuber">Delivery</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let p of filteredStores() | paginate: { itemsPerPage: selectedItemsPerPage, currentPage: p }; let i = index;">
+                    <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-2">
+                                  <td>
+                                    <input type="checkbox" [(ngModel)]="selectedOrders[p._id]" />
+                                    {{ p.lastFourDigits }}</td>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{p. client_first_name }}{{p. client_last_name }}</td>
+                        <td>{{p.type}}</td>
+                        <td>{{ p.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
+                        <td>{{p.preparedAt | date:'yyyy-MM-dd HH:mm'}}</td>
+                        <td>{{p.price_total}}</td>
+
+                         <!-- all.component.html -->
+                         <td>
+                          <div class="badge rounded-pill text-uppercase px-3" [ngStyle]="getStatusStyle(p.status)" (click)="connectemobile !== 'connect' && openStatusModal2(p._id)">
+                            <i class='bx bx-radio-circle-marked bx-burst bx-rotate-90 align-middle font-18 me-1'></i>
+                            {{ p.status }}
+                          </div>
+                        </td>
+                        <td>
+                          <div class="d-flex align-items-center">
+                              <a (click)="deleteorder(p._id)" class="ms-3 btn2"><i class='bx bxs-trash'></i></a>
+                              <button type="button" class="btn btn-primary btn-sm radius-30 px-4 ms-3" (click)="openModal(modalContent, p._id)">View Details</button>
+                          </div>
+                      </td>
+                      
+                          <td *ngIf="deliveryuber">
+                            <button *ngIf="p.type === 'Delivery' && (p.uberId === null || p.uberId === undefined)" type="button" class="button button-mat btn--7 btn-sm radius-30 px-4" (click)="delivery(modalContent5,p._id)">
+                                <i class="lni lni-delivery"></i> Delivery
+                            </button>
+                           <!-- <a *ngIf="p.type === 'Delivery' && p.uberId !== null" type="button" class="btn2 btn-lg px-4" (click)="detaildelivery(modalContent3,p.uberId,p._id)">
+                              <i class="fadeIn animated bx bx-show fs-5"></i>
+                          </a>-->
+                         <!-- <div>
+                            <span class="badge rounded-pill text-bg-warning" >
+                              <i class="bx bx-radio-circle-marked bx-burst bx-rotate-90 align-middle font-18 me-1"></i>
+                              View
+                            </span>
+                          </div>-->
+                          <div class="badge rounded-pill text-info bg-light-info p-2 text-uppercase px-3" 
+                          *ngIf="p.type === 'Delivery' && p.uberId !== null" 
+                          (click)="detaildelivery(modalContent3,p.uberId,p._id)">
+                        <i class="bx bxs-circle align-middle me-1"></i> View
+                        <!-- Afficher le nombre de livraisons pour cet ID de livraison Uber -->
+                        <span>{{ badgeNumbers[p.uberId] }}</span>
+                      </div>
+                      
+                     
+
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="pagination-container">
+  <pagination-controls (pageChange)="p = $event" class="pagination-controls"></pagination-controls>
+</div>
+<ng-template #modalContent let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Order Details</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <div class="custom-card">
+        <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="custom-label-container">
+                <label for="name" class="form-label custom-label"> First Name:</label>
+                <div class="custom-input">
+                  {{ orderData.client_first_name }}
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="custom-label-container">
+                <label for="description" class="form-label custom-label">Last Name:</label>
+                <div class="custom-input">
+                  {{ orderData.client_last_name }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="custom-label-container">
+                <label for="name" class="form-label custom-label"> Email:</label>
+                <div class="custom-input">
+                  {{ orderData.client_email }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+                <div class="custom-label-container">
+                  <label for="Phone" class="form-label custom-label">Created At:</label>
+                  <div class="custom-input">
+                    {{ orderData.createdAt | date:'yyyy-MM-dd HH:mm'}}
+                  </div>
+                </div>
+              </div>
+            <div class="col-md-6">
+              <div class="custom-label-container">
+                <label for="Latitude" class="form-label custom-label">Must be ready at:</label>
+                <div class="custom-input">
+                    {{ orderData.fulfillmentAt }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="custom-label-container">
+                <label for="Address" class="form-label custom-label">Mode:</label>
+                <div class="custom-input">
+                    {{ orderData.type }}
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="custom-label-container">
+                <label for="Range Delivery" class="form-label custom-label">Status:</label>
+                <div class="custom-input">{{ orderData.status }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+
+          <div class="col-md-6">
+            <div class="custom-label-container">
+              <label for="Range Delivery" class="form-label custom-label">Adresse:</label>
+              <div class="custom-input">{{ orderData.deliveryAdress }}
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="custom-label-container">
+              <label for="Range Delivery" class="form-label custom-label">Phone:</label>
+              <div class="custom-input">{{ orderData.client_phone}}
+              </div>
+            </div>
+          </div>
+          </div>
+          <div class="container"><div class="row"><div class="col-3"></div>
+          <div class="col-6 border rounded p-3">
+            <!-- Affichage des détails des articles -->
+            <ng-container *ngIf="orderData.items && orderData.items.length > 0">
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <h5>Order :</h5>
+                        <ul>
+                            <li *ngFor="let item of orderData.items">
+                              <div class="d-flex justify-content-between">
+                                <div>
+                                    <b>{{ item.quantity }} {{ item.name }} ({{ item.size }})</b>
+                                </div>
+                                <div >
+                                    {{ item.item_price.toFixed(2) }}€
+                                </div>
+                            </div>
+                                <ul>
+                                    <li *ngFor="let option of item.options">
+                                      
+                                        <b>{{ option.optionGroupeName }}:</b><br>
+                                        <div class="d-flex justify-content-between">
+                                          <div>
+                                               {{ option.name }}:
+                                          </div>
+                                          <div >
+                                            {{ option.price_opt * option.quantity }}€
+                                          </div>
+                                      </div>
+                                   
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </ng-container>
+        
+            <!-- Affichage des détails des promotions -->
+            <ng-container *ngIf="orderData.promo && orderData.promo.length > 0">
+              <div class="row mb-3">
+                  <div class="col-md-12">
+                      <h5>Promotions:</h5>
+                      <ul>
+                          <li *ngFor="let promo of orderData.promo">
+                            <div class="d-flex justify-content-between">
+
+                              {{ promo.name }} - Discount: {{ promo.discount }} 
+                            </div>
+                              <ul>
+
+                                  <li *ngFor="let item of promo.items">
+                                    <div class="d-flex justify-content-between">
+                                    <div>{{ item.name }}</div>
+                                    <div>{{ item.item_price}}</div>
+                                    </div>
+                                    
+                                    <ul>
+                                      <li *ngFor="let option of item.options">
+                                        
+                                          <b>{{ option.optionGroupeName }}:</b><br>
+                                          <div class="d-flex justify-content-between">
+                                            <div>
+                                                 {{ option.name }}:
+                                            </div>
+                                            <div >
+                                              {{ option.price_opt * option.quantity }}€
+                                            </div>
+                                        </div>
+                                     
+                                      </li>
+                                  </ul>
+                                  <hr>
+                                      <div class="d-flex justify-content-between">
+                                        <div>Total HTVA</div>
+                                        <div>{{ item.priceHt }}</div>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                          <div>Prix TTC</div>
+                                          <div>{{ item.price}}</div>
+                                          </div>
+
+                                  </li>
+                              </ul>
+                            
+                          </li>
+                      </ul>
+                  </div>
+              </div>
+          </ng-container>
+          
+            <div class="row">
+                    <div class="custom-label-container text-center ">
+                      <hr>
+                      <div class="d-flex justify-content-between">
+                        <div> Total HTVA:</div>
+                        <div > {{ orderData.priceHt_total }}€ </div>
+                    </div>
+                        <hr>
+                        <div class="d-flex justify-content-between">
+                          <div> Price Total: </div>
+                          <div > {{ orderData.price_total }}€  </div>
+                      </div>
+                    </div>
+            </div>
+        </div>
+          <div class="col-3"></div></div>
+          </div>
+          
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+    </div>
+  </ng-template>
+<ng-template #statusModalContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title center-align" >Change the status </h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <ng-container >
+      <h4 class="center-align">Previous Status: {{ selectedItem?.status }}</h4>
+ <div class="status-dropdown ms-2 d-flex justify-content-center ">  <h6>New status:</h6><br>
+        <select class="form-select small-horizontal-select" (change)="onStatusSelection2(selectedItem?._id, $event.target.value)">
+          <option *ngFor="let status of getStatusList(selectedItem?.status)" [value]="status">{{ status }}</option>
+        </select>
+      </div>
+    </ng-container>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Close click')">Close</button>
+  </div>
+</ng-template>
+
+<ng-template #modalContent3 let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Delivery Details</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <button *ngIf="deliveryData.status !== 'delivered' " type="button" class="btn btn-primary btn-sm radius-30 px-4" (click)="CancelDelivery(deliveryData.id,idorderr)" >
+      Cancel Delivery  </button>
+    <div class="custom-card">
+      <div class="row mb-3">
+          <div class="col-md-6">
+            <div class="custom-label-container">
+              <label for="name" class="form-label custom-label"> Dropoff_Name:</label>
+              <div class="custom-input">
+                {{ deliveryData.dropoff.name }}
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="custom-label-container">
+              <label for="description" class="form-label custom-label">Dropoff_Phone:</label>
+              <div class="custom-input">
+                {{ deliveryData.dropoff.phone_number }}   </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <div class="custom-label-container">
+              <label for="Address" class="form-label custom-label">Dropoff_Address:</label>
+              <div class="custom-input">
+                {{ deliveryData.dropoff.address }}               </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+              <div class="custom-label-container">
+                <label for="Longitude" class="form-label custom-label">Dropoff_Deadline:</label>
+                <div class="custom-input"> {{ deliveryData.dropoff_deadline | date: 'short'  }}
+                </div>
+              </div>
+            </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6">
+              <div class="custom-label-container">
+                <label for="Phone" class="form-label custom-label">Dropoff_Eta:</label>
+                <div class="custom-input">
+                     {{ deliveryData.dropoff_eta | date: 'short' }}
+                </div>
+              </div>
+            </div>
+          <div class="col-md-6">
+            <div class="custom-label-container">
+              <label for="Latitude" class="form-label custom-label">Dropoff_Ready:</label>
+              <div class="custom-input">  {{ deliveryData.dropoff_ready| date: 'short'  }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <div class="custom-label-container">
+              <label for="Range Delivery" class="form-label custom-label">Pickup_Name:</label>
+              <div class="custom-input"> {{ deliveryData.pickup.name }}
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="custom-label-container">
+              <label for="Range Delivery" class="form-label custom-label">Pickup_Phone:</label>
+              <div class="custom-input"> {{ deliveryData.pickup.phone_number }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <div class="custom-label-container">
+              <label for="Range Delivery" class="form-label custom-label">Pickup_Address:</label>
+              <div class="custom-input">{{ deliveryData.pickup.address }}
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="custom-label-container">
+              <label for="Range Delivery" class="form-label custom-label">Pickup_Deadline:</label>
+              <div class="custom-input"> {{ deliveryData.pickup_deadline | date: 'short' }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <div class="custom-label-container">
+              <label for="Range Delivery" class="form-label custom-label">Pickup_Eta:</label>
+              <div class="custom-input"> {{ deliveryData.pickup_eta | date: 'short' }}
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="custom-label-container">
+              <label for="Range Delivery" class="form-label custom-label">Pickup_Ready:</label>
+              <div class="custom-input">{{ deliveryData.pickup_ready | date: 'short' }}
+              </div>
+            </div>
+          </div>
+        </div>
+    </div><br>
+    <div class="row"><div class="col-2"></div><div class="col-7">
+      <div  class="shadow p-3 mb-5 bg-body-tertiary rounded">
+      <div class="custom-label-container">
+        <div class="custom-input" style="color: #DF8F17;">Free:  {{ deliveryData.fee / 100 }}</div>
+      </div>
+      <div class="custom-label-container">
+        <div class="custom-input"> Status: {{ deliveryData.status }}</div>
+      </div>
+      <div class="custom-label-container">
+        <div class="custom-input"> Updated: {{ deliveryData.updated | date: 'short'  }}</div>
+      </div>
+      <div class="custom-label-container">
+        <div class="custom-input"> Tracking_url: <a href="{{ deliveryData.tracking_url }}" target="_blank">{{ deliveryData.tracking_url }}</a></div>
+    </div>
+
+    </div>
+        </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+  </div>
+
+</ng-template>
+
+
+<!--Crere delivery-->
+<ng-template #modalContent5 let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Devis</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+      <div class="custom-card">
+          <div class="row espace">
+              <div class="col-md-6">
+                  <div class="custom-label-container">
+                      <label for="name" class="form-label custom-label">Created:</label>
+                     {{ devis?.uberDirectData?.created| date:'yyyy-MM-dd HH:mm:ss' }}
+                  </div>
+              </div>
+              <div class="col-md-6">
+                  <div class="custom-label-container">
+                      <label for="name" class="form-label custom-label">Currency:</label>
+                      {{ devis?.uberDirectData?.currency }}
+                  </div>
+              </div>
+              <div class="col-md-6">
+                  <div class="custom-label-container">
+                      <label for="name" class="form-label custom-label">Currency_type:</label>
+                       {{ devis?.uberDirectData?.currency_type }}
+                  </div>
+              </div>
+              <div class="col-md-6">
+                  <div class="custom-label-container">
+                      <label for="name" class="form-label custom-label">Dropoff_deadline:</label>
+                      {{  devis?.uberDirectData?.dropoff_deadline| date:'yyyy-MM-dd HH:mm:ss' }}
+                  </div>
+              </div>
+              <div class="col-md-6">
+                  <div class="custom-label-container">
+                      <label for="name" class="form-label custom-label">Dropoff_eta:</label>
+                      {{  devis?.uberDirectData?.dropoff_eta| date:'yyyy-MM-dd HH:mm:ss' }}
+                  </div>
+              </div>
+              <div class="col-md-6">
+                  <div class="custom-label-container">
+                      <label for="name" class="form-label custom-label">Duration:</label>
+                      {{  devis?.uberDirectData?.duration | date:'HH:mm:ss'}}
+                  </div>
+              </div>
+              <div class="col-md-6">
+                  <div class="custom-label-container">
+                      <label for="name" class="form-label custom-label">Expires:</label>
+                     {{  devis?.uberDirectData?.expires| date:'yyyy-MM-dd HH:mm:ss' }}
+                  </div>
+              </div>
+              <div class="col-md-6">
+                  <div class="custom-label-container">
+                      <label for="name" class="form-label custom-label">Fee:</label>
+                      <span class="fee-amount" style="color: blue;">{{ devis?.uberDirectData?.fee / 100 }}</span>
+                    </div>
+              </div>
+          </div>
+      </div><br>
+
+  </div>
+  <div class="modal-footer">
+    <button (click)="adddelivery() " class="btn btn-danger" >Add Delivery</button>
+    <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+  </div>
+
+</ng-template>

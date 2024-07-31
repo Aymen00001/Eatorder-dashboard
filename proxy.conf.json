@@ -1,0 +1,6 @@
+{
+    "/api": {
+      "target": "https://api.eatorder.fr",
+      "secure": false
+    }
+  }

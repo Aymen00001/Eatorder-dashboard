@@ -1,0 +1,135 @@
+<ng-template #dangerTpl>
+	<svg xmlns="http://www.w3.org/2000/svg" fill="#fff" width="24" height="24" viewBox="0 0 24 24"><path d="M10.872 6.831l1.695 3.904 3.654-1.561-1.79 3.426 3.333.954-3.417 1.338 2.231 4.196-4.773-2.582-2.869 2.287.413-3.004-3.792-.726 2.93-1.74-1.885-2.512 3.427.646.843-4.626zm-.786-6.831l-1.665 9.119-6.512-1.228 3.639 4.851-5.548 3.294 7.108 1.361-.834 6.076 5.742-4.577 9.438 5.104-4.288-8.064 6.834-2.677-6.661-1.907 3.25-6.22-6.98 2.982-3.523-8.114z"/></svg>
+	{{ errorMessage }}
+	</ng-template>
+
+	<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
+<div class="bg-login">
+	<!--wrapper-->
+	<div class="wrapper">
+		<div class="d-flex align-items-center justify-content-center my-5 my-lg-0">
+			<div class="container">
+				<div class="row row-cols-1 row-cols-lg-2 row-cols-xl-2">
+					<div class="col mx-auto">
+						<div class="my-4 text-center">
+							<img src="http://eatorder.fr/sandbox01/images/banner.png" width="180" alt="" />
+						</div>
+						<div class="card">
+							<div class="card-body">
+								<div class="border p-4 rounded">
+									<div class="text-center">
+										<h3 class="">S'inscrire</h3>
+										<p>Vous avez déjà un compte ? <a href="JavaScript:;" (click)="onSignIn()">Se connecter ici</a>
+										</p>
+									</div>
+									<!-- <div class="d-grid">
+										<a class="btn my-4 shadow-sm btn-white" href="javascript:;"> <span class="d-flex justify-content-center align-items-center">
+											<img class="me-2" src="assets/images/icons/search.svg" width="16" alt="Image Description">
+											<span>Sign Up with Google</span>
+											</span>
+										</a> <a href="javascript:;" class="btn btn-facebook"><i class="bx bxl-facebook"></i>Sign Up with Facebook</a>
+									</div> -->
+									<div class="login-separater text-center mb-4"> <span>OU S'INSCRIRE PAR E-MAIL</span>
+										<hr/>
+									</div>
+									<div class="form-body">
+										<form class="row g-3" [formGroup]="ownerForm" (ngSubmit)="onSubmit(dangerTpl)">
+											<div class="col-sm-6">
+												<label for="inputFirstName" class="form-label">Prénom</label>
+												<div class="input-group"> <span class="input-group-text bg-transparent"><i class='bx bxs-user'></i></span>
+													<input type="text" formControlName="firstName" class="form-control border-start-0"  [(ngModel)]="formData.firstName"  [ngClass]="{ 'is-invalid': submitted && f['firstName'].errors} "  id="firstName" placeholder="Prénom" required />
+													<div *ngIf="submitted && f['firstName'].errors" class="invalid-feedback">
+														<div *ngIf="f['firstName'].errors['required']">messageNameRequered</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<label for="inputLastName" class="form-label">Nom</label>
+												<div class="input-group"> <span class="input-group-text bg-transparent"><i class='bx bxs-user'></i></span>
+													<input type="text" formControlName="lastName"  class="form-control border-start-0"  [(ngModel)]="formData.lastName"  placeholder="Nom" [ngClass]="{ 'is-invalid': submitted && f['lastName'].errors} " />
+													<div *ngIf="submitted && f['lastName'].errors" class="invalid-feedback">
+														<div *ngIf="f['lastName'].errors['required']">messageLastNameRequered</div>
+												</div>
+											
+											</div>
+											</div>
+											<div class="col-12">
+												<label for="inputPhoneNo" class="form-label">numéro de téléphone</label>
+												<div class="input-group"> <span class="input-group-text bg-transparent"><i class='bx bxs-phone' ></i></span>
+													
+													<input type="text" formControlName="phoneNumber" class="form-control border-start-0"  [(ngModel)]="formData.phoneNumber"  id="phoneNumber" placeholder="Numéro de téléphone" [ngClass]="{ 'is-invalid': submitted && f['phoneNumber'].errors} " />
+													<div *ngIf="submitted && f['phoneNumber'].errors" class="invalid-feedback">
+														<div *ngIf="f['phoneNumber'].errors['required']">messagePhoneRequered</div>
+												</div>
+											</div>
+											</div>
+											<div class="col-12">
+												<label for="inputEmailAddress" class="form-label">Adresse e-mail</label>
+												<div class="input-group"> <span class="input-group-text bg-transparent"><i class='bx bxs-message' ></i></span>
+													<input type="mail" formControlName="email" class="form-control border-start-0"  [(ngModel)]="formData.email"  id="email" placeholder="Adresse courriel" [ngClass]="{ 'is-invalid': submitted && f['email'].errors} " />
+													<div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
+														<div *ngIf="f['email'].errors['required']">messageEmailRequered</div>
+														<div *ngIf="f['email'].errors['email']"> messageValideEmail</div>
+													</div>
+												</div>											</div>
+											<div class="col-12">
+												<label for="inputChoosePassword" class="form-label">Mot de passe</label>
+												<div class="input-group"> <span class="input-group-text bg-transparent"><i class='bx bxs-lock-open' ></i></span>
+													<input type="password" formControlName="password" class="form-control border-start-0"  [(ngModel)]="formData.password"  id="password" placeholder="Choisissez un mot de passe" [ngClass]="{ 'is-invalid': submitted && f['password'].errors} " />
+													<div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
+														<div *ngIf="f['password'].errors['required']">messagePasswordRequered</div>
+														<div *ngIf="f['password'].errors['minlength']">messagePAsswordLongRequered</div>
+												</div>
+											</div>
+											</div>
+											<div class="col-12">
+												<label for="inputChoosePassword" class="form-label">Confirmer le mot de passe</label>
+												<div class="input-group"> <span class="input-group-text bg-transparent"><i class='bx bxs-lock' ></i></span>
+													<input type="password" formControlName="confirmPassword" class="form-control border-start-0"  [(ngModel)]="formData.confirmPassword"  id="confirmPassword" placeholder="Confirmer le mot de passe" [ngClass]="{ 'is-invalid': submitted && f['confirmPassword'].errors} "  />
+													<div *ngIf="submitted && f['confirmPassword'].errors" class="invalid-feedback">
+														<div *ngIf="f['confirmPassword'].errors['required']">messagePasswordRequered</div>
+														  <div *ngIf="f['confirmPassword'].errors['mustMatch']">messageMatchRequered</div>
+														  </div>
+												</div>
+											</div>
+											<div>
+												<label for="inputsexe" class="form-label">gender</label><br>
+												<div class="form-check form-check-inline">
+													<input class="form-check-input" type="radio" name="sexe" id="maleGender" [(ngModel)]="formData.sexe" [ngModelOptions]="{standalone: true}" value="Homme">
+													<label class="form-check-label" for="inlineRadio1">male </label>
+												</div>
+												<div class="form-check form-check-inline">
+													<input class="form-check-input" type="radio" name="sexe" id="femaleGender" [(ngModel)]="formData.sexe" [ngModelOptions]="{standalone: true}" value="Femme">
+													<label class="form-check-label" for="inlineRadio2">female</label>
+												</div>
+											</div>
+											<div class="col-12">
+												<label for="inputAddress3" class="form-label">Adresse</label>
+												<textarea class="form-control" id="inputAddress3" placeholder="Enter Address" rows="3" required></textarea>
+											</div>
+											
+											<div class="col-12">
+												<div class="form-check form-switch">
+													<input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked">
+													<label class="form-check-label" for="flexSwitchCheckChecked">J'ai lu et j'accepte les termes et conditions</label>
+												</div>
+											</div>
+										
+											<div class="col-12">
+												<div class="d-grid">
+													<button type="submit" class="btn btn-primary"><i class='bx bx-user'></i>Inscrivez-vous</button>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--end row-->
+			</div>
+		</div>
+	</div>
+	<!--end wrapper-->
+</div>

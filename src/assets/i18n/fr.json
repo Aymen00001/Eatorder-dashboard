@@ -1,0 +1,130 @@
+{
+    "siteTitle": "Application angular multilingue",
+    "welcome": "Bienvenue",
+    "addOwner": "Ajouter Propriétaire",
+    "phone": "Téléphone",
+    "name": "Nom",
+    "status": "Statut",
+    "stores": "Magasin",
+    "actions": "Actions",
+    "noDataFound": "Données introuvables",
+    "show": "Voir",
+    "enable": "Activer",
+    "disable": "Désactiver",
+    "active": "Actif",
+    "pending": "En attente",
+    "suspended": "Suspendu",
+    "rejected": "Rejeté",
+    "search": "Chercher",
+    "dashboard": "Tableau de bord",
+    "users": "Utilisateurs",
+    "ecommerce": "Commerce électronique",
+    "firstName": "Prénom",
+    "lastName": " Nom",
+    "gender": "Sexe",
+    "male": "Homme",
+    "female": "Femme",
+    "phoneNumber": "Numéro de téléphone",
+    "password": "Choisissez un mot de passe",
+    "confirmPassword": "Confirmez le mot de passe",
+    "btnAddOwner": "Ajouter",
+    "messageNameRequered": "Le prénom est requis ",
+    "messageLastNameRequered": "Le nom est requis",
+    "messageEmailRequered": "Email est requis",
+    "messageValideEmail":"L'e-mail doit être une adresse e-mail valide",
+    "messagePhoneRequered": "Numéro de téléphone est requis",
+    "messagePasswordRequered": "Mot de passe est requis",
+    "messageMatchRequered": "Les mots de passe doivent correspondre",
+    "messagePAsswordLongRequered": "Le mot de passe doit être au moins de 6 caractères",
+    "congratulation": "Félicitation",
+    "messageAddedOwner": "Propriétaire ajouté avec succès",
+    "loading": "Chargement...",
+    "disableOwnermessage": "Voulez vous désactiver ce propriétaire",
+    "enableOwnermessage": "Voulez vous activer ce propriétaire",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "powered":"Développé par",
+    "theme": "Personnalisateur de thème",
+    "date": "Date",
+    "details": "Voir détails",
+    "listOwner": "Liste Propriétaires",
+    "allOwner": "Tous Les Propriétaires",
+    "analytics": "Analytique",
+    "application": "Application",
+    "email": "E-mail",
+    "fileManager": "Gestionnaire de fichiers",
+    "contacts": "Liste de contacts",
+    "invoice": "Factures",
+    "calender": "Calendrier",
+    "chatBox" :"Boîte de discussion",
+    "allStores": "Tous les magasins",
+    "requestedStore": "Magasins demandés",
+    "rejectedtedStore": "Magasins rejetés",
+    "admin": "Administrateur",
+    "profile": "Profil",
+    "earnings": "Gains",
+    "logout": "Se déconnecter",
+    "downloads": "Téléchargements",
+    "notification": "Notifications",
+    "adresseEmail": "Adresse courriel",
+    "all": "Tout",
+    "description": "Description",
+    "userProfile": "Profil de l'utilisateur",
+    "saveChanges": "Sauvegarder les modifications",
+    "disableStore": "Voulez-vous suspendre ce magasin?",
+    "enableStore": "Voulez-vous activer ce magasin ?",
+    "rejeterStore": "Voulez-vous rejeter ce magasin ?",
+    "approuverStore": "Voulez-vous approuver ce magasin ?",
+    "deleteStores": "Voulez-vous supprimer ce magasin ?",
+    "addFile": "Ajouter Un Fichier",
+    "allFile": "Tous Les Fichiers",
+    "documents": "Documents",
+    "images": "Images",
+    "storage": "Mon stockage",
+    "folders": "Dossier",
+    "files": "Fichier",
+    "recentFiles": "Fichiers récents",
+    "used":"Utilisé",
+    "upgrade":"Améliorer",
+    "msgUploadType": "Type de fichier non autorisé. Seuls les fichiers PNG, JPEG, WebP, PDF et DOCX sont autorisés.",
+    "msgUploadSize":"La taille du fichier dépasse la limite autorisée (500 Ko).",
+    "chooseFile": "Choisir un fichier",
+    "close": "Fermer",
+    "preview": "Aperçu",
+    "msgDeleteFile":"Voulez-vous vraiment supprimer ce fichier ?",
+    "seConnecter": "Se connecter",
+    "createAccountmsg": "Vous n'avez pas de compte ?",
+    "seconnecterEmail":"SE CONNECTER AVEC L'EMAIL",
+    "forgetPasswordMsg":"Mot de passe oubilé ?",
+    "passwordForm": "Mot De Passe",
+    "emptyField": "requis",
+    "tapEmailAdresse": "Saisissez votre adresse e-mail",
+    "send": "Envoyer",
+    "retout":"Retour",
+    "createPassword": "Créer un nouveau mot de passe",
+    "msgRenitiliser":"Nous avons reçu votre demande de réinitialisation du mot de passe. Veuillez saisir votre nouveau mot de passe !",
+    "updatePasword": "Modifier"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  }

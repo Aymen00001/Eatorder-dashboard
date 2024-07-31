@@ -1,0 +1,121 @@
+<div class="card custom-border">
+    <div class="card-body p-5">
+        <hr>
+        <form class="row g-3">
+            <div class="col-md-6">
+                <label for="name" class="form-label">Name</label>
+                <div>
+                    <input type="text" class="form-control" id="name" name="name" [(ngModel)]="name"
+                        [ngClass]="{'is-invalid': messageErrors['name']}" (input)="clearError('name')">
+                    <div class="invalid-feedback">
+                        <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['name'] }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label for="inputLastName" class="form-label">Image</label>
+                <input type="file" class="form-control" id="image" name="image" (change)="onImageChange($event)">
+            </div>
+            <div class="col-md-6">
+                <label for="number" class="form-label">Promo Group</label>
+                <div>
+                    <input type="number" class="form-control" id="number" name="number" [(ngModel)]="numberGroup"
+                        (ngModelChange)="addRows()" (input)="clearError('numberGroup')">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label for="number2" class="form-label">Base Price</label>
+                <div>
+                    <input type="number" class="form-control" id="number2" name="number2" [(ngModel)]="number2"
+                        [ngClass]="{'is-invalid': messageErrors['number2']}" (input)="clearError('number2')">
+                    <div class="invalid-feedback">
+                        <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['number2'] }}
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3">
+                <div class="row" *ngFor="let row of dynamicRows; let i = index">
+                    <div class="espace">
+                        <div class="input-group mb-3"><br>
+                            <label class="input-group-text" for="inputGroupSelect01">Groupe {{ i + 1 }}</label>
+                            <select name="categories" class="form-select"
+                                (change)="onCategoryChange($event.target.value, i)">
+                                <option selected>Choose...</option>
+                                <option *ngFor="let category of categories" [value]="category.category._id">
+                                    {{ category.category.name }}
+                                </option>
+                            </select>
+                        </div>
+                        <div *ngIf="selectedCategoryIds[i]">
+                            <label>Produit</label>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="{{ 'allProductsCheckbox_' + i }}"
+                                    [checked]="isAllProductsSelected(i)"
+                                    (change)="onAllProductsCheckboxChange($event.target.checked, i)" />
+                                <label class="form-check-label" for="{{ 'allProductsCheckbox_' + i }}">Tous les
+                                    produits</label>
+                            </div>
+                            <div class="product-list-container">
+                                <div *ngFor="let prod of products[i]" class="form-check">
+                                    <input type="checkbox" class="form-check-input"
+                                        id="{{ 'productCheckbox_' + prod._id }}" [checked]="isProductSelected(prod, i)"
+                                        (change)="onProductCheckboxChange(prod, i)" />
+                                    <label class="form-check-label" for="{{ 'productCheckbox_' + prod._id }}">
+                                        {{ prod.name }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div><br>
+                    </div>
+                    <div class="invalid-feedback" *ngIf="getErrorMessage(i)">
+                        <i class="bi bi-exclamation-triangle"></i> {{ getErrorMessage(i) }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="discount" class="form-label">Mode:</label>
+                    <div class="product-list-container">
+                        <div *ngFor="let mode of consumationModes" class="form-check">
+                            <input type="checkbox" class="form-check-input" id="{{ 'modeCheckbox_' + mode.mode.id }}"
+                                (change)="onModeCheckboxChange(mode.mode._id, $event.target.checked)"
+                                [ngClass]="{'is-invalid': messageErrors['availabilitys']}"
+                                (input)="clearError('availabilitys')" />
+                            <label class="form-check-label" for="{{ 'modeCheckbox_' + mode.mode.id }}">
+                                {{mode.mode.name}}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="invalid-feedback">
+                        <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['availabilitys'] }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="discount" class="form-label">Discount %:</label>
+                    <div>
+                        <input type="number" class="form-control" id="discount" name="discount" [(ngModel)]="discount"
+                            [ngClass]="{'is-invalid': messageErrors['discount']}" (input)="clearError('discount')">
+                        <div class="invalid-feedback">
+                            <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['discount'] }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault"
+                    [(ngModel)]="availability" [ngModelOptions]="{standalone: true}">
+                <label class="form-check-label" for="flexSwitchCheckDefault">Availability</label>
+            </div>
+            <br>  <br>
+            <div class="row">
+                <div class="col-xs-12 text-right">
+                    <button type="submit" class="btn btn-primary px-5" (click)="onSubmit()">Register</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-2"> </div>
+</div>
+
+
+

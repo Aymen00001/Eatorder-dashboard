@@ -1,0 +1,362 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap');
+
+.accordion-item{
+    margin-bottom: 20px;
+}
+.accordion-header{
+    background-color: white;
+}
+
+.imagecategory{
+ width: 100px;
+ height: 100px;
+ object-fit: contain;
+}
+.modifycategory{
+    margin: 10px;
+}
+
+.inlineitem{
+    display: flex;
+    justify-content: space-between;
+}
+.edit{
+  display: flex;
+  align-items: center;
+  margin-right: 3%;
+  flex-direction: column;
+  margin-top: -2%;
+}
+.edit2{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+}
+.lni{
+    margin-left: 10px;
+    font-size: 20px;
+}
+.rounded{
+    background-color: white;
+}
+.btneditcategory{
+  display: flex;
+
+}
+.stat{
+  position:fixed;
+ height: 80%;
+    overflow-y: auto;
+}
+.drag-over {
+    background-color: lightblue; /* Change this to your desired background color */
+  }
+.option{
+    display: flex;
+    align-items: center;
+ 
+
+}
+.margin{
+    margin-left: 5%;
+}
+ .uppercase{
+    text-transform: capitalize;
+ }
+ .a{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background: #FFFFFF;
+    box-shadow: 0 1px 4px #00000026;
+    border-radius: 3px;
+    padding: 0;
+    width: 100%;
+    position: relative;
+ }
+ .product{
+    background-color: white;
+    margin-top:5px ;
+ }
+ .chip {
+   
+     border-radius: 0px; 
+ }
+.optiongroupe{
+    margin-top: 10px;
+}
+.inline{
+display: inline-flex;
+}
+
+  .example-list {
+    width: 500px;
+    max-width: 100%;
+    border: solid 1px #ccc;
+    min-height: 60px;
+    display: block;
+    background: white;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  
+  .example-box {
+    padding: 20px 10px;
+    border-bottom: solid 1px #ccc;
+    color: rgba(0, 0, 0, 0.87);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    cursor: move;
+    background: white;
+    font-size: 14px;
+  }
+  
+  .cdk-drag-preview {
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+                0 8px 10px 1px rgba(0, 0, 0, 0.14),
+                0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  }
+  
+  .cdk-drag-placeholder {
+    opacity: 0;
+  }
+  
+  .cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+  
+  .example-box:last-child {
+    border: none;
+  }
+  
+  .example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+.center{
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+}
+.btn-outline-warning {
+  color: #df8f17;
+  border-color:#df8f17;
+}
+.btn-outline-warning:hover {
+  color: #000;
+  background-color: #df8f17;
+  border-color: #df8f17;
+}
+.form-check-input:checked {
+  background-color: #df8f17;
+  border-color: #df8f17;
+}
+.form-check {
+  display: block;
+  min-height: 1.5rem;
+  padding-left: 1.5em;
+  margin-bottom: 0;
+}
+
+.form-switch .form-check-input {
+  margin-bottom: 0;
+  width: 30px;
+ 
+
+  
+}
+.form-check-input {
+  height:13px;
+  margin-top: 0;
+ // margin-left: -1.2em;
+ 
+
+  
+}
+.productName{
+  display: flex;
+  width: 95%;
+ 
+  margin-left: 2%;
+}
+p{
+  
+  font-size: 20px;
+   margin-right: 13px;
+}
+h2 span h3 {
+  font-family: 'Quicksand', sans-serif;
+}
+.mode{
+    
+  display: flex;
+  justify-content: space-between;
+
+}
+.justify{
+  
+    float: right;
+
+}
+.perso{
+  margin-bottom: 0px;
+  margin-top: 0.15em;
+}
+i{
+  font-size: 20px;
+}
+.form-control {
+
+  border-color: #df8f17;
+}
+.bg-primary {
+  background-color: #df8f17 !important;
+}
+.text-primary {
+  color: #df8f17 !important;
+}
+img, svg {
+  vertical-align: middle;
+ object-fit: fill;
+}
+.checkboxmodel {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 20px;
+  height: 20px;
+  position: relative;
+  border: 2px solid #df8f17;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+}
+.checkboxmodel:checked {
+  background-color: #df8f17;
+  border-color: #df8f17;
+}
+.checkboxmodel:disabled {
+  background-color: #F0F0F0;
+  border-color: #ccc;
+  cursor: auto;
+}
+.checkboxmodel:checked::before {
+  content: "\2713";
+  font-size: 18px;
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.btn-primary:hover {
+  color: #fff;
+  background-color: #df8f17;
+  border-color: #df8f17;
+}
+.btn-primary {
+  color: #df8f17;
+  background-color: #fff;
+  border-color: #df8f17;
+}
+#scrollableDiv {
+  height: 150px;
+  overflow-y: scroll;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.checkbox-item {
+  margin-bottom: 10px;
+}
+.upload-image{
+  border:1px dashed #df8f17;
+  height:150px;
+  width:150px;
+  display:flex;
+  align-items: center;
+}
+h2{
+  text-align:center
+}
+section{
+  display: flex;
+  justify-content:space-evenly
+}
+.image-container {
+  position: relative;
+  display: inline-block;
+  width: 7rem;
+  height:7rem
+}
+.image {
+  display: block;
+  width: 7rem;
+  height:7rem
+}
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(128, 128, 128, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out; /* Smooth opacity transition */
+  pointer-events: none; /* Allow clicks to go through the overlay */
+}
+
+.overlay-text {
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.image-container:hover .overlay {
+  opacity: 1;
+}
+image-cropper {
+  max-height: 33vh;
+}
+
+.cropper-wrapper {
+  min-height: 300px;
+  position: relative;
+}
+
+.loader {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, .5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  color: white;
+}
+
+.nav-link{
+  color: #DF8F17;
+  background-color: #fff;
+  border-color: #DF8F17;
+}
+.custom-border {
+  border-top: 4px solid #DF8F17;
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 0;
+}
+

@@ -1,0 +1,99 @@
+<div class="card custom-border">
+  <div class="card-body p-5">
+      <hr>
+      <form class="row g-3">
+        <div class="col-md-6">
+          <label for="name" class="form-label" >Name</label>
+          <div class="input-group">
+            <span class="input-group-text bg-transparent"><i class='bx bx-store'></i></span>
+         <input type="text" class="form-control" id="name" [(ngModel)]="currenyData.name" name="name"></div>
+        </div>
+        <div class="col-md-6">
+          <label for="inputLastName" class="form-label" >Description</label>
+          <div class="input-group">
+            <span class="input-group-text bg-transparent"><i class='bx bx-message-square-detail'></i></span>
+          <input type="text" class="form-control" id="inputLastName" name="description" [(ngModel)]="currenyData.description"></div>
+        </div>
+        <div class="col-md-6">
+          <label for="email" class="form-label" >Email</label>
+          <div class="input-group">
+            <span class="input-group-text bg-transparent"><i class='bx bx-message-square-detail'></i></span>
+          <input type="email" class="form-control" id="email" name="description" [(ngModel)]="currenyData.email" >
+          </div>
+          
+        </div>
+     
+        <div class="col-md-6">
+          <label for="phone" class="form-label">Phone</label>
+          <div class="input-group ">
+            <span class="input-group-text bg-transparent"><i class="lni lni-phone" ></i></span>
+            <ngx-intl-tel-input name="phone" [(ngModel)]="currenyData.phone"></ngx-intl-tel-input>
+          </div>
+          <span>Phone already entered:{{ currenyData.phoneNumber }}</span>
+        </div>
+        <div class="col-md-6">
+          <label for="adresse" class="form-label" >Address</label>
+          <div class="input-group"> <span class="input-group-text bg-transparent"><i class='bx bx-map' ></i></span>
+          <input type="text" class="form-control" id="adresse" [(ngModel)]="currenyData.address" name="address"  (input)="onAddressInput()">
+          </div>
+          <div class="col-md-11">
+            <div id="map"></div></div> 
+        </div>
+        <div class="col-md-6" *ngIf="!someCondition">
+          <label for="latitude" class="form-label" >Latitude </label>
+          <input type="number" class="form-control" id="latitude" [(ngModel)]="currenyData.latitude" name="latitude" >
+        </div>
+        <div class="col-md-6" *ngIf="!someCondition">
+          <label for="longitude" class="form-label">Longitude</label>
+          <input type="number" class="form-control" id="longitude" [(ngModel)]="currenyData.longitude" name="longitude">
+        </div>
+         <br>
+        <div class="col-md-6">
+          <label for="rangeDelivery" class="form-label">Range Delivery ({{ currenyData.rangeValue }} KM)</label>
+          <input type="range" class="form-range" id="rangeDelivery" [(ngModel)]="currenyData.rangeValue" [ngModelOptions]="{standalone: true}" (input)="updateRangeValue($event)" max="7">
+          <label for="inputLastName" class="form-label">Logo</label>*
+          <!-- <img class="card-img-top logo-image" [src]="'http://localhost:8000/' + currenyData.logo" alt="Card image cap" /> -->
+          <input type="file" class="form-control" id="image" name="image" accept="image/*" (change)="onImageChange($event)"  >
+          <label for="inputLastName" class="form-label">Banner</label>
+          <input type="file" class="form-control" id="image2" name="image2" (change)="onImageChange2($event)">
+          <br>
+          <div class="col-md-6">
+            <label for="Primary Color" class="form-label custom-label">Primary Color:</label>
+            <div class="d-flex align-items-center">
+              <input type="color" class="form-colorstore" id="primairecolor" [(ngModel)]="currenyData.primairecolor" name="primairecolor" [ngModelOptions]="{standalone: true}">
+            </div>
+              <div style="margin-left: 10px;">
+              </div> <br>
+              <label for="Secondary Color" class="form-label custom-label">Secondary Color:</label>
+              <div class="d-flex align-items-center">
+              <input type="color" class="form-colorstore" id="secondairecolor" [(ngModel)]="currenyData.secondairecolor" name="secondairecolor" [ngModelOptions]="{standalone: true}">
+              </div>
+          </div>
+          <div class="col">
+            <div class="input-group">
+              <span class="input-group-text bg-transparent"><i class='bx bx-store'></i></span>
+                <input type="text" class="form-control" id="nom" [value]="'Select  Specialite'"[disabled]="someCondition"/>
+              </div>
+                <div class="product-list-container">
+                  <div class="d-flex align-items-center" *ngFor="let specialite of specialites">
+                    <input type="checkbox"  [checked]="isChecked(specialite._id)"  (change)="onCheckboxChange(specialite._id)" name="specialite" value="specialite._id" > {{specialite.name}}
+                  </div>
+                </div>
+          </div>
+        </div>
+        <br><br>
+     
+       
+        <div class="col-12 text-right">
+          <button type="submit" class="btn btn-primary px-5" (click)="UpdateStores()" >Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+
+
+
+
+

@@ -1,0 +1,71 @@
+.green-card {
+    background-color:rgb(240, 160, 130); /* Couleur verte */
+    color: #ffffff; /* Texte blanc */
+    border-radius: 10px; /* Bord arrondi */
+    padding: 20px; /* Marge intérieure */
+}
+
+.green-card .total-amount {
+    font-size: 24px; /* Taille de la police pour le montant total */
+    font-weight: bold; /* Texte en gras */
+}
+.green-card2 {
+    background-color:rgb(74, 50, 231); 
+    color: #ffffff; 
+    padding: 20px; 
+}
+.prix{
+    margin-left: 40px; 
+}
+.custom-card {
+    width: 250px; 
+    height: 100px;
+}
+.chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+}
+.chart-wrapper {
+    text-align: center;
+    width: 80%;
+}
+
+.row {
+    display: nowrap;
+    flex-wrap: wrap;
+  }
+  
+  .col {
+    flex: 1;
+    margin-right: 15px; /* Ajustez selon votre besoin */
+  }
+
+  .btn:hover {
+    color: #fff;
+    background-color: #DF8F17;
+    border-color: #DF8F17;
+    }
+    .btn {
+    color: #DF8F17;
+    background-color: #fff;
+    border-color: #DF8F17;
+    }
+    .nav-link:hover {
+        color: #fff;
+        background-color: #DF8F17;
+        border-color: #DF8F17;
+        }
+    .nav-link{
+        color: #DF8F17;
+        background-color: #fff;
+        border-color: #DF8F17;
+    }
+    .custom-border {
+        border-top: 4px solid #DF8F17;
+        border-left: 0;
+        border-right: 0;
+        border-bottom: 0;
+      }
+ .text-right { text-align: right; }

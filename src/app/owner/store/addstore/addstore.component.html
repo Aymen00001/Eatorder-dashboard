@@ -1,0 +1,140 @@
+<div *ngIf="!isManagerRole()" >
+<div class="card custom-border">
+  <div class="card-body p-5">
+      <hr>
+      <form class="row g-3" >
+        <div class="col-md-6">
+          <label for="name" class="form-label" >Name</label>
+          <div class="input-group">
+            <span class="input-group-text bg-transparent"><i class='bx bx-store'></i></span>
+         <input type="text" class="form-control" id="name" [(ngModel)]="currenyData.name" name="name" [ngClass]="{'is-invalid': messageErrors['name']}"  (input)="clearError('name')">
+          </div>
+         <div class="invalid-feedback">
+          <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['name'] }}
+      </div>
+         <div class="error-message"></div>
+        </div>
+        <div class="col-md-6">
+          <label for="inputLastName" class="form-label" >Description</label>
+          <div class="input-group">
+            <span class="input-group-text bg-transparent"><i class='bx bx-message-square-detail'></i></span>
+          <input type="text" class="form-control" id="inputLastName" name="description" [(ngModel)]="currenyData.description" [ngClass]="{'is-invalid': messageErrors['description']}" (input)="clearError('description')">
+          </div>
+          <div class="invalid-feedback">
+            <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['description'] }}
+        </div>
+        </div>
+        <div class="col-md-6">
+          <label for="email" class="form-label" >Email</label>
+          <div class="input-group">
+            <span class="input-group-text bg-transparent"><i class='bx bx-message-square-detail'></i></span>
+          <input type="email" class="form-control" id="email" name="description" [(ngModel)]="currenyData.email" [ngClass]="{'is-invalid': messageErrors['email']}" (input)="clearError('email')">
+          </div>
+          <div class="invalid-feedback">
+            <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['email'] }}
+        </div>
+        <div class="alert alert-danger" role="alert" *ngIf="erroremail">
+          {{messageerror}}
+        </div>
+        </div>
+        <div class="col-md-6">
+          <label for="phoneNumber" class="form-label">Phone</label>
+          <div class="input-group">
+            <span class="input-group-text bg-transparent"><i class="lni lni-phone" ></i></span>
+            <ngx-intl-tel-input [(ngModel)]="currenyData.phoneNumber" name="phoneNumber"></ngx-intl-tel-input>
+          </div>
+          <div class="invalid-feedback">
+            <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['phoneNumber'] }}
+        </div>
+        </div>
+        <div class="col-md-6">
+          <label for="adresse" class="form-label" >Address</label>
+          <div class="input-group"> <span class="input-group-text bg-transparent"><i class='bx bx-map' ></i></span>
+          <input type="text" class="form-control" id="adresse"  [(ngModel)]="currenyData.address" name="address" [ngClass]="{'is-invalid': messageErrors['address']}"
+           (input)="clearError('address')" (input)="onAddressInput()" >
+          </div><div class="invalid-feedback">
+            <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['address'] }}
+        </div>
+        <div class="alert alert-danger" role="alert" *ngIf="erroradrress">
+          {{erroradrress}}
+        </div>
+        <div class="col-md-11">
+          <div id="map" style="height: 400px;"></div>
+        </div>
+        </div>
+      
+        <div class="col-md-6" *ngIf="!someCondition">
+          <label for="latitude" class="form-label">Latitude</label>
+          <input type="number" class="form-control" id="latitude" [(ngModel)]="currenyData.latitude" name="latitude" [ngClass]="{'is-invalid': messageErrors['latitude']}" (input)="clearError('latitude')">
+          <div class="invalid-feedback">
+            <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['latitude'] }}
+          </div>
+        </div>
+        <div class="col-md-6" *ngIf="!someCondition">
+          <label for="longitude" class="form-label">Longitude</label>
+          <input type="number" class="form-control" id="longitude" [(ngModel)]="currenyData.longitude" name="longitude" [ngClass]="{'is-invalid': messageErrors['longitude']}" (input)="clearError('longitude')" >
+          <div class="invalid-feedback">
+            <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['longitude'] }}
+          </div>
+        </div>
+      
+           <br>
+        <div class="col-md-6">
+          <label for="rangeDelivery" class="form-label">Range Delivery ({{ currenyData.rangeValue }} KM)</label>
+          <input type="range" class="form-range" id="rangeDelivery" [(ngModel)]="currenyData.rangeValue" [ngModelOptions]="{standalone: true}" (input)="updateRangeValue($event)" max="7">
+          <label for="inputLastName" class="form-label">Logo</label>
+          <input type="file" class="form-control" id="image" name="image" (change)="onImageChange($event)"  >
+          <div *ngIf="logoErrorMessage" class="alert alert-danger" role="alert">
+            {{ logoErrorMessage }}
+          </div>
+          <br>
+          <label for="inputLastName" class="form-label">Banner</label>
+          <input type="file" class="form-control" id="image2" name="image2" (change)="onImageChange2($event)">
+          <div *ngIf="BannerErrorMessage" class="alert alert-danger" role="alert">
+            {{ BannerErrorMessage }}
+          </div>
+          <br>
+          <div class="col-md-6">
+            <label for="Primary Color" class="form-label custom-label">Primary Color:</label>
+            <div class="d-flex align-items-center">
+              <input type="color" class="form-colorstore" id="primairecolor" [(ngModel)]="currenyData.primairecolor" name="primairecolor" [ngModelOptions]="{standalone: true}">
+            </div>
+              <div style="margin-left: 10px;">
+              </div> <br>
+              <label for="Secondary Color" class="form-label custom-label">Secondary Color:</label>
+              <div class="d-flex align-items-center">
+              <input type="color" class="form-colorstore" id="secondairecolor" [(ngModel)]="currenyData.secondairecolor" name="secondairecolor" [ngModelOptions]="{standalone: true}">
+              </div>
+          </div><br>
+          <div class="col">
+            <div class="input-group">
+              <span class="input-group-text bg-transparent"><i class='bx bx-store'></i></span>
+                <input type="text" class="form-control" id="nom" [value]="'Select  Specialite'"[disabled]="someCondition"/></div>
+                <div class="product-list-container">
+            <div class="d-flex align-items-center" *ngFor="let specialite of specialites">
+              <input type="checkbox" [(ngModel)]="specialite.isChecked" (change)="onCheckboxChange(specialite._id)" name="specialite" value="specialite._id" > {{specialite.name}}
+            </div>
+                </div>
+          </div>
+          
+        </div>
+       
+        <br><br>
+     
+    <hr>
+        <div class="row">
+          <div class="col-xs-12 text-right">
+            <button type="submit" class="btn btn-primary px-5" (click)="addStores()">Register</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  </div>
+  <div *ngIf="isManagerRole()">
+    <div class="alert alert-danger" role="alert">
+      Access denied: Managers do not have access to this form.
+    </div>
+  </div>

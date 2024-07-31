@@ -1,0 +1,149 @@
+
+<!--Afficher-->
+<div class="card">
+    <div class="card-body">
+    
+      <div class="d-lg-flex align-items-center mb-4 gap-3 ">
+        <div class="position-relative">
+          <input type="text" class="form-control ps-5 radius-30" placeholder="Search Order"    [(ngModel)]="searchTerm"  name="searchTerm" >
+          <span class="position-absolute top-50 product-show translate-middle-y"><i class="bx bx-search"></i></span>
+        </div> <div class="ms-auto"><a  class="btn btn-primary radius-30 mt-2 mt-lg-0" (click)="openModal(content)"><i class="bx bxs-plus-square" ></i>Add New Coupon</a></div></div>
+      <div class="table-responsive">
+        <table class="table align-middle mb-0 table-hover" id="Transaction-History">
+          <thead class="table-light">
+            <tr>
+              <th>#</th>
+              <th>Number Of Uses</th>
+              <th>code</th>
+              <th>Date debut </th>
+              <th>
+                <div (click)="sortorderByData()" style="cursor: pointer;">Date fin
+                  <i class="lni" [ngClass]="sortDirection === 'asc' ? 'lni-arrow-up' : 'lni-arrow-down'"></i>
+              </div>
+              </th>
+              <th> <div (click)="sortorderByDatadiscount()" style="cursor: pointer;">Discount
+                <i class="lni" [ngClass]="sortDirections === 'asc' ? 'lni-arrow-up' : 'lni-arrow-down'"></i>
+            </div></th>
+              <th>View Details</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+            *ngFor="let coupon of filteredCoupons()| paginate: { itemsPerPage: selectedItemsPerPage, currentPage: p } ; let i=index ">
+              <td>
+                <div class="d-flex align-items-center">
+                  <div class="ms-2">
+  
+                    <h6 class="mb-0 font-14">{{ coupon.orderNumber }}</h6>
+                  </div>
+                </div>
+              </td>
+              <td>{{coupon.numberOfUses}}</td>
+              <td>{{coupon.code}}</td>
+              <td>{{coupon.startDate| date:'yyyy-MM-dd'}}</td>
+              <td> {{coupon.endDate| date:'yyyy-MM-dd'}}</td>
+              <td>
+                {{coupon.discount}} %
+              </td>
+            
+              <td>  <button type="button"class="btn btn-primary btn-sm radius-30 px-4" (click)="openDetailsModal(coupon)">View Details</button>
+
+              </td>
+              <td>
+                <div class="d-flex order-actions">
+                  <a  class="ms-3" (click)="this.deletecoupons(coupon._id)"><i class='bx bxs-trash'></i></a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="pagination-container">
+    <pagination-controls (pageChange)="currentPage = $event" class="pagination-controls"></pagination-controls>
+  </div>
+<!--Add Coupon-->
+  <ng-template #content let-modal>
+        <div>
+            <div  class="modal-header">
+              <h4 class="modal-title">Add Coupon</h4>
+              <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+
+            </div>
+            <div class="modal-body">
+               
+                    <div >
+                        <div class="card-head"></div>
+                        <div class="card-body">
+                            <div class="row justify-content-center">
+                                <div >
+                                    <h5 class="mb-0">Discount %</h5>
+                                    <input type="number" min="0" max="100" class="form-control" [(ngModel)]="discount" name="discount" id="inputdiscount">
+                                    <h5 class="mb-0">Prefix</h5>
+                                    <input type="text" class="form-control" [(ngModel)]="Prefix" name="Prefix" id="inputPrefix">
+                                </div>
+                            </div>
+                            <div class="place">
+                            <div class="daterange ">
+                                <h4 class="mb-0">Validity period</h4>
+                                <ngb-datepicker #dp (dateSelect)="onDateSelection($event)" [displayMonths]="1" [dayTemplate]="t"
+                                    outsideDays="hidden"></ngb-datepicker>
+                                <ng-template #t let-date let-focused="focused"> <span class="custom-day" [class.focused]="focused"
+                                        [class.range]="isRange(date)" [class.faded]="isHovered(date) || isInside(date)"
+                                        (mouseenter)="hoveredDate = date" (mouseleave)="hoveredDate = null">
+                                        {{ date.day }}
+                                    </span>
+                                </ng-template>
+                            </div></div>
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-xs-12 text-right">
+                    <button type="submit" class="btn btn-primary" (click)="addCoupon(discount,Prefix)"  (click)="modal.close('Close click')"> ADD Coupon
+                    </button>
+                </div>
+            </div></div>
+  </ng-template>
+
+
+  <!-- Afficher Detail -->
+<ng-template #modalContent let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Coupon Details</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body" >
+      <div style="display: flex; flex-wrap: wrap;" class="place">
+        <div style="width: 30%; margin:1%;">
+          <div class="coupon bg-white rounded mb-3 d-flex justify-content-between">
+            <div class="tengah py-3 d-flex w-100 justify-content-start" style="padding-left:3%;">
+              <div>
+                <span class="badge badge-primary">Number Of Uses : {{selectedCoupon.numberOfUses}}</span>
+                <h3 class="lead">{{selectedCoupon.code}}</h3>
+                <p class="text-muted mb-0">Date debut : {{selectedCoupon.startDate | date:'yyyy-MM-dd'}}</p>
+                <p>Date fin : {{selectedCoupon.endDate | date:'yyyy-MM-dd'}}</p>
+              </div>
+            </div>
+            <div class="kanan">
+              <div class="info m-3 d-flex align-items-center">
+                <div class="w-100">
+                  <div class="block">
+                    <span class="time font-weight-light">
+                      <span>{{selectedCoupon.discount}} %</span>
+                    </span>
+                  </div>
+                
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+    </div>
+  </ng-template>

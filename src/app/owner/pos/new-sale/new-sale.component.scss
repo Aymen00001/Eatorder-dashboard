@@ -1,0 +1,45 @@
+@font-face {
+  font-family: "Ticket";
+  src: url("../../../../assets/fonts/CONSOLA.TTF");
+}
+.perso{
+  min-height: 75vh;
+  overflow-y: scroll;
+  max-height: 75vh;
+  font-family: "Ticket";
+}
+.Totale{
+  position: relative;
+  bottom: 0;
+  left: 0;
+}
+.options{
+  margin-left: 20px;
+
+}
+.right{
+  display: flex;
+}
+.quantity{
+  margin: 10px;
+}
+.plus{
+  border: 2px solid #42a5f5;
+  color: #42a5f5;
+  font-weight: bold;
+  font-size: 20px;
+}
+.minus{
+  border: 2px solid #dd1226;
+  color: #dd1226;
+  font-weight: bold;
+  font-size: 20px;
+}
+.minus:hover{
+  color: #fff;
+  background-color: #dd1226;
+}
+.plus:hover{
+  color: #fff;
+  background-color: #42a5f5;
+}

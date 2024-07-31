@@ -1,0 +1,253 @@
+
+  <!--breadcrumb-->
+<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+  <div class="breadcrumb-title pe-3">Product</div>
+  <div class="ps-3">
+      <nav aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0 p-0">
+              <li class="breadcrumb-item"><a href="#" (click)="$event.preventDefault()"><i class="bx bx-group"></i></a></li>
+              <li class="breadcrumb-item active" aria-current="page">List Product</li>
+          </ol>
+      </nav>
+  </div>
+  <div class="ms-auto">
+      <div class="btn-group">
+          <button type="button" class="btn btn-primary">Settings</button>
+          <button type="button" class="btn btn-primary split-bg-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">
+              <span class="visually-hidden">Toggle Dropdown</span>
+          </button>
+          <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
+              <a class="dropdown-item" href="#" (click)="$event.preventDefault()">Action</a>
+              <a class="dropdown-item" href="#" (click)="$event.preventDefault()">Another action</a>
+              <a class="dropdown-item" href="#" (click)="$event.preventDefault()">Something else here</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#" (click)="$event.preventDefault()">Separated link</a>
+          </div>
+      </div>
+
+  </div>
+</div>
+
+<!--end breadcrumb-->
+
+<div class="card">
+  <div class="card-body">
+      <div class="fm-search">
+          <div class="mb-0">
+              <div class="input-group input-group-lg">
+                  <span class="input-group-text bg-transparent"><i class='bx bx-search'></i></span>
+                  <input type="text" class="form-control" placeholder="Search the files">
+              </div>
+          </div>
+      </div>
+      <div class="table-responsive mt-3">
+          <table class="table table-striped table-hover table-sm mb-0">
+              <thead>
+                  <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                      
+                      <th>Description</th>
+                      <th>Availability</th>
+                      <th>Price</th>
+                      <th>Category</th>
+                      <th>Option Group</th>
+                      <th> Tax </th>
+                      <th>Action</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let item of displayedProducts" >
+                    <td><img [src]="baseUrl+item.image" alt="Product Image" width="50"></td>
+                    <td>{{ item.name }}</td>
+                     
+                      <td>{{ item.description }}</td>
+                      <td>
+                        <div class="form-check-danger form-check form-switch">
+                          <input class="form-check-input" type="checkbox" [checked]="item.availability" (change)="toggleAvailability(item)">
+                        </div>
+                      </td>
+
+                      <td> {{item.price}}</td>
+                      <td *ngIf="item.category && item.category.name !== ''">{{ item.category.name }}</td>
+                      <td *ngIf="!item.category || item.category.name === ''">No category</td>
+                      <td ><div   *ngFor="let op of item.optionGroups" >   
+                        {{ op.name }}
+    
+                    
+                    </div>  </td>
+                    <td><div   *ngFor="let tax of item.taxes" >   
+                      {{ tax.rate }}%
+  
+                  
+                  </div> </td>
+                   
+                      <td>
+                          <a href="javascript:void(0)" 
+                              class="me-3 text-danger" title="Delete" (click)="deleteProduct(item)">
+                              <i class="bx bx-trash font-24"></i>
+                          </a>
+                          <a href="javascript:void(0)" 
+                              class="me-3 text-primary" data-bs-toggle="dropdown"  title="Download">
+                              <i class="bx bx-edit font-24"></i>
+                          </a>
+               
+                          <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
+                            <button class="dropdown-item"  (click)="openLg(content,item)">Update Product</button>
+                      
+                            <div class="dropdown-divider" ></div>
+                            <button class="dropdown-item" [routerLink]="['/product/products', item._id]" >Update Option Groups</button>
+                          </div>
+                      </td>
+                    <!-- <td><a [routerLink]="['/product/products', item._id]">View Details</a></td> -->
+                  </tr>
+                 
+              </tbody>
+          </table>
+          <div class="d-flex justify-content-center">
+            <nav >
+              <ul class="pagination">
+                <li class="page-item"><a class="page-link"  (click)="goToPage(currentPage - 1)" >Previous</a></li>
+                <li class="page-item"><div class="page-link">Page {{ currentPage }} of {{ totalPages }}</div> </li>
+                
+                <li class="page-item"><a class="page-link" (click)="goToPage(currentPage + 1)"  >Next</a></li>
+              </ul>
+            </nav></div>
+      </div>
+  </div>
+</div><div class="d-flex justify-content-center mt-4">
+
+</div>
+
+<ng-template #content let-modal>
+  <form >
+  <div class="modal-header">
+      <h5 class="card-title">Update Product</h5>
+
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+         
+            <div class="card-body p-4">
+                <hr/>
+                 <div class="form-body mt-4">
+                  <div class="row">
+                     <div class="col-lg-6">
+                     <div class="border border-3 p-4 rounded">
+                      <div class="mb-3">
+                          <label for="inputProductTitle" class="form-label">Product Title</label>
+                          <input type="email" class="form-control"  [(ngModel)]="selectedProduct.name" name="name" value="{{selectedProduct.name}}"   class="form-control"  id="inputProductTitle" placeholder="Enter product title">
+                       
+                        </div>
+                        <div class="mb-3">
+                          <label for="inputProductDescription" class="form-label">Description</label>
+                          <textarea class="form-control" id="inputProductDescription"   [(ngModel)]="selectedProduct.description"  name="description"  rows="3" ></textarea>
+                    
+                        </div>
+                        <div *ngFor="let size of selectedProduct.size ;let i = index " class="p-1">
+                          <div class="row">
+                            
+                          <div class="col-7 perso"> <span>name</span><input type="text" class="form-control perso" id="inputPrice"  [(ngModel)]="size.name"  [name]="'sizeName_' + i"   ></div>
+                          <div class="col-4  perso"><span>price</span><input type="text" class="form-control perso" id="inputPrice"  [(ngModel)]="size.price" [name]="'sizePrice_' + i"   ></div>
+                          <div class="col-1 mt-3 perso ">
+                           
+                            <button class="btn btn-link " (click)="removeSize(i)">
+                              <i class="bx bx-trash text-danger"></i>
+                            </button>
+                        </div> 
+                        </div>
+                        </div>
+                        <div class="col-6">
+                          <button type="button" class="btn btn-link-secondary" (click)="addSize()">Add Size</button>
+                        </div>
+                      </div>
+                      
+                     </div>
+                     
+                     <div class="col-lg-6">
+                      <div class="border border-3 p-4 rounded">
+                        <div class="row g-3">
+                          <div class="col-md-6">
+                              <label for="inputPrice" class="form-label">Price</label>
+                              <input type="email" class="form-control" id="inputPrice"  [(ngModel)]="selectedProduct.price" [ngModelOptions]="{standalone: true}"   placeholder="00.00">
+                         
+                            </div>
+                       
+                            <!-- <div class="col-md-6">
+                              <label for="inputCompareatprice" class="form-label">Compare at Price</label>
+                              <input type="password" class="form-control" id="inputCompareatprice" placeholder="00.00">
+                            </div>
+                            <div class="col-md-6">
+                              <label for="inputCostPerPrice" class="form-label">Cost Per Price</label>
+                              <input type="email" class="form-control" id="inputCostPerPrice" placeholder="00.00">
+                            </div>
+                            <div class="col-md-6">
+                              <label for="inputStarPoints" class="form-label">Star Points</label>
+                              <input type="password" class="form-control" id="inputStarPoints" placeholder="00.00">
+                            </div> -->
+                            <div  class="mb-3">
+                              <label for="formFileSm" class="form-label">Store</label>
+              
+                              <select  class="single-select form-select"  name="storeId"  [(ngModel)]="selectedProduct.storeId">
+                                <option hidden>Select your store</option>
+                                  <option *ngFor="let str of store" value="{{str._id}}"> {{str.name}}</option>
+                                
+                              </select>
+                          
+                          </div>
+                            <!-- <div class="col-12">
+                              <label for="inputProductType" class="form-label">Option Groups</label>
+                              <select class="form-select" id="inputProductType" name="optionGroups" [(ngModel)]="this.selectedProduct.category._id">
+                                <option *ngFor="let optionGroup of optionGroups" [value]="optionGroup._id">{{ optionGroup.name }}</option>
+                                </select>
+                               
+                            </div> -->
+                            <div class="col-12">
+                              <label for="inputVendor" class="form-label">Category</label>
+                              <select class="form-select" id="inputVendor" name="category"   [(ngModel)]="selectedProduct.category._id">
+            
+                                  <option *ngFor="let category of Categorys" [value]="category._id" >{{ category.name }}</option>
+                                </select>
+                               
+                            </div>
+                            <div class="col-12">
+                              <label for="inputImage" class="form-label">Product Image</label>
+                              <input
+                                type="file"
+                                class="form-control"
+                                id="inputImage"
+                                (change)="onImageSelected($event)"
+                                accept="image/*"
+                                name="image"
+                              >
+                            </div>
+                            <!-- <div class="col-12">
+                              <label for="inputCollection" class="form-label">Collection</label>
+                              <select class="form-select" id="inputCollection">
+                                  <option></option>
+                                  <option value="1">One</option>
+                                  <option value="2">Two</option>
+                                  <option value="3">Three</option>
+                                </select>
+                            </div> -->
+                          
+                            <div class="col-12">
+                                <div class="d-grid">
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                    </div>
+                 </div><!--end row-->
+              </div>
+            </div>
+          </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" (click)=" updateProduct(selectedProduct); modal.close('Close click')" data-dismiss="modal" class="btn btn-primary">Save Product</button>
+
+      <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+    </div>
+  </form>
+  </ng-template>

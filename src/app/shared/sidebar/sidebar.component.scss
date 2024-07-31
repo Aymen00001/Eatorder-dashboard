@@ -1,0 +1,18 @@
+.sidebar .navigation li ul li.active > a {
+    color: #df8f17;
+    text-decoration: none;
+    background: rgb(223 143 23 / 12%);
+}
+.sidebar .navigation li.open > a {
+    color: #df8f17;
+    text-decoration: none;
+    background: rgba(223, 143, 23, 0.12);
+}
+a:hover {
+    color: #df8f17;
+}
+.sidebar .navigation li:hover > a {
+    color: #df8f17;
+    text-decoration: none;
+    background: rgba(223, 143, 23, 0.12);
+}

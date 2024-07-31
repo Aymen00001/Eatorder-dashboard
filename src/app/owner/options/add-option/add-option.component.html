@@ -1,0 +1,132 @@
+<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+  <div class="breadcrumb-title pe-3">Options</div>
+  <div class="ps-3">
+      <nav aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0 p-0">
+              <li class="breadcrumb-item"><a href="#" (click)="$event.preventDefault()"><i class="bx bx-group"></i></a></li>
+              <li class="breadcrumb-item active" aria-current="page">Add Options</li>
+          </ol>
+      </nav>
+  </div>
+  
+</div>
+
+
+<div class="card">
+  <div class="mb-0">
+    <div class="border border-3 p-4 rounded">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label for="inputName" class="form-label">Name</label>
+          <input type="text" class="form-control" id="inputName" placeholder="Option">
+        </div>
+        <div class="col-md-6">
+          <label for="inputPrice" class="form-label">Price</label>
+          <input type="number" class="form-control" id="inputPrice" placeholder="00.00" min="0">
+        </div>
+    <!--   <div class="col-md-6">
+          <label for="inputTax" class="form-label">Tax</label>
+          <div class="input-group">
+            <input type="number" class="form-control" id="inputTax" placeholder="00.00" min="0" max="100">
+            <span class="input-group-text">%</span>
+          </div>
+       
+        </div> -->
+        <div class="col-md-6">
+          <label for="inputUnit" class="form-label">Unité</label>
+          <select class="form-select" id="inputUnit">
+            <option></option>
+            <option value="1">Kg</option>
+            <option value="2">Piece</option>
+            <option value="3">Litre</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="formFileSm" class="form-label">Image</label>
+          <input class="form-control form-control-sm" id="formFileSm" type="file" (change)="onFileChange($event)">
+        </div>
+        <div class="col-md-6">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="inputDefault">
+            <label class="form-check-label" for="inputDefault">Default</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="inputPromo" (change)="onPromoCheckboxChange()">
+            <label class="form-check-label" for="inputPromo">Promo</label>
+          </div>
+        </div>
+        <div class="col-md-6" *ngIf="isPromoChecked">
+          <label for="inputPromoPercentage" class="form-label">Promo Percentage</label>
+          <div class="input-group">
+            <input type="number" class="form-control" id="inputPromoPercentage" placeholder="00.00" min="0" max="100">
+            <span class="input-group-text">%</span>
+          </div>
+        </div>
+        
+               <!--Tax-->
+
+               <div class="container">
+                <div class="card custom-border">
+                  <br>
+                  <ul class="nav nav-tabs justify-content-center">
+                    <li class="nav-item" *ngFor="let mode of ModeConsumation">
+                      <a class="nav-link" (click)="selectMode(mode)">
+                        {{ mode.mode.name }}
+                      </a>
+                    </li>
+                  </ul>
+                  <div *ngIf="selectedMode">
+                    {{selectedMode.name}}
+                    <div class="input-group mb-3">
+                      <label for="tax" class="input-group-text">Tax:</label>
+                      <select id="tax" class="form-select" [(ngModel)]="selectedMode.selectedTax" (change)="selectTax($event.target.value)">
+                        <option hidden>Select a tax</option>
+                        <option *ngFor="let tax of taxeoption" [value]="tax._id">{{ tax.rate }}%</option>
+                      </select>
+                    </div>
+                
+                  </div>
+
+                  
+                </div>
+              </div>
+                              <!--Fin Tax-->
+ 
+        <div class="col-12 mt-3">
+          <div class="d-grid">
+            <button type="button" class="btn btn-primary" (click)="saveOption()">Save Option</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div *ngIf="successMessage" class="alert alert-success">
+  <div class="d-flex align-items-center">
+    <div class="font-35 text-white"><i class='bx bxs-check-circle'></i></div>
+    <div class="ms-3">
+      <h6 class="mb-0 text-white">Success Alerts</h6>
+      <div class="text-white">{{ successMessage }}</div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="errorMessage" class="alert alert-danger">
+  <div class="ms-3">
+    <h6 class="mb-0 text-white">Danger Alerts</h6>
+    <div class="text-white">{{ errorMessage }}</div>
+  </div>
+</div>
+
+<!-- Your existing code -->
+
+
+
+
+

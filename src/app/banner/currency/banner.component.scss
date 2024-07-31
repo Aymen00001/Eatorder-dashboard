@@ -1,0 +1,25 @@
+.map-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 30px;
+}
+.map-frame {
+  border: 2px solid black;
+  height: 100%;
+}
+#map {
+  height: 400px;
+}
+#frugalmap {
+  height: 600px;
+  width: 100%
+}
+.toast-container {
+  position: fixed;
+  top: 0;
+  //end: 0;
+  padding: 3px;
+}

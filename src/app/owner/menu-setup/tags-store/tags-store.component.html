@@ -1,0 +1,102 @@
+<div class="card radius-10">
+    <div class="card-body">
+        <div class="d-flex align-items-center">
+            <div>
+                <h5>
+                    <i class="lni lni-dinner">TAGES</i>
+                </h5>
+            </div>
+
+            <div class="font-22 ms-auto"><i class='bx bx-dots-horizontal-rounded'></i>
+            </div>
+        </div>
+        <div class="d-lg-flex align-items-center mb-4 gap-3">
+            <div class="position-relative">
+              <input type="text" class="form-control ps-5 radius-30" placeholder="Search Order"  name="searchTerm" >
+              <span class="position-absolute top-50 product-show translate-middle-y"><i class="bx bx-search"></i></span>
+            </div> 
+            <div class="ms-auto">
+              <a (click)="openModal(modalContent)" class="btn btn-primary radius-30 mt-2 mt-lg-0">
+                <i class="bx bxs-plus-square"></i>Add New TAGS
+              </a>
+            </div></div>
+        <hr />
+        <div class="table-responsive table-margin">
+            <table class="table align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th> NAME</th>
+                        <th>Action</th>
+                 
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let targ of tags">
+                        <td>{{targ.orderNumber}}</td>
+                        <td>{{targ.name}}</td>
+                        <td>
+                            <div class="d-flex order-actions">
+                              <a (click)="deletteTags(targ._id)" class="ms-3 btn2 "><i class='bx bxs-trash'></i></a>
+                              <a class="ms-3 btn2" (click)="openModal2(modalContent2, targ)"><i class='bx bxs-edit'></i></a>
+                            </div>
+                          </td>
+                    </tr>
+                </tbody>
+    </table>
+</div>
+</div>
+<!--<div class="pagination-container">
+<pagination-controls (pageChange)="currentPage = $event" class="pagination-controls"></pagination-controls>
+</div>-->
+</div>
+
+
+<!--Add Tags-->
+<ng-template #modalContent let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">ADD </h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body" >
+      <div class="modal-body">
+        <form class="row g-3" >
+            <div class="col-md-6">
+              <label for="name" class="form-label" >Name</label>
+              <div class="input-group">
+                <span class="input-group-text bg-transparent"><i class="lni lni-dinner"></i></span>
+             <input type="text" class="form-control" id="nametag" [(ngModel)]="nametag" name="nametag">
+              </div>
+             
+          </div>
+        </form>
+    </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" (click)="addTags()" (click)="modal.close('Close click')">Add Tags</button>
+      <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+    </div>
+  </ng-template>
+  <!--Edit Tags-->
+  <ng-template #modalContent2 let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title"> Update</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+      </div>
+      <div class="modal-body">
+        <div class="col-md-6">
+            <label for="name" class="form-label">Name</label>
+            <div>
+                <input type="text" class="form-control" id="name" name="name" [(ngModel)]="objectToEdit.name"  >
+            </div>
+           
+        </div>
+     
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary px-5" (click)="UpdateTags(objectToEdit._id)"
+          (click)="modal.close('Close click')">Update</button>
+        <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+      </div>
+  </ng-template>

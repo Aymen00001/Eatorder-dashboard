@@ -1,0 +1,540 @@
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
+<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+    <div class="breadcrumb-title pe-3">Options Groups</div>
+    <div class="ps-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item"><a href="#" (click)="$event.preventDefault()"><i class="bx bx-group"></i></a></li>
+                <li class="breadcrumb-item active" aria-current="page">List Options Groups</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="ms-auto">
+      <div class="btn-group">
+          <button type="button" class="btn btn-primary" (click)="openAddOptionsGroups(addOptionsGroups) ">add options groups</button>
+      
+      </div>
+  
+  </div>
+  </div>
+  <!-- <input type="file" (change)="fileChangeEvent($event)" />
+
+  <image-cropper
+      [imageChangedEvent]="imageChangedEvent"
+      [maintainAspectRatio]="true"
+      [aspectRatio]="4 / 3"
+      format="png"
+      (imageCropped)="imageCropped($event)"
+      (imageLoaded)="imageLoaded($event)"
+      (cropperReady)="cropperReady()"
+      (loadImageFailed)="loadImageFailed()"
+  ></image-cropper>
+  
+  <img [src]="croppedImage" /> -->
+  <h1>Options Groups</h1>
+
+<div cdkDropList class="accordion" id="groupeAccordion">
+    <div class="accordion-item" *ngFor="let groupe of optionGroups; let i = index">
+      <h2 class="accordion-header" cdkDrag>
+        <div *ngIf="!(hidden && groupe._id===id)">
+       
+
+          <div class="inlineitem">
+            <div class="productName" data-bs-toggle="collapse"
+              [attr.data-bs-target]="'#groupeCollapse' + groupe._id"
+              [attr.aria-controls]="'groupeCollapse' + groupe._id">
+                <div>
+              <span>{{ groupe.name }}</span>    
+              <h6>Min :{{ groupe.force_min }}</h6>
+              <h6>Max :{{ groupe.force_max }}</h6>
+            </div>
+            </div>
+           
+            <table>
+
+       
+             
+            </table>
+            <table>
+              <tr> <i class=" bx bx-pencil" (click)="openupdategroupe(updategroupe,groupe)"></i></tr>
+              <tr> <i class=" bx bx-duplicate"></i></tr>
+
+              <tr> <i class=" bx bx-trash-alt text-danger"  (click)="   deleteOptionGroup(groupe)"></i></tr>
+
+            </table>
+          </div>
+
+        </div>
+    
+      </h2>
+      <div [id]="'groupeCollapse' + groupe._id" class="accordion-collapse collapse"
+        [attr.aria-labelledby]="'groupeHeading' + groupe._id" data-bs-parent="#groupeAccordion">
+        <div class="accordion-body">
+
+          <h3>Options</h3>
+          <!-- Nested Product Accordion -->
+          <div *ngFor="let product of groupe.options" class="product">
+            <!-- <div class="form-check form-switch productswitech">
+              <input class="form-check-input perso switchedproduct" type="checkbox" role="switch"
+                id="flexSwitchCheckDefault" (change)="toggleAvailabilityglobale(product)"  [checked]="product.availability">
+
+            </div> -->
+            <div *ngIf="!(hiddenupdateProduct && product._id===selectedProduct._id)">
+              <div class="inlineitem" (dragover)="handleDragOver($event)"
+                (drop)="handleDroptoproduct($event,product)">
+
+                <div class="productName">
+                  <div class="image-container" (mouseover)="showOverlay()" (mouseout)="hideOverlay()">
+                    <img class="imagecategory image"  (click)="uploadAndResizeUpdateoption(product.option._id,groupe._id)"
+                      [src]="baseUrl + product.option.image" />
+
+                    <div class="overlay" *ngIf="isHovered">
+                      <span class="overlay-text">Change</span>
+                    </div>
+                  </div>
+                  <!-- <img class="imagecategory"  (click)="uploadAndResize()" [src]="baseUrl+product.option.image">   -->
+                  {{ product.name }}
+                </div>
+                <div >
+                  <div class="chip chip-md" *ngFor="let go of product.subOptionGroup" cdkDrag>    {{go.name}}<span class="closebtn" (click)="deleteSubOptionGroup(groupe._id,product._id,go._id)" onclick="this.parentElement.style.display='none' ">×</span>
+                  </div>
+                </div>
+                <!-- <div class="chip chip-outline btn-outline-primary" data-mdb-ripple-color="dark" *ngFor="let go of product.subOptionGroup"> 
+                  {{go.name}}
+                  <i class="close fas fa-times"></i>
+                </div> -->
+                <table>
+                  <tr>
+                </table>
+                <table>
+                  <tr> <i class=" bx bx-pencil" (click)="openModfiyOptionsInGroupsOptions(modfiyOptionsInGroupsOption,product,groupe._id)"></i></tr>
+                  <tr> <i class=" bx bx-duplicate" (click)="openAddGroupsOptionsInOptions(AddGroupsOptionsInOptions,product,groupe._id)"></i></tr>
+                  <tr> <i class=" bx bx-trash-alt text-danger" (click)="DeleteOptionFromGroupOption(groupe._id,product._id)"></i></tr>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="center">
+            <button class="btn btn-outline-warning " (click)="openScrollableContent(addoption,groupe) "> add item
+              to {{groupe.name}} </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </div>
+  <ng-template #addOptionsGroups let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Modal title</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+      </div>
+      <div class="modal-body">
+        <div class="col-lg">
+          <div class="border border-3 p-4 rounded">
+            <div class="mb-3">
+              <label for="inputProductTitle" class="form-label">Title</label>
+              <input type="text" [(ngModel)]="optionGroup.name" name="name" class="form-control" id="inputProductTitle"
+                placeholder="Enter product title" (ngModelChange)="validateInputLength()" maxlength="24">
+                <div class="text-danger" *ngIf="validateInputLength()">{{ validateInputLength() }}</div>
+
+            </div>
+            <div class="mb-3">
+              <label for="inputProductDescription" class="form-label">Description</label>
+              <textarea class="form-control" [(ngModel)]="optionGroup.description" name="description"
+                id="inputProductDescription" rows="3"></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="inputProductTitle" class="form-label">min</label>
+              <div class="input-group has-validation">
+                <input type="number" min="0" [(ngModel)]="optionGroup.force_min" name="min" class="form-control"
+                  id="inputProductTitle" placeholder="Enter product title">
+                <span class="input-group-text" id="inputGroupPrepend"> <i class="fadeIn animated bx bx-info-circle"
+                    placement="top" ngbTooltip="This forces your customer
+                  to select a certain
+                  minimum number of
+                  choices. E.g.: If you set this
+                  to 2 then your customer
+                  must select at least 2"></i></span>
+    
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="inputProductTitle" class="form-label">max</label>
+              <div class="input-group has-validation">
+                <input type="number" min="0" [(ngModel)]="optionGroup.force_max" name="max" class="form-control"
+                  id="inputProductTitle" placeholder="Enter product title">
+                <span class="input-group-text" id="inputGroupPrepend"> <i class="fadeIn animated bx bx-info-circle"
+                    placement="top" ngbTooltip="The maximurn number of
+                  choices your customer can
+                  add. If you prefer not to
+                  set any limitation you can
+                  set it to 0. E.g.: If you set
+                  this to 4 then your
+                  customer can not select
+                  more than 4 choices."></i></span>
+              </div>
+    
+            </div>
+            <div class="col-md-6">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="inputPromo" [(ngModel)]="optionGroup.allow_quantity">
+                <label class="form-check-label" for="inputPromo">Allow adding same choice multiple times</label>
+              </div>
+            </div>
+           
+            <div class="col-4">
+              <label for="inputVendor" class="form-label">Tax</label>
+              <div *ngFor="let consumationMode of ModeConsumation">
+                <div class="row">
+                  <div class="col-3">{{ consumationMode.mode.name }} :</div>
+                  <div class="col-2" *ngFor="let tax of consumationMode.taxes">
+                    <input class="checkboxmodel" name="checktaxs" type="checkbox" [(ngModel)]="tax.isChecked" />
+                    <label> {{ tax.rate }}%</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br>
+            <div class="alert alert-danger" *ngIf="optionGroup.force_max<optionGroup.force_min && optionGroup.force_max!=0">
+              <strong> minimum</strong> must be less than or equal to a <strong>maximum</strong> value .
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+    
+        <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close </button>
+        <button type="submit" class="btn btn-primary" (click)="addOptionGroup() "
+          [disabled]="optionGroup.force_max<optionGroup.force_min && optionGroup.force_max!=0">Save Groupe Option</button>
+    
+      </div>
+  </ng-template> 
+  <ng-template #addoption let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Add option to option groupe </h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <a href="javascript:void(0)" class="me-3 text-primary" title="Add" (click)="showAddOption()">
+        <i class="bx bx-plus font-24"></i>
+      </a>
+      <div *ngIf="showaddoption">
+        <input type="text" class="form-control" [(ngModel)]="searchTerm" (ngModelChange)="searchOptions()"
+          placeholder="Search Options">
+  
+  
+  <table>
+        <div class="option" *ngFor="let option of filteredOptions">
+          <div> <input class="form-check-input" type="checkbox" [value]="option._id" [(ngModel)]="option.checked"
+              id="flexCheckDefault"></div>
+          <div class="uppercase"> {{ option.name }}</div>
+          <div class="margin"> <input *ngIf="option.checked" type="text" [(ngModel)]="option.price" placeholder="price"
+              class="form-control" /></div>
+          <div *ngIf="option.checked"> <div><label> default </label> <input class="form-check-input" type="checkbox"
+              [(ngModel)]="option.isDefault" id="CheckDefault"></div></div>
+  
+  
+  
+        </div>
+      </table>
+      </div>
+      <div *ngIf="!showaddoption">
+        <div class="card">
+          <div class="mb-0">
+            <div class="border border-3 p-4 rounded">
+              <div class="row g-3">
+                <section>
+                  <div *ngIf="!imgResultAfterResize" (click)="uploadAndResize()" class="upload-image">
+                      <h2> Upload Image</h2>
+                     
+                    </div>
+                  
+                  <!-- <button (click)="uploadAndResize()">
+                    Uploading, Compressing, and resizing to max width 200px and max height 100px
+                  </button> -->
+                  <img (click)="uploadAndResize()" width="150px" height="150px" *ngIf="imgResultAfterResize" [src]="image" alt="" />
+              
+                </section>
+                <div class="col-md-6">
+                  <label for="inputName" class="form-label">Name</label>
+                  <input type="text" class="form-control" id="inputName" placeholder="Option"
+                    [(ngModel)]="productOption.name">
+                </div>
+                <div class="col-md-6">
+                  <label for="inputPrice" class="form-label">Price</label>
+                  <input type="number" class="form-control" id="inputPrice" placeholder="00.00" min="0"
+                    [(ngModel)]="productOption.price">
+                </div>
+                
+              <!--<div class="col-md-6">
+                  <label for="inputTax" class="form-label">Tax</label>
+                  <div class="input-group">
+                    <input type="number" class="form-control" id="inputTax" placeholder="00.00" min="0" max="100"
+                      [(ngModel)]="productOption.tax">
+                    <span class="input-group-text">%</span>
+                  </div>
+                </div>--> 
+                <div class="col-md-6">
+                  <label for="inputUnit" class="form-label">Unité</label>
+                  <select class="form-select" id="inputUnit" [(ngModel)]="productOption.unite">
+                    <option value="Piece">Piece</option>
+                    <option value="Kg">Kg</option>
+                    <option value="Litre">Litre</option>
+                  </select>
+                </div>
+                <hr>
+
+                                <!--Tax-->
+
+                                <div class="container">
+                                  <div class="card custom-border">
+                                    <br>
+                                    <ul class="nav nav-tabs justify-content-center">
+                                      <li class="nav-item" *ngFor="let mode of ModeConsumation">
+                                        <a class="nav-link" (click)="selectMode(mode)">
+                                          {{ mode.mode.name }}
+                                        </a>
+                                      </li>
+                                    </ul>
+                                    <div *ngIf="selectedMode">
+                                      <div class="input-group mb-3">
+                                        <label for="tax" class="input-group-text">Tax:</label>
+                                        <select id="tax" class="form-select" [(ngModel)]="selectedMode.selectedTax" (change)="selectTax(selectedMode.mode._id, $event.target.value)">
+                                          <option hidden>Select a tax</option>
+                                          <option *ngFor="let tax of taxeoption" [value]="tax._id">{{ tax.rate }}%</option>
+                                        </select>
+                                      </div>
+                                      <div class="invalid-feedback">
+                                        <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['selectedMode.selectedTax'] }}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                                <!--Fin Tax-->
+
+                <div class="col-md-6">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="inputDefault"
+                      [(ngModel)]="productOption.isDefault">
+                    <label class="form-check-label" for="inputDefault">Default</label>
+                  </div>
+                </div>
+         
+                <div class="col-12 mt-3">
+                  <div class="d-grid">
+  
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+      </div>
+      <div *ngIf="successMessage" class="alert alert-success">
+        <div class="d-flex align-items-center">
+          <div class="font-35 text-white"><i class='bx bxs-check-circle'></i></div>
+          <div class="ms-3">
+            <h6 class="mb-0 text-white">Success Alerts</h6>
+            <div class="text-white">{{ successMessage }}</div>
+          </div>
+        </div>
+      </div>
+      
+      <div *ngIf="errorMessage" class="alert alert-danger">
+        <div class="ms-3">
+          <h6 class="mb-0 text-white">Danger Alerts</h6>
+          <div class="text-white">{{ errorMessage }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      
+  
+      <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+      <button *ngIf="showaddoption" class="btn btn-primary"
+        (click)=" getCheckedOptions( groupe); modal.close('Close click')">Get Checked Options</button>
+      <button *ngIf="!showaddoption" type="button" class="btn btn-primary"
+        (click)="saveOption(productOption,groupe._id);">Save Option</button>
+    </div>
+  </ng-template> 
+  <ng-template #modfiyOptionsInGroupsOption let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Update Option</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <div class="col-md-6">
+        <label for="inputPrice" class="form-label">Name</label>
+        <input class="form-control" [(ngModel)]="selectedoption.name" type="text"/>
+      </div>
+      <div class="col-md-6">
+        <label for="inputPrice" class="form-label">Price</label>
+        <input class="form-control" [(ngModel)]="selectedoption.price" type="text"/>
+      </div>
+      <br>
+      <!-- Affichage des modes -->
+      <div class="container">
+        <div class="card custom-border">
+          <br>
+          <h5>Modes:</h5>
+          <ul class="list-group">
+            <li class="list-group-item" *ngFor="let mode of ModeConsumation">
+              <div>
+                Mode: {{ mode.mode.name }}
+                <br>
+                <label for="tax">Tax:</label>
+                <select class="form-select" [(ngModel)]="selectedoption.taxes[mode.mode._id]" (change)="selectTax(mode.mode._id, $event.target.value)">
+                  <option hidden>Select a tax</option>
+                  <option *ngFor="let tax of taxeoption" [value]="tax._id" [selected]="isSelectedTax(mode.mode._id, tax._id)">
+                    {{ tax.rate }}%
+                  </option>
+                </select>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- Fin de l'affichage des taxes -->
+  
+      <div class="col-md-6">
+        <label for="inputDefault" class="form-label">Default :</label>
+        <input class="checkboxmodel" type="checkbox" [(ngModel)]="selectedoption.isDefault"/>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+      <button type="button" class="btn btn-primary" (click)="modifyOpionInGroupeOption(selectedGroup, selectedoption._id, selectedoption.price,selectedoption.name, selectedoption.isDefault); modal.close('Close click')">Update  Option</button>
+    </div>
+  </ng-template>
+  
+  
+  
+  
+  <ng-template #AddGroupsOptionsInOptions let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Add  option groupe to option  </h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <div class="col-md-6">
+        <label for="inputUnit" class="form-label">option groupe</label>
+        <select class="form-select"  id="inputUnit" [(ngModel)]="og">
+          <option *ngFor="let groupe of optionGroups" value="{{groupe._id}}">{{groupe.name}}</option>
+         
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+  
+  
+      <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+ 
+      <button  type="button" class="btn btn-primary"
+        (click)="addOptionGroupToOG(og,selectedGroup,selectedoption._id);modal.close('Close click')">Save Option</button>
+    </div>
+  </ng-template> 
+
+  <ng-template #updategroupe let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Update groupe</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <div class="col-lg">
+        <div class="border border-3 p-4 rounded">
+          <div class="mb-3">
+            <label for="inputProductTitle" class="form-label">Title</label>
+            <input type="text" [(ngModel)]="selectedGroup.name" name="name" class="form-control" id="inputProductTitle"
+              placeholder="Enter product title">
+          </div>
+          <div class="mb-3">
+            <label for="inputProductDescription" class="form-label">Description</label>
+            <textarea class="form-control" [(ngModel)]="selectedGroup.description" name="description"
+              id="inputProductDescription" rows="3"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="inputProductTitle" class="form-label">min</label>
+            <div class="input-group has-validation">
+              <input type="number" min="0" [(ngModel)]="selectedGroup.force_min" name="min" class="form-control"
+                id="inputProductTitle" placeholder="Enter product title">
+              <span class="input-group-text" id="inputGroupPrepend"> <i class="fadeIn animated bx bx-info-circle"
+                  placement="top" ngbTooltip="This forces your customer
+                to select a certain
+                minimum number of
+                choices. E.g.: If you set this
+                to 2 then your customer
+                must select at least 2"></i></span>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="inputProductTitle" class="form-label">max</label>
+            <div class="input-group has-validation">
+              <input type="number" min="0" [(ngModel)]="selectedGroup.force_max" name="max" class="form-control"
+                id="inputProductTitle" placeholder="Enter product title">
+              <span class="input-group-text" id="inputGroupPrepend"> <i class="fadeIn animated bx bx-info-circle"
+                  placement="top" ngbTooltip="The maximum number of
+                choices your customer can
+                add. If you prefer not to
+                set any limitation you can
+                set it to 0. E.g.: If you set
+                this to 4 then your
+                customer can not select
+                more than 4 choices."></i></span>
+            </div>
+          </div>
+  
+          <!--Tax-->
+          <!-- Affichage des modes -->
+          <div class="container">
+            <div class="card custom-border">
+              <br>
+              <h5>Taxes:</h5>
+              <ul class="list-group">
+                <li class="list-group-item" *ngFor="let mode of ModeConsumation">
+                  <div>
+                    Mode: {{ mode.mode.name }}
+                    <br>
+                    <label for="tax">Tax:</label>
+                    <select class="form-select" [(ngModel)]="selectedTaxes[mode.mode._id]" (change)="selectTax2(mode.mode._id, $event.target.value)">
+                      <option hidden>Select a tax</option>
+                      <option *ngFor="let tax of taxeoption" [value]="tax._id" [selected]="isSelectedTax2(mode.mode._id, tax._id)">
+                        {{ tax.rate }}%
+                      </option>
+                    </select>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!--Fin taxe-->
+  
+          <div class="col-md-6">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="inputPromo" [(ngModel)]="selectedGroup.allow_quantity">
+              <label class="form-check-label" for="inputPromo">Allow adding same choice multiple times</label>
+            </div>
+          </div>
+  
+          <div class="col-12">
+            <div class="d-grid">
+              <!-- Ajoutez d'autres champs ici si nécessaire -->
+            </div>
+          </div>
+          <br>
+          <div class="alert alert-danger" *ngIf="selectedGroup.force_max < selectedGroup.force_min && selectedGroup.force_max != 0">
+            <strong>Minimum</strong> must be less than or equal to a <strong>maximum</strong> value.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+      <button type="button" class="btn btn-primary" (click)="updateOptionGroup(); modal.close('Close click')">Update Option Group</button>
+    </div>
+  </ng-template>
+  

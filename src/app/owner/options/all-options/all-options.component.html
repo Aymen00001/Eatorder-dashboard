@@ -1,0 +1,356 @@
+<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+  <div class="breadcrumb-title pe-3">Options</div>
+  <div class="ps-3">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-0 p-0">
+        <li class="breadcrumb-item"><a href="#" (click)="$event.preventDefault()"><i class="bx bx-group"></i></a></li>
+        <li class="breadcrumb-item active" aria-current="page">List Options</li>
+      </ol>
+    </nav>
+  </div>
+  <!--<div class="ms-auto">
+    <div class="btn-group">
+      <button type="button" class="btn btn-primary" (click)="goToAddOption()">Add Option</button>
+      
+    </div>
+  </div>-->
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div class="fm-search">
+      <div class="mb-0">
+        <div class="input-group input-group-lg">
+          <span class="input-group-text bg-transparent"><i class='bx bx-search'></i></span>
+          <input type="text" class="form-control" placeholder="Search the files" [(ngModel)]="searchQuery" (input)="filterOptionsByName()">
+        </div>
+      </div>
+    </div>
+    <!-- <div class="table-responsive mt-3"> -->
+      <table class="table  table-hover table-sm mb-0">
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Price</th>
+          <!-- <th>Tax</th>--> 
+            <th>Default</th>
+            <th>Unite</th>
+            <th>Promo</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let option of filteredOptions  | paginate: { itemsPerPage: pageSize, currentPage: p }; let i = index" (click)="openModal(option)" >
+            <td>
+              <div class="d-flex align-items-center">
+                <img src="{{ baseUrl + '/' + option.image }}" alt="" style="width: 45px; height: 45px"
+                  class="rounded-circle" />
+              </div>
+            </td>
+            <td>{{ option.name }}</td>
+             <td>{{ option.price }}</td>
+          <!-- <td>{{ option.tax }}</td>--> 
+            <td>{{ option.isDefault ? 'oui' : 'non' }}</td>
+            <td>{{ option.unite }}</td>
+            <td>{{ option.promoPercentage != null ? option.promoPercentage : 0 }} %</td> 
+            <td>
+              <div class="dropdown">
+                <a href="javascript:void(0)" class="me-3 text-danger" title="Delete" (click)="deleteOption(option)">
+                  <i class="bx bx-trash font-24"></i>
+                </a>
+                <a href="javascript:void(0)" class="me-3 text-primary dropdown-toggle" role="button"
+                  data-bs-toggle="dropdown">
+                  <i class="bx bx-edit font-24"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end">
+                <!--  <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#exampleScrollableModal"
+                    (click)="openModal(option, 'edit')">Modifier Option</a>-->
+                  <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#addToGroupModal"
+                    (click)="openModal(option, 'addToGroup')">Add to Group</a>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    <!-- </div> -->
+  </div>
+</div>
+
+<div class="d-flex justify-content-center mt-4">
+  <pagination-controls (pageChange)="p = $event" previousLabel="{{ 'previous' | translate }}"
+    nextLabel="{{ 'next' | translate }}">
+  </pagination-controls>
+</div>
+
+
+<div class="modal fade" id="addToGroupModal" tabindex="-1" aria-hidden="true" [class.show]="isAddToGroupModalOpen">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Option To Group</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+          (click)="closeAddToGroupModal()"></button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="selectedGroup">
+          <!-- <p><strong>ID:</strong> {{ selectedGroup._id }}</p> -->
+          <p><strong>Name:</strong> {{ selectedGroup.name }}</p>
+          <p><strong>Price:</strong> {{ selectedGroup.price }}</p>
+          <p><strong>Tax:</strong> {{ selectedGroup.tax }}</p>
+          <p><strong>Default:</strong> {{ selectedGroup.isDefault ? 'Yes' : 'No' }}</p>
+          <p><strong>Unit:</strong> {{ getUnitLabel(selectedGroup.unite) }}</p>
+          <p><strong>Promo Percentage:</strong> {{ selectedGroup.promoPercentage !== null ?
+            selectedGroup.promoPercentage + '%' : 'N/A' }}</p>
+        </div>
+
+        <label for="groupSelect" class="form-label">Select Group</label>
+        <select id="groupSelect" class="form-select" [(ngModel)]="selectedGroupId">
+          <option *ngFor="let group of optionGroups" [value]="group._id">{{ group.name }}</option>
+        </select>
+
+        <!-- <div *ngIf="selectedGroupId">
+          <p><strong>Selected Group ID:</strong> {{ selectedGroupId }}</p>
+        </div> -->
+
+
+
+
+        <label for="optionPrice" class="form-label">Option Price</label>
+        <input id="optionPrice" class="form-control" type="number" [(ngModel)]="optionPrice"
+          placeholder="Enter the price">
+      </div>
+
+
+
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+          (click)="closeAddToGroupModal()">Close</button>
+        <button type="button" class="btn btn-primary"  data-bs-dismiss="modal"
+          (click)="addToGroup(selectedGroupId, selectedGroup?._id, optionPrice)">Add to Group</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="exampleScrollableModal" tabindex="-1" aria-hidden="true" [class.show]="isModalOpen">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Option details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+          (click)="closeAddToGroupModal()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="option-groups">
+          <!-- Display option groups as chips -->
+          <div class="chips-container">
+            <ng-container *ngFor="let groupId of selectedGroup?.optionGroups">
+              <div class="chip chip-md">
+                <img src="{{ baseUrl + '/' + getGroupImage(groupId) }}" alt="Group Image" class="group-image">
+                {{ getGroupName(groupId) }}
+                <span class="closebtn" (click)="removeOptionGroup(groupId)" data-bs-dismiss="modal">×</span>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+        <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+          <li [ngbNavItem]="'default'">
+            <a ngbNavLink>Default</a>
+            <ng-template ngbNavContent>
+            
+              <div class="text-center">
+                <img src="{{ baseUrl + '/' + selectedGroup?.image }}" alt="Owner Image" class="rounded-circle"
+                  style="width: 150px; height: 150px;" *ngIf="selectedGroup">
+              </div>
+              <div class="mb-0" *ngIf="selectedGroup">
+                <div class="border border-3 p-4 rounded">
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label for="inputName" class="form-label">Name</label>
+                      <input type="text" class="form-control" id="inputName" placeholder="Option"
+                        [(ngModel)]="selectedGroup.name">
+                    </div>
+                    <div class="col-md-6">
+                      <label for="inputPrice" class="form-label">Price</label>
+                      <input type="number" class="form-control" id="inputPrice" placeholder="00.00" min="0"
+                        [(ngModel)]="selectedGroup.price">
+                    </div>
+                
+                    <div class="col-md-6">
+                      <label for="inputUnit" class="form-label">Unité</label>
+                      <select class="form-select" id="inputUnit" [(ngModel)]="selectedGroup.unite">
+                        <option></option>
+                        <option value="1">Kg</option>
+                        <option value="2">Piece</option>
+                        <option value="3">Litre</option>
+                      </select>
+                      <p><strong>Unité:</strong> {{ getUnitLabel(selectedGroup?.unite) }}</p>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="inputDefault"
+                          [(ngModel)]="selectedGroup.isDefault">
+                        <label class="form-check-label" for="inputDefault">Default</label>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="inputPromo" [(ngModel)]="isPromoChecked">
+                        <label class="form-check-label" for="inputPromo">
+                          <span *ngIf="selectedGroup?.promoPercentage === null" class="fa fa-times"></span>
+                          <span *ngIf="selectedGroup?.promoPercentage !== null" class="fa fa-check"></span>
+                          Promo
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-6" *ngIf="isPromoChecked && selectedGroup?.promoPercentage !== null">
+                      <label for="inputPromoPercentage" class="form-label">Promo Percentage</label>
+                      <div class="input-group">
+                        <input type="number" class="form-control" id="inputPromoPercentage" placeholder="00.00" min="0"
+                          max="100" [(ngModel)]="selectedGroup.promoPercentage">
+                        <span class="input-group-text">%</span>
+                      </div>
+                    </div>
+                    <div class="mb-3">
+                      <label for="formFileSm" class="form-label">Image</label>
+                      <input class="form-control form-control-sm" id="formFileSm" type="file" (change)="onFileChange($event)">
+                    </div>
+                 <!--Tax-->
+              <div class="col-md-6">
+                <div class="container">
+                  <div class="card custom-border">
+                    <br>
+                    <ul class="nav nav-tabs justify-content-center">
+                      <li class="nav-item" *ngFor="let mode of selectedGroup.taxes">
+                        <a class="nav-link">
+                        </a>
+                      </li>
+                    </ul>
+                    <div *ngIf="selectedMode">
+                      <div class="input-group mb-3">
+                        <label for="tax" class="input-group-text">Tax:</label>
+                        <select id="tax" class="form-select" [(ngModel)]="selectedMode.selectedTax" (change)="selectTax($event.target.value)">
+                          <option hidden>Select a tax</option>
+                          <option *ngFor="let tax of taxeoption" [value]="tax._id">{{ tax.rate }}%</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--fin taxe-->
+                    <div class="col-12 mt-3">
+                      <div class="d-grid">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="updateOption()">Save Option</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </ng-template>
+          </li>
+          <ng-container *ngFor="let groupId of selectedGroup?.optionGroups; let i = index">
+            <li [ngbNavItem]="groupId" *ngIf="groupId !== 'default'">
+              <a ngbNavLink (click)="onNavItemChange($event, groupId)">{{ getGroupName(groupId) }}</a>
+              
+              
+              
+              
+              
+              <ng-template ngbNavContent>
+                
+                <div class="text-center">
+                  <img src="{{ baseUrl + '/' +  optionDetails[groupId]?.image }}" alt="Owner Image" class="rounded-circle"
+                    style="width: 150px; height: 150px;" *ngIf="optionDetails[groupId]">
+                </div>
+                <div class="mb-0" *ngIf="optionDetails[groupId]">
+                  <div class="border border-3 p-4 rounded">
+                    <div class="row g-3">
+                      <div class="col-md-6">
+                        <label for="inputName" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="inputName" placeholder="Option"
+                          [(ngModel)]="optionDetails[groupId].name">
+                      </div>
+                      <div class="col-md-6">
+                        <label for="inputPrice" class="form-label">Price</label>
+                        <input type="number" class="form-control" id="inputPrice" placeholder="00.00" min="0"
+                          [(ngModel)]="optionDetails[groupId].price">
+                      </div>
+                      <div class="col-md-6">
+                        <label for="inputTax" class="form-label">Tax</label>
+                        <div class="input-group">
+                          <input type="number" class="form-control" id="inputTax" placeholder="00.00" min="0" max="100"
+                            [(ngModel)]="optionDetails[groupId].tax">
+                          <span class="input-group-text">%</span>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <label for="inputUnit" class="form-label">Unité</label>
+                        <select class="form-select" id="inputUnit" [(ngModel)]="optionDetails[groupId].unite">
+                          <option></option>
+                          <option value="1">Kg</option>
+                          <option value="2">Piece</option>
+                          <option value="3">Litre</option>
+                        </select>
+                        <p><strong>Unité:</strong> {{ getUnitLabel(optionDetails[groupId]?.unite) }}</p>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="inputDefault"
+                            [(ngModel)]="optionDetails[groupId].isDefault">
+                          <label class="form-check-label" for="inputDefault">Default</label>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="inputPromo" [(ngModel)]="optionDetails[groupId].isPromoChecked">
+                          <label class="form-check-label" for="inputPromo">
+                            <span *ngIf="optionDetails[groupId]?.promoPercentage === null" class="fa fa-times"></span>
+                            <span *ngIf="optionDetails[groupId]?.promoPercentage !== null" class="fa fa-check"></span>
+                            Promo
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-6" *ngIf="optionDetails[groupId].isPromoChecked && optionDetails[groupId]?.promoPercentage !== null">
+                        <label for="inputPromoPercentage" class="form-label">Promo Percentage</label>
+                        <div class="input-group">
+                          <input type="number" class="form-control" id="inputPromoPercentage" placeholder="00.00" min="0"
+                            max="100" [(ngModel)]="optionDetails[groupId].promoPercentage">
+                          <span class="input-group-text">%</span>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <label for="formFileSm" class="form-label">Image</label>
+                        <input class="form-control form-control-sm" id="formFileSm" type="file" (change)="onFileChange($event)">
+                      </div>
+                      <div class="col-12 mt-3">
+                        <div class="d-grid">
+                          <button type="button" class="btn btn-primary" (click)="updateOptionInGroupe()">Save Option</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Afficher le prix en utilisant le dictionnaire optionDetails -->
+              </ng-template>
+              
+              
+            </li>
+            
+          </ng-container>
+          
+        </ul>
+        <div [ngbNavOutlet]="nav" class="mt-2"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+          (click)="closeAddToGroupModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,122 @@
+<!--breadcrumb-->
+
+<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+    <div class="breadcrumb-title pe-3">Category</div>
+    <div class="ps-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item"><a href="#" (click)="$event.preventDefault()"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Add New Category</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="ms-auto">
+        <div class="btn-group">
+            <button type="button" class="btn btn-primary">Settings</button>
+            <button type="button" class="btn btn-primary split-bg-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">	<span class="visually-hidden">Toggle Dropdown</span>
+            </button>
+            
+            <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">	<a class="dropdown-item" href="#" (click)="$event.preventDefault()">Action</a>
+                <a class="dropdown-item" href="#" (click)="$event.preventDefault()">Another action</a>
+                <a class="dropdown-item" href="#" (click)="$event.preventDefault()">Something else here</a>
+                <div class="dropdown-divider"></div>	<a class="dropdown-item" href="#" (click)="$event.preventDefault()">Separated link</a>
+            </div>
+  
+        </div>
+    </div>
+</div>
+<!--end breadcrumb-->
+
+<div class="card">
+  <div class="card-body p-4">
+      <h5 class="card-title">Add New Category</h5>
+      <hr/>
+       <div class="form-body mt-4">
+        <form>
+        <div class="row">
+         
+           <div class="col-lg-12">
+           <div class="border border-3 p-4 rounded">
+            <div class="mb-3">
+                <label for="inputProductTitle" class="form-label">Category Title</label>
+                <input type="text" [(ngModel)]="category.name" name="name" class="form-control" id="inputProductTitle" placeholder="Enter product title">
+              </div>
+              <div class="mb-3">
+                <label for="inputProductDescription" class="form-label">Description</label>
+                <textarea class="form-control" [(ngModel)]="category.description" name="description"  id="inputProductDescription" rows="3"></textarea>
+              </div>
+              <div  class="mb-3">
+                <label for="formFileSm" class="form-label">Store</label>
+
+                <select  class="single-select form-select" (change)="getstoreid($event.target.value)">
+                  <option hidden>Select your store</option>
+                    <option *ngFor="let str of store" value="{{str._id}}"> {{str.name}}</option>
+                    
+                </select>
+            </div>
+              <div class="mb-3">
+                <label for="formFileSm" class="form-label">Image</label>
+                <input class="form-control form-control-sm" id="formFileSm" type="file" accept="image/*" (change)="onFileChange($event)" >
+            </div>
+         
+              <div class="col-12">
+                <div class="d-grid">
+                   <button type="submit" (click)="onFileSelected($event)"  class="btn btn-primary">Save Category</button>
+                </div>
+            </div>
+            </div>
+           </div>
+           
+           
+           
+      
+        <!-- <div class="col-lg-4">
+          <div class="border border-3 p-4 rounded">
+            <div class="row g-3">
+              <ngb-accordion #acc="ngbAccordion">
+                <ngb-panel  *ngFor="let category of Categorys" [id]="'toggle-'+category.category._id" title=" {{ category.category.name }}">
+                  <ng-template ngbPanelContent *ngFor="let product of category.products">
+                    {{ product.name }}
+                  </ng-template>
+                  <ng-template ngbPanelContent *ngIf="category.products.length === 0">
+                    Aucun produit disponible.
+                              </ng-template>
+                </ngb-panel>
+      
+                </ngb-accordion>
+              
+            </div> 
+        </div>
+        </div> -->
+        <!-- <div class="accordion accordion-flush" id="accordionFlushExample">
+          <div class="accordion-item" *ngFor="let group of Categorys">
+            <h2 class="accordion-header" [id]="'flush-heading' +  group.category._id">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                [attr.data-bs-target]="'#flush-collapse' + group.category._id" aria-expanded="false"
+                [attr.aria-controls]="'flush-collapse' + group.category._id">
+                {{ group.category.name }}
+                
+              </button>
+
+            </h2>
+            <div *ngFor="let product of group.products" [id]="'flush-collapse'+group._id" class="accordion-collapse collapse" 
+              data-bs-parent="#accordionFlushExample">
+              <div class="accordion-body">
+                {{ product.name }}
+              </div>
+            </div>
+            <div *ngIf="group.products.length === 0" [id]="'flush-collapse'+group._id" class="accordion-collapse collapse" 
+            data-bs-parent="#accordionFlushExample">
+            <div class="accordion-body">
+              Aucun produit disponible.
+
+            </div>
+          </div>
+          </div>
+        </div> -->
+       </div> </form>
+       <!--end row-->
+    </div>
+  </div>
+</div>

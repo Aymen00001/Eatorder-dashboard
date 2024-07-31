@@ -1,0 +1,162 @@
+<!--breadcrumb-->
+<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+    <div class="breadcrumb-title pe-3">{{'users' | translate}}</div>
+    <div class="ps-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item"><a href="#" (click)="$event.preventDefault()"><i
+                            class="bx bx-group"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">{{'listOwner' | translate}}</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="ms-auto">
+        <div class="btn-group">
+            <button type="button" class="btn btn-primary">Settings</button>
+            <button type="button" class="btn btn-primary split-bg-primary dropdown-toggle dropdown-toggle-split"
+                data-bs-toggle="dropdown"> <span class="visually-hidden">Toggle Dropdown</span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end"> <a class="dropdown-item" href="#"
+                    (click)="$event.preventDefault()">Action</a>
+                <a class="dropdown-item" href="#" (click)="$event.preventDefault()">Another action</a>
+                <a class="dropdown-item" href="#" (click)="$event.preventDefault()">Something else here</a>
+                <div class="dropdown-divider"></div> <a class="dropdown-item" href="#"
+                    (click)="$event.preventDefault()">Separated link</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end breadcrumb-->
+
+<div class="card">
+    <div class="card-body">
+        <div class="d-lg-flex align-items-center mb-4 gap-3">
+            <div class="position-relative">
+                <input type="text" class="form-control ps-5 radius-30" placeholder="{{'search'| translate}}"
+                    [(ngModel)]="searchQuery" (input)="searchOwners()">
+                <span class="position-absolute top-50 product-show translate-middle-y"><i
+                        class="bx bx-search"></i></span>
+            </div>
+            <div class="ms-auto"><a href="/users/add-owners" 
+        
+                    class="btn btn-primary radius-30 mt-2 mt-lg-0"><i class="bx bxs-plus-square"></i>{{"addOwner" | translate}}</a>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Stores#</th>
+                        <th>{{'name'| translate}}</th>
+                        <th>{{'phone'| translate}}</th>
+                        <th>{{'status'| translate}}</th>
+                        <th>{{'Date'| translate}}</th>
+                        <th>{{'details'|translate}}</th>
+                        <th>{{'actions'| translate}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let owner of filteredOwners  | paginate: { itemsPerPage: pageSize, currentPage: p }"
+                        (click)="selectedOwner = owner">
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <input class="form-check-input me-3" type="checkbox" value="" aria-label="...">
+                                </div>
+                                <div class="ms-2">
+                                    <h6 class="mb-0 font-14">{{ owner.stores.length }}</h6>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <img src="https://mdbootstrap.com/img/new/avatars/8.jpg" alt=""
+                                    style="width: 45px; height: 45px" class="rounded-circle" />
+                                <div class="ms-3">
+                                    <p class="fw-bold mb-1">{{ owner.firstName }} {{ owner.lastName }}</p>
+                                    <p class="text-muted mb-0">{{ owner.email }}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{ owner.phoneNumber }}</td>
+                        <td>
+                            <div [ngClass]="getStatusClass(owner.status)">
+                                <i class="bx bxs-circle me-1"></i>{{ owner.status | translate}}
+                            </div>
+                        </td>
+
+                        <td>{{ formatCreatedAt(owner.createdAt) }}</td>
+                        <td>
+                            <button type="button" class="btn btn-primary btn-sm radius-30 px-4" data-bs-toggle="modal"
+                                data-bs-target="#exampleScrollableModal">{{'details'|translate}}</button>
+
+                        </td>
+                        <td>
+                            <div class="d-flex order-actions">
+
+                                <ng-container *ngIf="owner.status === 'suspended' || owner.status === 'pending'">
+                                    <a href="javascript:void(0)" (click)="confirmEnableOwner(owner)"><i
+                                            class='bx bxs-edit'></i></a>
+                                </ng-container>
+                                <ng-container *ngIf="owner.status === 'active'">
+                                    <a href="javascript:void(0)" (click)="confirmDisableOwner(owner)"><i
+                                            class='bx bxs-edit'></i></a>
+                                </ng-container>
+
+
+                                <a href="javascript:void(0)" (click)="confirmDeleteOwner(owner)" class="ms-3"><i
+                                        class='bx bxs-trash text-danger'></i></a>
+                            </div>
+                        </td>
+                    </tr>
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div *ngIf="noResultsFound" class="text-center">{{'noDataFound'|translate}}</div>
+
+<div class="d-flex justify-content-center mt-4">
+    <pagination-controls (pageChange)="p = $event"
+                          previousLabel="{{ 'previous' | translate }}"
+                          nextLabel="{{ 'next' | translate }}">
+    </pagination-controls>
+  </div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleScrollableModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Owner details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center">
+                    <img src="https://mdbootstrap.com/img/new/avatars/8.jpg" alt="Owner Image" class="rounded-circle" style="width: 150px; height: 150px;">
+                    <h4 class="mt-3">{{ selectedOwner?.firstName }} {{ selectedOwner?.lastName }}</h4>
+                    <p>{{ selectedOwner?.email }}</p>
+                </div>
+                <hr>
+                <p><strong>First Name:</strong> {{ selectedOwner?.firstName }}</p>
+                <p><strong>Last Name:</strong> {{ selectedOwner?.lastName }}</p>
+                <p><strong>Email:</strong> {{ selectedOwner?.email }}</p>
+                <p><strong>Phone Number:</strong> {{ selectedOwner?.phoneNumber }}</p>
+                <p><strong>Status:</strong> {{ selectedOwner?.status }}</p>
+                <p><strong>Created At:</strong> {{ formatCreatedAt(selectedOwner?.createdAt) }}</p>
+                <p><strong>Last Name:</strong> {{ selectedOwner?.lastName }}</p>
+                <p><strong>Email:</strong> {{ selectedOwner?.email }}</p>
+                <p><strong>Phone Number:</strong> {{ selectedOwner?.phoneNumber }}</p>
+                <p><strong>Status:</strong> {{ selectedOwner?.status }}</p>
+                <p><strong>Created At:</strong> {{ formatCreatedAt(selectedOwner?.createdAt) }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,10 @@
+.alert {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.form-check {
+    margin-bottom: 0; /* Supprime l'espace sous la case à cocher */
+    margin-left: 10px; /* Ajoute un espace entre le texte et la case à cocher */
+}

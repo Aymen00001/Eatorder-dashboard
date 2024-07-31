@@ -1,0 +1,162 @@
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation" *ngFor="let category of Categorys">
+    <div></div>
+
+    <button class="nav-link" [class.active]="category === Categorys[0]" [id]="category.name + '-tab'"
+      (click)="fetchProductsByCategory(category)" data-bs-toggle="tab" [data-bs-target]="'#' + category.name"
+      type="button" role="tab" [attr.aria-controls]="category.name" [attr.aria-selected]="category === Categorys[0]">
+      <img [src]="baseUrl + category.image" width="50" height="50">{{category.name}} </button>
+  </li>
+</ul>
+<div>
+  <div class="row">
+    <div class="col-8">
+      <div style="display: flex ; flex-wrap:wrap">
+
+        <div *ngFor="let prod of product" style="margin: 10px;">
+
+          <div class="card" (click)=" openSm(content,prod)">
+            <img class="card-img-top" [src]="baseUrl+prod?.image" alt="Product Image"
+              style="width: 200px; height: 150px; object-fit: contain;">
+            <div class="card-body">
+              <h5 class="card-title">{{ prod?.name }}</h5>
+              <p class="card-text">{{ prod?.description }}</p>
+              <div class="card-text" *ngIf="prod.price"><b>{{ prod?.price}} €</b> </div>
+              <div class="card-text" *ngIf="!prod.price"><b>à partie de {{ prod?.size[0].price}} €</b> </div>
+            </div>
+
+          </div>
+          <ng-template #content let-modal>
+
+            <div class="modal-header">
+              <h4 class="modal-title">Sélectionnez votre choix</h4>
+              <!-- <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button> -->
+            </div>
+            <div class="modal-body">
+              <div *ngIf=" prod.optionGroups.length>0 ; else size">
+                <div *ngFor="let optionGroup of prod.optionGroups">
+                  <span><b> {{optionGroup.name}}</b></span>
+                  <span> {{optionGroup.force_max}}
+                    {{optionGroup.force_min}}
+                  </span>
+                  <div *ngFor="let option of optionGroup.options">
+
+                    <!-- Use checkbox when force_max is greater than 1 -->
+                    <label>
+                      <input type="checkbox" [name]="'optionCheck' + optionGroup._id"
+                        (change)="updateSelectedOptions(option, selectedOptions); ischecked(option.selected) ;checkOptions(prod)"
+                        [(ngModel)]="option.selected" [value]="option"
+                        [disabled]="isOptionGroupFull(optionGroup)&&!ischecked(option.selected)">
+                      {{ option.name }} : {{ option.price }}
+                    </label>
+
+                  </div>
+                  <hr>
+                </div>
+
+              </div>
+              <!-- Display size options -->
+              <ng-template #size>
+                <div *ngIf="!selectedSize">
+                  <div *ngFor="let size of prod.size">
+                    <label>
+                      <input type="radio" name="sizeRadio" [(ngModel)]="selectedSize" [value]="size.name"
+                        (change)="filterOptionGroupsBySize(prod,selectedSize)">
+                      {{ size.name }}
+                    </label>
+                  </div>
+
+                </div>
+
+                <!-- Display selected option groups -->
+                <div *ngIf="selectedSize">
+                  <div *ngFor="let optionGroup of selectedOptionGroups">
+                    <h6>{{ optionGroup.name }} </h6>
+                    <ul>
+                      <li *ngFor="let option of optionGroup.options">
+                        <ng-container
+                          *ngIf="optionGroup.force_max === 1 && optionGroup.force_min === 1; else checkboxOption">
+                          <!-- Use radio button when force_max is 1 -->
+                          <label>
+                            <input type="radio" [name]="'optionRadio' + optionGroup._id"
+                              (change)=" updateSelectedOptions(option, selectedOptions); checkOptions(prod)"
+                              [(ngModel)]="option.selected" [value]="option">
+                            {{ option.name }} : {{ option.price }}
+                          </label>
+                        </ng-container>
+                        <ng-template #checkboxOption>
+                          <!-- Use checkbox when force_max is greater than 1 -->
+                          <label>
+                            <input type="checkbox" [name]="'optionCheck' + optionGroup._id"
+                              (change)="updateSelectedOptions(option, selectedOptions); ischecked(option.selected) ;checkOptions(prod)"
+                              [(ngModel)]="option.selected" [value]="option"
+                              [disabled]="isOptionGroupFull(optionGroup)&&!ischecked(option.selected)">
+                            {{ option.name }} : {{ option.price }}
+                          </label>
+                        </ng-template>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </ng-template>
+
+            </div>
+
+            <div class="modal-footer">
+              <h1>
+
+              </h1>
+
+              <button *ngIf="! prod.optionGroups.length>0" type="button" class="btn btn-primary"
+                (click)="goToPreviousSize()" [disabled]="currentSizeIndex === 0">Back</button>
+              <button type="button" class="btn btn-light"
+                (click)="modal.close('Close click') ;resetOptions(prod)">Close</button>
+              <button class="btn btn-primary"
+                (click)="valider(prod, selectedOptions);modal.close('Close click') ;resetOptions(prod)"
+                [disabled]=" !areMinimumOptionsSelected(prod)  ">valider </button>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+    <div class="col-4 card perso">
+
+    <div class="row">
+<div class="col-10">      <h2 style="text-align: center;"> <i class="fadeIn animated bx bx-cart"></i> <span>Panier</span> </h2></div>
+<div class="col-2" > <button class="btn text-danger " (click)="clear()"> <i class="fadeIn animated bx bx-trash"></i> </button></div>
+
+
+    </div>
+
+
+      
+
+      <hr />
+      <div *ngFor="let ord of orders">
+        <div class="row">
+
+          <div class="col-7">
+            <h5><b>{{ord.product.name}} {{ord.product.price}}  {{ ord.pricesize}} €</b></h5>
+          </div>
+          <div class="col-5">
+            
+            <button class="btn  minus" (click)="removeFromCart(ord)">-</button>
+            <span class="quantity" *ngIf="ord.quantity" > {{ord.quantity}}</span>
+            <button class="btn  plus" (click)="addToCart(ord)">+</button>
+          </div>
+        </div>
+        <h6 *ngIf="ord.size"> <b>size :</b> {{ord.size}} </h6>
+        <div *ngFor="let optiongroupe of ord.optiongroupe">
+          <span class="options"><b>{{optiongroupe.name}}</b> : {{optiongroupe.price}} €</span>
+        </div>
+
+
+        <hr>
+      </div>
+
+      <button class="btn btn-warning btn-lg btn-block Totale" style="width: 100%;"> Totale: {{totale }} € </button>
+
+    </div>
+
+
+  </div>

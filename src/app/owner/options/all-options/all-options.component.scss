@@ -1,0 +1,31 @@
+/* Add custom CSS styles for the chips container */
+.chips-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  
+  /* Add custom CSS styles for the chips */
+  .chip {
+    display: flex;
+    align-items: center;
+    background-color: #f0f0f0;
+    border-radius: 16px;
+    padding: 8px;
+    font-size: 14px;
+  }
+  
+  .group-image {
+    width: 20px; /* Adjust the width as needed */
+    height: 20px; /* Adjust the height as needed */
+    margin-right: 8px; /* Add spacing between the image and text */
+  }
+  
+  .closebtn {
+    cursor: pointer;
+    margin-left: 8px; /* Add spacing between the text and close button */
+  }
+  
+  
+  

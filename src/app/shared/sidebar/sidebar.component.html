@@ -1,0 +1,198 @@
+<ng-template #content let-modal>
+    <div *ngIf=" store?.length=== 0; else notEmpty">
+        <div>
+            <div  class="modal-header">
+              <h4 class="modal-title">Add Company</h4>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <form class="row g-3" >
+                      <div>
+                        <label class="form-label" for="name">Nom :</label>
+                        <input type="text" id="name"  class="form-control" [(ngModel)]="companyData.name" name="name" required [ngClass]="{'is-invalid': messageErrors['name']}" (input)="clearError('name')">
+                        <div class="invalid-feedback">
+                            <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['name'] }}
+                        </div>
+                      </div>
+                      
+                      <div >
+                        <label class="form-label" for="street">Street:</label>
+                        <input type="text" id="street" class="form-control" [(ngModel)]="companyData.address.street" name="street" required [ngClass]="{'is-invalid': messageErrors['address.street']}" (input)="clearError('address.street')">
+                        <div class="invalid-feedback">
+                            <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['address.street'] }}
+                        </div>
+                    </div>
+                    <div>
+                        <label class="form-label" for="city">City:</label>
+                        <input type="text" id="city" class="form-control" [(ngModel)]="companyData.address.city" name="city" required [ngClass]="{'is-invalid': messageErrors['address.city']}" (input)="clearError('address.city')">
+                        <div class="invalid-feedback">
+                            <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['address.city'] }}
+                        </div>
+                    </div>
+                    <div>
+                        <label class="form-label" for="state">State:</label>
+                        <input type="text" id="state" class="form-control" [(ngModel)]="companyData.address.state" name="state" required [ngClass]="{'is-invalid': messageErrors['address.state']}" (input)="clearError('address.state')">
+                        <div class="invalid-feedback">
+                            <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['address.state'] }}
+                        </div>
+                    </div>
+                    <div >
+                        <label class="form-label" for="zipcode">Zipcode:</label>
+                        <input type="text" id="zipcode" class="form-control" [(ngModel)]="companyData.address.zipcode" name="zipcode" required [ngClass]="{'is-invalid': messageErrors['address.zipcode']}" (input)="clearError('address.zipcode')">
+                        <div class="invalid-feedback">
+                            <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['address.zipcode'] }}
+                        </div>
+                    </div>
+                    <div >
+                        <label class="form-label" for="country_iso2">Country ISO:</label>
+                        <input type="text" id="country_iso2" class="form-control" [(ngModel)]="companyData.address.country_iso2" name="country_iso2" required [ngClass]="{'is-invalid': messageErrors['address.country_iso2']}" (input)="clearError('address.country_iso2')">
+                        <div class="invalid-feedback">
+                            <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['address.country_iso2'] }}
+                        </div>
+                    </div>
+                    
+                  <div >
+                    <label for="phoneNumber" class="form-label">Phone Number</label>
+                    <div class="input-group">
+                      <ngx-intl-tel-input name="phoneNumber" [(ngModel)]="companyData.phoneNumber"></ngx-intl-tel-input>
+                    </div>
+                    <div class="invalid-feedback">
+                      <i class="bi bi-exclamation-triangle"></i>  {{ messageErrors['phoneNumber'] }}
+                  </div>
+                  </div>
+                
+                      <div>
+                        <label class="form-label" for="duns">DUNS:</label>
+                        <input type="text" id="duns"  class="form-control" [(ngModel)]="companyData.duns" name="duns" required [ngClass]="{'is-invalid': messageErrors['duns']}" (input)="clearError('duns')">
+                        <div class="invalid-feedback">
+                            <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['duns'] }}
+                        </div>
+                      </div>
+                      <div>
+                        <label class="form-label" for="email">Email:</label>
+                        <input type="email" id="duns"  class="form-control" [(ngModel)]="companyData.email" name="email" required [ngClass]="{'is-invalid': messageErrors['email']}" (input)="clearError('email')">
+                        <div class="invalid-feedback">
+                            <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['email'] }}
+                        </div>
+                      </div>
+                    
+                      <div>
+                        <label class="form-label" for="website">Web Site:</label>
+                        <input type="text" id="website"  class="form-control" [(ngModel)]="companyData.website" name="website" required [ngClass]="{'is-invalid': messageErrors['website']}" (input)="clearError('website')">
+                        <div class="invalid-feedback">
+                            <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['website'] }}
+                        </div>
+                      </div>
+                      <div>
+                        <label class="form-label" for="legalstatus">Status:</label>
+                        <select class="form-select small-horizontal-select" [(ngModel)]="companyData.legalstatus" name="legalstatus" required [ngClass]="{'is-invalid': messageErrors['legalstatus']}" (input)="clearError('legalstatus')">
+                            <option *ngFor="let country of countries" [value]="country">{{ country }}</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['legalstatus'] }}
+                        </div>
+                      </div>
+                   <label for="inputLastName" class="form-label">Logo</label>
+                   <input type="file" class="form-control" id="image" name="image" (change)="onImageChange($event)"  >
+                   <label for="inputLastName" class="form-label">Banner</label>
+                   <input type="file" class="form-control" id="image2" name="image2" (change)="onImageChange2($event)"  >
+                      <br>
+                      <hr>
+                      <button type="submit" (click)="addCompany()" class="btn btn-primary px-2">Add Company</button>
+                    </form>
+                  </div>
+            </div>
+            <div class="modal-footer">
+            </div></div>
+</div>
+
+
+    <ng-template #notEmpty >
+        <div  class="modal-header">
+            <h4 class="modal-title">Sélectionnez votre boutique</h4>
+          </div>
+          <div class="modal-body">
+              <select  class="single-select form-select" (change)="getstoreid($event.target.value)">
+                  <option hidden>Select your store</option>
+                  <option *ngFor="let str of store" value="{{str._id}}" [attr.selected]="str._id === selectedOption ? 'selected' : null"> {{str.name}} </option>
+              </select>
+          </div>
+          <div class="modal-footer">
+          </div>
+   </ng-template>
+  </ng-template>
+ 
+<div class="sidebar sidebar-wrapper" >
+        <div class="sidebar-header"> 
+            <div>
+                <img src="assets/images/unnamed.png" class="logo-icon" alt="logo icon" style="width: 70px; height: auto;">
+            </div>
+            <div>
+                <h4 class="logo-text">Eat Order</h4>
+            </div>
+            <div class="toggle-icon ms-auto"><i  (click)="toggleSidebar()"  class='bx bx-arrow-to-left'></i>
+            </div>
+        </div>
+        
+    <div class="sidebar-content" [perfectScrollbar]>
+        <select  class="single-select form-select" (change)="getstoreid($event.target.value)">
+            <option hidden>Select your store</option>
+            <option *ngFor="let str of store" [value]="str?._id" [attr.selected]="str?._id === selectedOption ? 'selected' : null">
+                {{ str?.name }}
+            
+        </select>
+        <ul class="navigation">
+            <!-- First level menu -->
+            <li *ngFor="let menuItem of menuItems" [ngClass]="[menuItem.class]" [routerLinkActive]="menuItem.submenu.length != 0 ? '' : 'active'"
+                [routerLinkActiveOptions]="{exact: true}">
+                <a [routerLink]="menuItem.class === '' ? [menuItem.path] : null" [ngClass]="menuItem.class === '' ? '' : 'cursor-pointer' " *ngIf="!menuItem.isExternalLink; else externalLinkBlock">
+                    <i [ngClass]="[menuItem.icon]"></i>
+                    <span class="menu-title">{{menuItem.title}} </span>
+                    <span *ngIf="menuItem.badge != '' " [ngClass]="[menuItem.badgeClass]">{{menuItem.badge}}</span>
+                </a>
+                <ng-template #externalLinkBlock>
+                    <a [href]="[menuItem.path]" target="_blank">
+                        <i [ngClass]="[menuItem.icon]"></i>
+                        <span class="menu-title">{{menuItem.title}}</span>
+                        <span *ngIf="menuItem.badge != '' " [ngClass]="[menuItem.badgeClass]">{{menuItem.badge}}</span>
+                    </a>
+                </ng-template>
+                <!-- Second level menu -->
+                <ul class="menu-content" *ngIf="menuItem.submenu.length > 0">
+                    <li *ngFor="let menuSubItem of menuItem.submenu" [routerLinkActive]="menuSubItem.submenu.length > 0 ? '' : 'active'" [ngClass]="[menuSubItem.class]">
+                        <a [routerLink]="menuSubItem.submenu.length > 0 ? null : [menuSubItem.path]" [ngClass]="menuItem.class === '' ? '' : 'cursor-pointer' " *ngIf="!menuSubItem.isExternalLink; else externalSubLinkBlock">
+                            <i [ngClass]="[menuSubItem.icon]"></i>
+                            <span class="sub-menu-title">{{menuSubItem.title}}</span>
+                            <span *ngIf="menuSubItem.badge != '' " [ngClass]="[menuSubItem.badgeClass]">{{menuSubItem.badge}}</span>
+                        </a>
+                        <ng-template #externalSubLinkBlock>
+                            <a [href]="[menuSubItem.path]" target="_blank">
+                                <i [ngClass]="[menuSubItem.icon]"></i>
+                                <span class="sub-menu-title">{{menuSubItem.title}} </span>
+                                <span *ngIf="menuSubItem.badge != '' " [ngClass]="[menuSubItem.badgeClass]">{{menuSubItem.badge}}</span>
+                            </a>
+                        </ng-template>
+                        <!-- Third level menu -->
+                        <ul class="menu-content" *ngIf="menuSubItem.submenu.length > 0">
+                            <li *ngFor="let menuSubsubItem of menuSubItem.submenu" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                                [ngClass]="[menuSubsubItem.class]">
+                                <a [routerLink]="[menuSubsubItem.path]" *ngIf="!menuSubsubItem.isExternalLink; else externalSubSubLinkBlock">
+                                    <i [ngClass]="[menuSubsubItem.icon]"></i>
+                                    <span class="sub-menu-title">{{menuSubsubItem.title}}</span>
+                                    <span *ngIf="menuSubsubItem.badge != '' " [ngClass]="[menuSubsubItem.badgeClass]">{{menuSubsubItem.badge}}</span>
+                                </a>
+                                <ng-template #externalSubSubLinkBlock>
+                                    <a [href]="[menuSubsubItem.path]" target="_blank">
+                                        <i [ngClass]="[menuSubsubItem.icon]"></i>
+                                        <span class="sub-menu-title">{{menuSubsubItem.title}}</span>
+                                        <span *ngIf="menuSubsubItem.badge != '' " [ngClass]="[menuSubsubItem.badgeClass]">{{menuSubsubItem.badge}}</span>
+                                    </a>
+                                </ng-template>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>

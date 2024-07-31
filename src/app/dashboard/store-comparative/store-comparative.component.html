@@ -1,0 +1,106 @@
+<div *ngIf="!isManagerRole()" >
+
+<div class="container">
+	<div class="card custom-border">
+		<br>
+		<ul class="nav nav-tabs justify-content-center">
+			<li class="nav-item">
+				<a class="nav-link" (click)="show()" >Weekly</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" (click)="show2()">Monthly</a>
+			</li>
+		</ul>
+		  <div *ngIf="selectedOption">	<div class="card-body p-5">
+			<div class="row justify-content-center">
+				<div class="col-md-4">
+					<div class="input-group mb-3">
+						<label for="store1" class="input-group-text">Select Store 1:</label>
+						<select id="store1" class="form-select" [(ngModel)]="selectedStore1">
+							<option hidden>Select a store</option>
+							<option *ngFor="let str of store" [value]="str._id">{{ str.name }}</option>
+						</select>
+					</div>
+					<br><br>
+					<div class="input-group mb-3">
+						<label for="startDate" class="input-group-text">Select  Weekly:</label>
+						<input type="week" id="startDate" [(ngModel)]="selectedWeek" (ngModelChange)="onWeekChange()" class="form-control">
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="input-group mb-3">
+						<label for="store2" class="input-group-text">Select Store 2:</label>
+						<select id="store2" class="form-select" [(ngModel)]="selectedStore2">
+							<option hidden>Select a store</option>
+							<option *ngFor="let str of store" [value]="str._id">{{ str.name }}</option>
+						</select>
+					</div>
+					<br><br>
+				</div>
+				<div class="row">
+					<div class="col-xs-12 text-right">
+						<button class="btn btn-primary" (click)="getWeeklyComparison()">View Comparison</button>
+					</div>
+				</div>
+			</div>
+		</div> 
+	    </div>
+		  <div *ngIf="selectedOption2">
+			<div class="card-body p-5">
+				<div class="row justify-content-center">
+					<div class="col-md-4">
+						<div class="input-group mb-3">
+							<label for="store1" class="input-group-text">Select Store 1:</label>
+							<select id="store1" class="form-select" [(ngModel)]="selectedStore1">
+								<option hidden>Select a store</option>
+								<option *ngFor="let str of store" [value]="str._id">{{ str.name }}</option>
+							</select>
+						</div>
+						<br><br>
+						<div class="input-group mb-4">
+							<label for="startDate" class="input-group-text">Select Start Month:</label>
+							<input type="month" id="startDate" [(ngModel)]="selectedStartMonth" (ngModelChange)="onMonthChange($event, 'start')" class="form-control">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="input-group mb-3">
+							<label for="store2" class="input-group-text">Select Store 2:</label>
+							<select id="store2" class="form-select" [(ngModel)]="selectedStore2">
+								<option hidden>Select a store</option>
+								<option *ngFor="let str of store" [value]="str._id">{{ str.name }}</option>
+							</select>
+						</div>
+						<br><br>
+						<div class="input-group mb-4">
+							<label for="endDate" class="input-group-text">Select End Month:</label>
+							<input type="month" id="endDate" [(ngModel)]="selectedEndMonth" (ngModelChange)="onMonthChange($event, 'end')" class="form-control">
+						</div>
+		
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12 text-right">
+						<button class="btn btn-primary" (click)="getMonthComparison()">View Comparison</button>
+					</div>
+				</div>
+			</div>
+
+		  </div>
+
+	
+	</div>
+</div>
+
+
+<div class="chart-container">
+	<div class="chart-wrapper">
+		<h2><i class="fadeIn animated bx bx-bar-chart-alt-2"></i><b>Comparative</b></h2>
+		<chart [type]="type" [data]="data" [options]="options"></chart>
+	</div>
+</div>
+</div>
+<div *ngIf="isManagerRole()">
+    <div class="alert alert-danger" role="alert">
+      Access denied: Managers do not have access to this form.
+    </div>
+  </div>

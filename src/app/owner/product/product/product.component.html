@@ -1,0 +1,222 @@
+<!--breadcrumb-->
+<!-- <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+    <div class="breadcrumb-title pe-3">Product</div>
+    <div class="ps-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item"><a href="#" (click)="$event.preventDefault()"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Add New Product</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="ms-auto">
+        <div class="btn-group">
+            <button type="button" class="btn btn-primary">Settings</button>
+            <button type="button" class="btn btn-primary split-bg-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">	<span class="visually-hidden">Toggle Dropdown</span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">	<a class="dropdown-item" href="#" (click)="$event.preventDefault()">Action</a>
+                <a class="dropdown-item" href="#" (click)="$event.preventDefault()">Another action</a>
+                <a class="dropdown-item" href="#" (click)="$event.preventDefault()">Something else here</a>
+                <div class="dropdown-divider"></div>	<a class="dropdown-item" href="#" (click)="$event.preventDefault()">Separated link</a>
+            </div>
+        </div>
+    </div> 
+</div>-->
+<!--end breadcrumb-->
+
+<!-- <div class="card">
+  <form [formGroup]="registerForm">
+  <div class="card-body p-4">
+      <h5 class="card-title">Add New Product</h5>
+      <hr/>
+       <div class="form-body mt-4">
+        <div class="row">
+           <div class="col-lg-8">
+           <div class="border border-3 p-4 rounded">
+            <div class="mb-3">
+                <label for="inputProductTitle" class="form-label">Product Title</label>
+                <input type="email" class="form-control"  [(ngModel)]="product.name" formControlName="name"  class="form-control" [ngClass]="{ 'is-invalid': submitted && f['name'].errors }" id="inputProductTitle" placeholder="Enter product title">
+                <div *ngIf="submitted && f['name'].errors" class="invalid-feedback">
+                  <div *ngIf="f['name'].errors['required']">name required</div>
+              </div>
+              </div>
+              <div class="mb-3">
+                <label for="inputProductDescription" class="form-label">Description</label>
+                <textarea class="form-control" id="inputProductDescription" formControlName="description" [(ngModel)]="product.description" rows="3" [ngClass]="{ 'is-invalid': submitted && f['description'].errors }"></textarea>
+                <div *ngIf="submitted && f['description'].errors" class="invalid-feedback">
+                  <div *ngIf="f['description'].errors['required']">Description required</div>
+              </div>
+              </div>
+              <div class="mb-3">
+                <label for="inputProductDescription" class="form-label">Product Images</label>
+                <input class="form-control form-control-sm" required  id="image-uploadify" (change)="onFileChange($event)" type="file" accept=".xlsx,.xls,image/*,.doc,audio/*,.docx,video/*,.ppt,.pptx,.txt,.pdf" multiple>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Option Groups</label>
+                <select class="multiple-select" id="mySelect" data-placeholder="Choose anything" multiple="multiple">
+              
+                  <option *ngFor="let optionGroup of optionGroups" [value]="optionGroup._id">{{ optionGroup.name }}</option>
+                
+                </select>
+              </div>
+            </div>
+           </div>
+           <div class="col-lg-4">
+            <div class="border border-3 p-4 rounded">
+              <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="inputPrice" class="form-label">Price</label>
+                    <input type="email" class="form-control" id="inputPrice" formControlName="price" [(ngModel)]="product.price" [ngClass]="{ 'is-invalid': submitted && f['price'].errors }" placeholder="00.00">
+                    <div *ngIf="submitted && f['price'].errors" class="invalid-feedback">
+                      <div *ngIf="f['price'].errors['required']">Price required</div>
+                  </div>
+                  </div>
+    
+                  <div  class="mb-3">
+                    <label for="formFileSm" class="form-label">Store</label>
+    
+                    <select  class="form-select" formControlName="storeId" [ngClass]="{ 'is-invalid': submitted && f['storeId'].errors }" [(ngModel)]="product.storeId" (change)="getstoreid($event.target.value)">
+                      <option hidden>Select your store</option>
+                        <option *ngFor="let str of store" value="{{str._id}}"> {{str.name}}</option>
+                      
+                    </select>
+                    <div *ngIf="submitted && f['storeId'].errors" class="invalid-feedback">
+                      <div *ngIf="f['storeId'].errors['required']">store required</div></div>
+                </div>
+                 
+                  <div class="col-12">
+                    <label for="inputVendor" class="form-label">Category</label>
+                    <select class="form-select" id="inputVendor" formControlName="category" [ngClass]="{ 'is-invalid': submitted && f['category'].errors }"  [(ngModel)]="product.category">
+  
+                        <option *ngFor="let category of Categorys" [value]="category._id" >{{ category.name }}</option>
+                      </select>
+                      <div *ngIf="submitted && f['category'].errors" class="invalid-feedback">
+                      <div *ngIf="f['category'].errors['required']">category required</div></div>
+                  </div>
+                
+                  <div class="col-12">
+                    <label for="inputProductTags" class="form-label">Product Tags</label>
+                    <input type="text" class="form-control" id="inputProductTags" placeholder="Enter Product Tags">
+                  </div>
+                  <div class="col-12">
+                      <div class="d-grid">
+                         <button type="submit" (click)=" onSubmit()" class="btn btn-primary">Save Product</button>
+                      </div>
+                  </div>
+              </div> 
+          </div>
+          </div>
+       </div>
+    </div>
+  </div></form>
+</div> -->
+
+<!--breadcrumb-->
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
+
+<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+  <div class="breadcrumb-title pe-3">Product</div>
+  <div class="ps-3">
+      <nav aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0 p-0">
+              <li class="breadcrumb-item"><a href="#" (click)="$event.preventDefault()"><i class="bx bx-home-alt"></i></a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">Add New Product</li>
+          </ol>
+      </nav>
+  </div>
+  <div class="ms-auto">
+      <div class="btn-group">
+          <button type="button" class="btn btn-primary">Settings</button>
+          <button type="button" class="btn btn-primary split-bg-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">	<span class="visually-hidden">Toggle Dropdown</span>
+          </button>
+          <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">	<a class="dropdown-item" href="#" (click)="$event.preventDefault()">Action</a>
+              <a class="dropdown-item" href="#" (click)="$event.preventDefault()">Another action</a>
+              <a class="dropdown-item" href="#" (click)="$event.preventDefault()">Something else here</a>
+              <div class="dropdown-divider"></div>	<a class="dropdown-item" href="#" (click)="$event.preventDefault()">Separated link</a>
+          </div>
+      </div>
+  </div>
+</div>
+<!-- product-form.component.html -->
+<div class="card">
+   <form  [formGroup]="productForm" (ngSubmit)="addProduct()">
+  <div class="card-body p-4">
+    <h2>Add Product</h2>
+    <hr/>
+    <div class="form-body mt-4">
+      <div class="row">
+   
+     <div class="col-lg-8">
+           <div class="border border-3 p-4 rounded">
+      <div class="mb-3">
+        <label for="name" class="form-label">Name:</label>
+        <input type="text" id="name" class="form-control" formControlName="name">
+      </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">Description:</label>
+        <textarea id="description" class="form-control" formControlName="description"></textarea>
+      </div>
+     
+      <!-- <div class="form-group">
+        <label for="storeId">Store ID:</label>
+        <input type="text" id="storeId" class="form-control" formControlName="storeId">
+      </div> -->
+      <!-- <div class="form-group">
+        <label for="category">Category:</label>
+        <input type="text" id="category" class="form-control" formControlName="category">
+      </div> -->
+      <div class="col-12">
+        <label for="inputVendor" class="form-label">Category</label>
+        <select class="form-select" id="inputVendor" formControlName="category">
+          <option hidden>Select your category</option>
+            <option *ngFor="let category of Categorys" value="{{category._id}}" >{{ category.name }}</option>
+          </select>
+       
+      </div>
+      <div class="form-group">
+      </div>
+      <div  class="mb-3">
+        <label for="formFileSm" class="form-label">Store</label>
+
+        <select  class="form-select" formControlName="storeId" >
+          <option hidden>Select your store</option>
+            <option *ngFor="let str of store" value="{{str._id}}"> {{str.name}}</option>
+          
+        </select>
+     
+    </div>
+    </div>
+   
+      </div>
+
+      <div class="col-lg-4">
+        <div class="border border-3 p-4 rounded">
+          <div class="row g-3">
+          <div formArrayName="modePrices">
+            <div *ngFor="let modePrice of modePrices.controls; let i = index" [formGroupName]="i">
+             
+              <input type="text" class="form-control pers" formControlName="mode">
+              <label>Price {{modePrice.value.name}} :</label>
+              <input type="number" class="form-control" formControlName="price">
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="image-upload" class="form-label">Product Image</label>
+            <input type="file" id="image-upload" (change)="onFileChange($event)" class="form-control" accept="image/*">
+          </div>
+          <button type="submit" class="btn btn-primary">Add Product</button>
+        </div>
+        </div>
+        </div>
+   
+  
+      </div>
+    </div>
+  </div> </form>
+  </div>
+  
+  
+  
+  

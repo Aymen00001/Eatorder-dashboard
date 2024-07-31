@@ -1,0 +1,107 @@
+<br>
+<div class="container justify-content-center">
+  <div class="row">
+    <div class="col-1"> </div>
+    <div class="col-10">
+      <div class="card custom-border">
+        <h5><b>When are you open ?</b></h5>
+        <div class="card-head">
+          <h6>Opening Hours</h6>
+        </div>
+        <button class="btn-link" (click)="add1()">Add Hours</button>
+        <div class="card-body" *ngIf="addhours">
+          <p>Days: {{ selectedDays.join(', ') }}</p>
+          <div class="d-flex espace">
+            <table>
+              <tr>
+                <th *ngFor="let day of daysOfWeek" class="checkbox-cell">
+                  {{ day }}
+                </th>
+              </tr>
+              <tr>
+                <td *ngFor="let day of daysOfWeek" class="checkbox-cell">
+                  <input type="checkbox" class="form-check-input" id="{{ day }}Open"
+                    [(ngModel)]="openingdate.jour[day].isOpen" (change)="updateSelectedDays(day)" name="{{ day }}Open">
+                </td>
+              </tr>
+            </table>
+            <div *ngIf="selectedDays.length > 0" class="time-input-container">
+              <td>
+                <input type="time" class="form-control time-input" id="commonTimeStart" [(ngModel)]="selectedStart"
+                  [ngModelOptions]="{standalone: true}">
+              </td>
+              <td>
+                <input type="time" class="form-control time-input" id="commonTimeEnd" [(ngModel)]="selectedEnd"
+                  [ngModelOptions]="{standalone: true}">
+              </td>
+            </div> <br>
+            <div class="d-flex justify-content-end order-actions ">
+              <button type="button" class="btn btn-outline-warning" style="height: 35px"
+                (click)="add(); resetCheckboxValues(); resetTimeInputs()">Add</button>
+              <button type="button" class="btn btn-outline-secondary" style="height: 35px"
+                (click)="close2()">Close</button>
+            </div>
+          </div>
+        </div>
+        <!-- Ajoutez ce code pour afficher le message d'erreur -->
+        <div *ngIf="errorMessage" class="alert alert-danger">
+          {{ errorMessage }}
+        </div>
+    <!-- Ajoutez ce code pour afficher le message d'erreur -->
+    <div *ngIf="errorMessage2" class="alert alert-danger">
+      {{ errorMessage2 }}
+    </div>
+        <!-- Le reste de votre code HTML... -->
+        <!--Affichage -->
+        <div *ngFor="let groupedSet of openingHours;" class="container">
+          <div class="d-flex espace">
+            <div>
+              <div class="inline-container">Days:
+                <ng-container *ngFor="let day of groupedSet.jour | keyvalue">
+                  <span *ngIf="day.value.isOpen" class="inline-day">{{ day.key }}</span>
+                </ng-container>
+              </div>
+            </div>
+            <div class="d-flex justify-content-end order-actions">
+              <p> {{ groupedSet.shifts.start }} -</p>
+              <p> {{ groupedSet.shifts.end }}</p>
+              <a class="lg-3 btn2" (click)="gethorairebyid(groupedSet._id)"><i class='bx bxs-edit'></i></a>
+              <a (click)="delettehours(groupedSet._id)" class="ms-3 btn2"><i class='bx bxs-trash'></i></a>
+            </div>
+          </div>
+          <!-- Edit -->
+          <div *ngIf="groupedSet.isEditMode">
+            <div class="d-flex espace">
+              <table>
+                <tr>
+                  <td *ngFor="let day of daysOfWeek" class="checkbox-cell">
+                    <span class="inline-day">{{ day }}</span>
+                    <input type="checkbox" class="form-check-input" id="{{ day }}Open"
+                      [checked]="open.jour && groupedSet.jour[day] && open.jour[day].isOpen"
+                      (change)="updateEditSelectedDays(open, day)" name="{{ day }}Open">
+                  </td>
+                </tr>
+              </table>
+              <div class="time-input-container">
+                <td>
+                  <input type="time" class="form-control time-input" id="commonTimeStart"
+                    [(ngModel)]="open && open.shifts && open.shifts.start" [ngModelOptions]="{standalone: true}">
+                </td>
+                <td>
+                  <input type="time" class="form-control time-input" id="commonTimeEnd"
+                    [(ngModel)]="open && open.shifts && open.shifts.end" [ngModelOptions]="{standalone: true}">
+                </td>
+              </div><br>
+              <div class="d-flex justify-content-end order-actions">
+                <button type="button" class="btn btn-outline-warning small-btn"
+                  (click)="Updatehours(groupedSet._id)" style="height: 35px">Update</button>
+                <button type="button" class="btn btn-outline-secondary small-btn" (click)="close()" style="height: 35px">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-1"> </div>
+  </div>
+</div>

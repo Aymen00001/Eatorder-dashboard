@@ -1,0 +1,171 @@
+
+<div class="accordion" id="accordionExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+<i class="lni lni-delivery">   </i>DeLivery
+   </button>
+    </h2>
+    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <ol class="list-group list-group-numbered">
+          <li class="list-group-item d-flex justify-content-between align-items-start">
+            <div class="ms-2 me-auto">
+              <div class="fw-bold">Uber</div>
+            </div>
+            <span>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" 
+                       [(ngModel)]="uber" (change)="switchUber()">
+              </div>
+              <span>{{ uber ? 'Active' : 'Inactive' }}</span>
+            </span>
+          </li>
+          <li *ngIf="uber" class="list-group-item d-flex justify-content-between align-items-start">
+            <div class="ms-2 me-auto">
+              <div class="fw-bold">Mode Uber</div>
+            </div>
+            <span>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="orderAcceptances" id="manualRadio" 
+                       [(ngModel)]="uberstatus" [value]="false">
+                <label class="form-check-label" for="manualRadio">
+                  Manual
+                </label>
+              </div>
+              
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="orderAcceptances" id="automaticRadio" 
+                       [(ngModel)]="uberstatus" [value]="true">
+                <label class="form-check-label" for="automaticRadio">
+                  Automatic
+                </label>
+              </div>
+              <div class="form-check form-switch">
+                <button class="btn btn-primary" (click)="sendUpdateRequest()">Change</button>
+              </div>
+              <span>{{ uberstatus ? 'Automatic' : 'Manual' }}</span>
+            </span>
+          </li>
+          
+          
+          
+        </ol>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+<br>
+
+<!--
+<div class="accordion" id="accordionExample2">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne2" aria-expanded="true" aria-controls="collapseOne2">
+<i class="lni lni-cogs">   </i>Settings
+   </button>
+    </h2>
+    <div id="collapseOne2" class="accordion-collapse collapse show" data-bs-parent="#accordionExample2">
+      <div class="accordion-body">
+     
+  <ol class="list-group list-group-numbered">
+    <li class="list-group-item d-flex justify-content-between align-items-start">
+      <div class="ms-2 me-auto">
+        <div class="fw-bold">Automatic Order Acceptance.</div>
+      </div>
+      <span>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="orderAcceptance" id="manualRadio" 
+                 [(ngModel)]="isAutomatic" [value]="false" >
+          <label class="form-check-label" for="manualRadio">
+            Manual
+          </label>
+        </div>
+        
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="orderAcceptance" id="automaticRadio" 
+                 [(ngModel)]="isAutomatic" [value]="true" >
+          <label class="form-check-label" for="automaticRadio">
+            Automatic
+          </label>
+        </div>
+        
+        <div class="form-group" *ngIf="isAutomatic">
+          <label for="preparationTime">Preparation Time</label>
+          <input type="time" id="preparationTime" [(ngModel)]="preparationTime" class="form-control" />
+        </div><br>
+        <button class="btn btn-primary" (click)="switchcommande()">Change</button>
+      </span>
+      
+    </li>
+
+  </ol>
+            </div>
+    </div>
+  </div>
+</div>-->
+<br>
+<div class="accordion" id="accordionExample3">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne3" aria-expanded="true" aria-controls="collapseOne3">
+        <i class="lni lni-cogs"></i> Guest_Mode
+      </button>
+    </h2>
+    <div id="collapseOne3" class="accordion-collapse collapse show" data-bs-parent="#accordionExample3">
+      <div class="accordion-body">
+          <div *ngIf="guestMode">
+              <ol class="list-group list-group-numbered">
+                  <li class="list-group-item d-flex justify-content-between align-items-start">
+                      <div class="ms-2 me-auto">
+                          <div class="fw-bold">Guest Mode</div>
+                      </div>
+                      <span>
+                          <div class="form-check ms-2 me-auto">
+                              <input class="form-check-input" type="checkbox" [checked]="guestMode[0].guestmode" (change)="updateProperty('guestmode', '')">
+                              <label class="form-check-label" for="guestModeSwitch"></label>
+                          </div>
+                      </span>
+                  </li>
+                  <li>
+                      <div class="ms-2 me-auto">
+                          <div class="fw-bold">Kiosk</div>
+                      </div>
+                      <ol class="list-group list-group-numbered">
+                          <li class="list-group-item d-flex justify-content-between align-items-start" *ngFor="let kioskProperty of guestMode[0]?.kiosk | keyvalue">
+                              <div class="ms-2 me-auto">{{ kioskProperty.key }}</div>
+                              <span>
+                                  <div class="form-check ms-2 me-auto">
+                                      <input class="form-check-input" type="checkbox" [checked]="kioskProperty.value" (change)="updateProperty('kiosk', kioskProperty.key)">
+                                      <label class="form-check-label" for="{{ kioskProperty.key }}"></label>
+                                  </div>
+                              </span>
+                          </li>
+                      </ol>
+                  </li>
+                  <li>
+                      <div class="ms-2 me-auto">
+                          <div class="fw-bold">other</div>
+                      </div>
+                      <ol class="list-group list-group-numbered">
+                          <li class="list-group-item d-flex justify-content-between align-items-start" *ngFor="let otherProperty of guestMode[0]?.other | keyvalue">
+                              <div class="ms-2 me-auto">{{ otherProperty.key }}</div>
+                              <span>
+                                  <div class="form-check ms-2 me-auto">
+                                      <input class="form-check-input" type="checkbox" [checked]="otherProperty.value" (change)="updateProperty('other', otherProperty.key)">
+                                      <label class="form-check-label" for="{{ otherProperty.key }}"></label>
+                                  </div>
+                              </span>
+                          </li>
+                      </ol>
+                  </li>
+              </ol>
+          </div>
+      </div>
+  </div>
+  
+  </div>
+</div>
+

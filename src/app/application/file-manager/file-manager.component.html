@@ -1,0 +1,482 @@
+<!--breadcrumb-->div
+<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+	<div class="breadcrumb-title pe-3">Applications</div>
+	<div class="ps-3">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb mb-0 p-0">
+				<li class="breadcrumb-item"><a href="#" (click)="$event.preventDefault()"><i
+							class="bx bx-file"></i></a>
+				</li>
+				<li class="breadcrumb-item active" aria-current="page">{{'fileManager' | translate}}</li>
+			</ol>
+		</nav>
+	</div>
+	<div class="ms-auto">
+		<div class="btn-group">
+			<button type="button" class="btn btn-primary">Settings</button>
+			<button type="button" class="btn btn-primary split-bg-primary dropdown-toggle dropdown-toggle-split"
+				data-bs-toggle="dropdown"> <span class="visually-hidden">Toggle Dropdown</span>
+			</button>
+			<div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
+				<a class="dropdown-item" href="#" (click)="$event.preventDefault()">Action</a>
+				<a class="dropdown-item" href="#" (click)="$event.preventDefault()">Another action</a>
+				<a class="dropdown-item" href="#" (click)="$event.preventDefault()">Something else here</a>
+				<div class="dropdown-divider"></div>
+				<a class="dropdown-item" href="#" (click)="$event.preventDefault()">Separated link</a>
+			</div>
+		</div>
+	</div>
+</div>
+<!--end breadcrumb-->
+<div class="row">
+	<div class="col-12 col-lg-3">
+		<div class="card">
+			<div class="card-body">
+
+				<h5 class="my-3">{{'storage'| translate}}</h5>
+				<div class="fm-menu">
+					<div class="list-group list-group-flush">
+						<a id="addFile" [class.selected]="selectedMenuItem === 'addFile'"
+							(click)="onMenuItemSelected('addFile')" class="list-group-item py-1">
+							<i class="bx bx-upload me-2"></i>
+							<span>{{'addFile' | translate}}</span>
+						</a>
+
+						<a id="allFiles" [class.selected]="selectedMenuItem === 'allFiles'"
+							(click)="onMenuItemSelected('allFiles')" class="list-group-item py-1">
+							<i class="bx bx-folder me-2"></i>
+							<span>{{'allFile' | translate}}</span>
+						</a>
+
+
+						<a id="documents" [class.selected]="selectedMenuItem === 'documents'"
+							(click)="onMenuItemSelected('documents')" class="list-group-item py-1">
+							<i class="bx bx-file me-2"></i>
+							<span>{{'documents' | translate}}</span>
+						</a>
+						<a  id="images" [class.selected]="selectedMenuItem === 'images'"
+							(click)="onMenuItemSelected('images')" class="list-group-item py-1">
+							<i class="bx bx-image me-2"></i>
+							<span>{{'images' | translate}}</span>
+						</a>
+
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card">
+			<div class="card-body">
+				<h5 class="mb-0 text-primary font-weight-bold">{{ totalSize }} KO <span class="float-end text-secondary">100 MB</span></h5>
+				<p class="mb-0 mt-2"><span class="text-secondary">{{'used'|translate}}</span><span class="float-end text-primary">{{'upgrade'| translate}}</span></p>
+				<div class="progress mt-3 h-7">
+					<div class="progress-bar" role="progressbar" [style.width.%]="progressValue" [attr.aria-valuenow]="progressValue" aria-valuemin="0" aria-valuemax="100"></div>
+				</div>
+				<div class="mt-3"></div>
+				<div class="d-flex align-items-center">
+					<div class="fm-file-box bg-light-primary text-primary"><i class='bx bx-image'></i></div>
+					<div class="flex-grow-1 ms-2">
+						<h6 class="mb-0">Images</h6>
+						<p class="mb-0 text-secondary">{{ nbreImageFile }} {{'files'| translate}}</p>
+					</div>
+					<h6 class="text-primary mb-0">{{ totalImageSize }} KO</h6>
+				</div>
+				<div class="d-flex align-items-center mt-3">
+					<div class="fm-file-box bg-light-success text-success"><i class='bx bxs-file-doc'></i></div>
+					<div class="flex-grow-1 ms-2">
+						<h6 class="mb-0">Documents</h6>
+						<p class="mb-0 text-secondary">{{ nbreDocument }} {{'files'| translate}}</p>
+					</div>
+					<h6 class="text-primary mb-0">{{ totalDocSize }} KO</h6>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+	<div class="col-12 col-lg-9">
+		<div class="card">
+			<div class="card-body">
+				<!-- Code précédent -->
+
+				<div class="row mt-3" *ngIf="selectedMenuItem === ' '">
+					<div class="card">
+						<div class="card-body mt-3">
+
+							<div class="row mt-3 justify-content-center">
+								<div class="col-12 col-lg-3 col-xxl-8 mx-auto">
+								  <div class="text-center">
+
+									<input class="form-control" type="file" id="formFile"  (change)="onFileChange($event)"
+									  accept="image/*, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+									<div class="error-message" [ngClass]="{ 'visible': fileTypeError }">
+										{{'msgUploadType'| translate}}
+									</div>
+									<div class="error-message" [ngClass]="{ 'visible': fileSizeError }">
+										{{'msgUploadSize'| translate}}
+									</div>
+								  </div>
+								</div>
+								<div class="col-12 text-center mt-3">
+								  <div class="container">
+									<button class="btn btn-primary" id="add-file-button"
+									  [disabled]="fileTypeError || fileSizeError"
+									  (click)="onFileSelected($event)">+  {{'addFile'| translate}}</button>
+								  </div>
+								</div>
+							  </div>
+							  
+
+
+							<!--end row-->
+							<h5>{{'folders'| translate}}s</h5>
+							<div class="row mt-3">
+								<div class="col-12 col-lg-4">
+									<div class="card shadow-none border radius-15">
+										<div class="card-body">
+											<div class="d-flex align-items-center">
+												<div class="font-30 text-primary"><i class='bx bxs-folder'></i></div>
+												<div class="user-groups ms-auto">
+													<img src="assets/images/avatars/avatar-1.png" width="35" height="35"
+														class="rounded-circle" alt="" />
+													<img src="assets/images/avatars/avatar-2.png" width="35" height="35"
+														class="rounded-circle" alt="" />
+												</div>
+												<div class="user-plus">+</div>
+											</div>
+											<h6 class="mb-0 text-primary">{{'folders'| translate}}s</h6>
+											<small>{{ nbreImage }} {{'files'| translate}}s</small>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!--end row-->
+							<div class="d-flex align-items-center">
+								<div>
+									<h5 class="mb-0">{{'recentFiles'| translate}}</h5>
+								</div>
+							</div>
+							<div class="table-responsive mt-3">
+								<table class="table table-striped table-hover table-sm mb-0">
+								  <thead>
+									<tr>
+									  <th>{{'name'| translate}}</th>
+									  <th>{{'Date'| translate}}</th>
+									  <th>{{'actions'| translate}}</th>
+									</tr>
+								  </thead>
+								  <tbody>
+									<tr *ngFor="let image of images">
+									  <td>
+										<div class="d-flex align-items-center">
+										  <i [ngClass]="getImageIcon(image.mimeType)"></i>
+										  <div class="font-weight-bold" [ngClass]="getTextColor(image.mimeType)">{{ image.name }}</div>
+										</div>
+									  </td>
+									  <td>{{ image.date }}</td>
+									  <td>
+										<a href="javascript:void(0)" (click)="deleteImage(image)" class="me-3 text-danger" title="Delete">
+										  <i class="bx bx-trash font-24"></i>
+										</a>
+										<a href="javascript:void(0)" (click)="downloadImage(image)" class="me-3 text-primary" title="Download">
+										  <i class="bx bx-download font-24"></i>
+										</a>
+										<a href="javascript:void(0)" *ngIf="isPreviewSupported(image.mimeType)"
+										  (click)="openOwnerDetailsModal(modalContent, image)" class="text-success" title="Preview">
+										  <i class="bx bx-show-alt font-24"></i>
+										</a>
+									  </td>
+									</tr>
+								  </tbody>
+								</table>
+							  </div>
+							  
+
+
+						</div>
+					</div>
+				</div>
+
+				<div class="table-responsive mt-3" *ngIf="selectedMenuItem === 'allFiles'">
+					<div class="card">
+						<div class="card-body">
+							<div class="fm-search">
+								<div class="mb-0">
+									<div class="input-group input-group-lg"> <span
+											class="input-group-text bg-transparent"><i class='bx bx-search'></i></span>
+											<input type="text" class="form-control" placeholder="Search the files" [(ngModel)]="searchText">
+
+									</div>
+								</div>
+							</div>
+
+
+							<!--end row-->
+							<div class="d-flex align-items-center mt-3">
+								<div>
+									<h5 class="mb-0">All Files</h5>
+								</div>
+							</div>
+							<div class="table-responsive mt-3">
+								<table class="table table-striped table-hover table-sm mb-0">
+									<thead>
+										<tr>
+
+											<th>Name </th>
+											<th>Date</th>
+											<th>Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr *ngIf="images.length === 0">
+											<td colspan="3" class="text-center">No data</td>
+										  </tr>
+										<tr *ngFor="let image of images" [hidden]="!image.name.toLowerCase().includes(searchText.toLowerCase())">
+
+											<td>
+												<div class="d-flex align-items-center">
+													<i [ngClass]="getImageIcon(image.mimeType)"></i>
+													<div class="font-weight-bold"
+														[ngClass]="getTextColor(image.mimeType)">{{ image.name }}</div>
+												</div>
+											</td>
+											<td>{{ image.date }}</td>
+											<td>
+												<a href="javascript:void(0)" (click)="deleteImage(image)"
+													class="me-3 text-danger" title="Delete">
+													<i class="bx bx-trash font-24"></i>
+												</a>
+												<a href="javascript:void(0)" (click)="downloadImage(image)"
+													class="me-3 text-primary" title="Download">
+													<i class="bx bx-download font-24"></i>
+												</a>
+												<a href="javascript:void(0)" *ngIf="isPreviewSupported(image.mimeType)"
+										  (click)="openOwnerDetailsModal(modalContent, image)" class="text-success" title="Preview">
+										  <i class="bx bx-show-alt font-24"></i>
+										</a>
+											</td>
+										</tr>
+										<!-- Modal -->
+
+									</tbody>
+								</table>
+							</div>
+
+
+
+
+
+						</div>
+					</div>
+
+				</div>
+
+				<div class="table-responsive mt-3" *ngIf="selectedMenuItem === 'addFile'">
+					<div class="card">
+						<div class="card-body mt-3">
+		
+							<div class="row mt-3 justify-content-center">
+								<div class="col-12 col-lg-3 col-xxl-8 mx-auto">
+									<div class="text-center">
+
+										<input class="form-control" type="file" id="formFile"  (change)="onFileChange($event)"
+										  accept="image/*, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+										<div class="error-message" [ngClass]="{ 'visible': fileTypeError }">
+											{{'msgUploadType'| translate}}
+										</div>
+										<div class="error-message" [ngClass]="{ 'visible': fileSizeError }">
+											{{'msgUploadSize'| translate}}
+										</div>
+									  </div>
+								</div>
+								<div class="col-12 text-center mt-3">
+								  <div class="container">
+									<button class="btn btn-primary" id="add-file-button"
+									  [disabled]="fileTypeError || fileSizeError"
+									  (click)="onFileSelected($event)">+ Add File</button>
+								  </div>
+								</div>
+							  </div>
+							  
+
+
+						</div>
+					</div>
+
+				</div>
+
+
+
+				<div class="table-responsive mt-3" *ngIf="selectedMenuItem === 'documents'">
+					<div class="card">
+						<div class="card-body">
+							<div class="fm-search">
+								<div class="mb-0">
+									<div class="input-group input-group-lg"> <span
+											class="input-group-text bg-transparent"><i class='bx bx-search'></i></span>
+											<input type="text" class="form-control" placeholder="Search the files" [(ngModel)]="searchText">
+									</div>
+								</div>
+							</div>
+
+
+							<!--end row-->
+							<div class="d-flex align-items-center mt-3">
+								<div>
+									<h5 class="mb-0">Documents</h5>
+								</div>
+								
+							</div>
+							<div class="table-responsive mt-3">
+								<table class="table table-striped table-hover table-sm mb-0">
+									<thead>
+										<tr>
+
+											<th>Name </th>
+											<th>Date</th>
+											<th>Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr *ngIf="!hasDocumentFiles()">
+											<td colspan="3" class="text-center">No data</td>
+										  </tr>
+										<tr *ngFor="let image of images" [hidden]="!isDocumentFile(image) || !image.name.toLowerCase().includes(searchText.toLowerCase())">
+											<td>
+												<div class="d-flex align-items-center">
+													<i [ngClass]="getImageIcon(image.mimeType)"></i>
+													<div class="font-weight-bold"
+														[ngClass]="getTextColor(image.mimeType)">{{ image.name }}</div>
+												</div>
+											</td>
+											<td>{{ image.date }}</td>
+											<td>
+												<a href="javascript:void(0)" (click)="deleteImage(image)"
+													class="me-3 text-danger" title="Delete">
+													<i class="bx bx-trash font-24"></i>
+												</a>
+												<a href="javascript:void(0)" (click)="downloadImage(image)"
+													class="me-3 text-primary" title="Download">
+													<i class="bx bx-download font-24"></i>
+												</a>
+												<a href="javascript:void(0)" *ngIf="isPreviewSupported(image.mimeType)"
+										  (click)="openOwnerDetailsModal(modalContent, image)" class="text-success" title="Preview">
+										  <i class="bx bx-show-alt font-24"></i>
+										</a>
+											</td>
+										</tr>
+										<!-- Modal -->
+
+									</tbody>
+								</table>
+							</div>
+
+
+
+
+
+						</div>
+					</div>
+				</div>
+
+				<div class="table-responsive mt-3" *ngIf="selectedMenuItem === 'images'">
+					<div class="card">
+						<div class="card-body">
+							<div class="fm-search">
+								<div class="mb-0">
+									<div class="input-group input-group-lg"> <span
+											class="input-group-text bg-transparent"><i class='bx bx-search'></i></span>
+											<input type="text" class="form-control" placeholder="Search the files" [(ngModel)]="searchText">
+									</div>
+								</div>
+							</div>
+
+
+							<!--end row-->
+							<div class="d-flex align-items-center mt-3">
+								<div>
+									<h5 class="mb-0">Images</h5>
+								</div>
+								
+							</div>
+							<div class="table-responsive mt-3">
+								<table class="table table-striped table-hover table-sm mb-0">
+									<thead>
+										<tr>
+
+											<th>Name </th>
+											<th>Date</th>
+											<th>Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr *ngIf="!hasImageFiles()">
+											<td colspan="3" class="text-center">No data</td>
+										  </tr>
+										<tr *ngFor="let image of images" [hidden]="!isImageFile(image) || !image.name.toLowerCase().includes(searchText.toLowerCase())">
+											<td>
+												<div class="d-flex align-items-center">
+													<i [ngClass]="getImageIcon(image.mimeType)"></i>
+													<div class="font-weight-bold"
+														[ngClass]="getTextColor(image.mimeType)">{{ image.name }}</div>
+												</div>
+											</td>
+											<td>{{ image.date }}</td>
+											<td>
+												<a href="javascript:void(0)" (click)="deleteImage(image)"
+													class="me-3 text-danger" title="Delete">
+													<i class="bx bx-trash font-24"></i>
+												</a>
+												<a href="javascript:void(0)" (click)="downloadImage(image)"
+													class="me-3 text-primary" title="Download">
+													<i class="bx bx-download font-24"></i>
+												</a>
+												<a href="javascript:void(0)"
+													(click)="openOwnerDetailsModal(modalContent, image)"
+													class="text-success" title="Preview">
+													<i class="bx bx-show-alt font-24"></i>
+												</a>
+											</td>
+										</tr>
+										<!-- Modal -->
+
+									</tbody>
+								</table>
+							</div>
+
+
+
+
+
+						</div>
+					</div>
+				</div>
+
+
+
+				<!-- Reste du code -->
+			</div>
+		</div>
+	</div>
+
+
+</div>
+<!--end row-->
+
+
+<ng-template #modalContent>
+	<div class="modal-header">
+		<h5 class="modal-title">{{'preview'| translate}}</h5>
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modalService.dismissAll()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body d-flex justify-content-center align-items-center">
+		<img [src]="selectedImageName" alt="Selected Image" class="img-fluid">
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-secondary" data-dismiss="modal"
+			(click)="modalService.dismissAll()">{{'close'| translate}}</button>
+	</div>
+</ng-template>

@@ -1,0 +1,116 @@
+<div class="card custom-border">
+  <div class="card-body p-5">
+    <div class="card-title d-flex align-items-center">
+      <div><i class="bx bxs-user me-1 font-22 text-warning-emphasis"></i>
+      </div>
+      <h5 class="mb-0" style="color: #FF9800;">Add Manager</h5>
+    </div>
+      <hr>
+      <form class="row g-3" >
+        <div class="col-md-6">
+          <label for="firstName" class="form-label" >FirstName</label>
+          <div class="input-group">
+          <span class="input-group-text bg-transparent"><i class='bx bxs-user'></i></span>
+         <input type="text" class="form-control" id="firstName"  name="firstName" [(ngModel)]="managerdata.firstName" [ngClass]="{'is-invalid': messageErrors['firstName']}"  (input)="clearError('firstName')">
+         <div class="invalid-feedback">
+          <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['firstName'] }}
+      </div>
+          </div>
+         <div class="error-message"></div>
+        </div>
+        <div class="col-md-6">
+          <label for="inputLastName" class="form-label" >LastName</label>
+          <div class="input-group">
+            <span class="input-group-text bg-transparent"><i class='bx bxs-user'></i></span>
+          <input type="text" class="form-control" id="inputLastName" name="lastName" [(ngModel)]="managerdata.lastName" [ngClass]="{'is-invalid': messageErrors['lastName']}"  (input)="clearError('lastName')" >
+          <div class="invalid-feedback">
+            <i class="bi bi-exclamation-triangle"></i>  {{ messageErrors['lastName'] }}
+        </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label for="email" class="form-label" >Email</label>
+          <div class="input-group"> <span class="input-group-text bg-transparent"><i class='bx bxs-message' ></i></span>
+          <input type="text" class="form-control" id="email"  name="email"  [(ngModel)]="managerdata.email" [ngClass]="{'is-invalid': messageErrors['email']}"  (input)="clearError('email')" >
+          <div class="invalid-feedback">
+            <i class="bi bi-exclamation-triangle"></i>  {{ messageErrors['email'] }}
+        </div>
+          </div>
+        <div class="alert alert-danger" role="alert" *ngIf="erroremail">
+          {{messageerror}}
+        </div>
+        </div>
+        <div class="col-md-6">
+          <label for="password" class="form-label">Password</label>
+          <div class="input-group">
+            <span class="input-group-text bg-transparent"><i class='bx bxs-lock' ></i></span>
+              <input type="{{ showPassword ? 'text' : 'password' }}" class="form-control" id="password" name="password" [(ngModel)]="managerdata.password" [ngClass]="{'is-invalid': messageErrors['password']}" (input)="clearError('password')">
+              <button class="btn btn-outline-secondary" type="button" (click)="togglePasswordVisibility()">
+                  <i class="bi" [ngClass]="showPassword ? 'lni lni-eye' : 'fadeIn animated bx bx-show-alt'"></i>
+              </button>
+          </div>
+          <div class="invalid-feedback">
+              <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['password'] }}
+          </div>
+      </div>
+        <div class="col-md-6">
+          <label for="phoneNumber" class="form-label">Phone</label>
+          <div class="input-group">
+            <span class="input-group-text bg-transparent"><i class="lni lni-phone" ></i></span>
+            <ngx-intl-tel-input name="phoneNumber" [(ngModel)]="managerdata.phoneNumber"></ngx-intl-tel-input>
+          </div>
+          <div class="invalid-feedback">
+            <i class="bi bi-exclamation-triangle"></i>  {{ messageErrors['phoneNumber'] }}
+        </div>
+        </div>
+        <div class="col-md-6">
+          <label for="sexe" class="form-label">Sexe</label>
+          <select class="form-select" id="sexe" name="sexe" [(ngModel)]="managerdata.sexe" [ngClass]="{'is-invalid': messageErrors['sexe']}"  (input)="clearError('sexe')">
+              <option value="male" selected>Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+          </select>
+          <div class="invalid-feedback">
+              <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['sexe'] }}
+          </div>
+      </div>
+      <div class="col-md-6">
+          <label for="status" class="form-label">Status</label>
+          <select class="form-select" id="status" name="status" [(ngModel)]="managerdata.status" [ngClass]="{'is-invalid': messageErrors['status']}"  (input)="clearError('status')">
+              <option value="pending" class="text-warning" selected>Pending</option>
+              <option value="suspended" class="text-danger">Suspended</option>
+              <option value="active" class="text-success">Active</option>
+          </select>
+          <div class="invalid-feedback">
+              <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['status'] }}
+          </div>
+      </div>
+      <div class="col-md-6">
+        <label for="image" class="form-label">Image</label>
+        <input type="file" class="form-control" id="image" name="image" (change)="onImageChange($event)">
+    </div>
+    <div class="col-md-6">
+      <div class="input-group">
+        <span class="input-group-text bg-transparent"><i class='bx bx-store'></i></span>
+          <input type="text" class="form-control" id="nom" [value]="'Select your stores'"[disabled]="someCondition"/></div>
+      <div class="product-list-container">
+      <div *ngFor="let str of store">
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input"[(ngModel)]="str.selected" [value]="str._id" (change)="updateSelectedStores()" [ngModelOptions]="{standalone: true}" name="selectedStoreIds"
+          [ngClass]="{'is-invalid': messageErrors['selectedStoreIds']}"  (input)="clearError('selectedStoreIds')">
+         <label class="form-check-label">{{ str.name }} </label>
+      </div></div>
+    </div>
+      <div class="invalid-feedback">
+          <i class="bi bi-exclamation-triangle"></i> {{ messageErrors['selectedStoreIds'] }}
+      </div>
+  </div>
+<hr>
+        <div class="row">
+          <div class="col-xs-12 text-right">
+            <button type="submit" class="btn btn-primary px-5" (click)="addManager()">Register</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>

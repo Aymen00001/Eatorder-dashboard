@@ -1,0 +1,439 @@
+<div>
+    <h5> <i class="bx bx-basket">SALES</i></h5>
+</div>
+
+<div class="row">
+    <div class="col-3"></div>
+    <div class="row">
+        <div class="col-3">
+            <div class="input-group mb-3">
+                <label for="month" class="input-group-text">Select Month:</label>
+                <input id="month" type="month" name="month" [(ngModel)]="selectedMonth" (ngModelChange)="onMonthChange($event)">
+            </div>
+        </div>
+        <div class="col-5">
+            <div class="input-group mb-3">
+                <label for="Group" class="input-group-text">Group by:</label>
+                <select class="form-select" [(ngModel)]="selectedOption" aria-label="Default select example" (change)="show()">
+                    <option value="Order" selected>Aucun</option>
+                    <option value="Produit">PRODUCT</option>
+                    <option value="Mode">Delivery Mode</option>
+                    <option value="Status">Status</option>
+                    <option value="Categories">Categories</option>
+                    <option value="Payement">Payment Mode</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-3"></div>
+
+</div>
+
+<br>
+<br>
+<!--Par Produit-->
+<div *ngIf="selectedOption === 'Produit'">
+    <div class="chart-container">
+        <canvas id="salesChart"></canvas>
+    </div>
+    <br>
+    <br><br>
+    <div class="card radius-10">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <div>
+                    <h5>
+                        <i class="lni lni-dinner">Sales by Product</i>
+                    </h5>
+                </div>
+                <div class="font-22 ms-auto"><i class='bx bx-dots-horizontal-rounded'></i>
+                </div>
+            </div>
+            <hr />
+            <div class="table-responsive table-margin">
+                <table class="table align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>#</th>
+                            <th>PRODUCT NAME</th>
+                            <th>TOTAL Vente</th>
+
+                            <th>PRIX</th>
+                            <th>
+                                <div (click)="sortClientsByTotalSpent()" style="cursor: pointer;">POURCENTAGE
+                                    <i class="lni" [ngClass]="sortDirection === 'asc' ? 'lni-arrow-up' : 'lni-arrow-down'"></i>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            *ngFor="let vente of ventes | paginate: { itemsPerPage: selectedItemsPerPage, currentPage: currentPage }; let i = index;">
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="ms-2">
+                            <td>{{ vente.orderNumber }}</td> <!-- Display the order number -->
+            </div>
+        </div>
+        </td>
+        <td>{{vente.productName}}</td>
+        <td>{{vente.totalSales}} </td>
+        <td>{{vente.priceproduct}}</td>
+        <td>{{ vente.percentTotalSales.toFixed(2) }}%</td>
+<!-- 
+        <td>
+            <button type="button" class="btn btn-primary btn-sm radius-30 px-4"
+                (click)="viewDetails(modalContent,client)">View Details</button>
+        </td>
+        </tr>
+            <tr>
+            <td>Total =</td>
+            <td></td>
+            <td></td>
+            <td style="color:rgb(37, 163, 37);"><b></b></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>-->
+        </tbody>
+        </table>
+    </div>
+</div>
+<div class="pagination-container">
+    <pagination-controls (pageChange)="currentPage = $event" class="pagination-controls"></pagination-controls>
+</div>
+</div>
+</div>
+<!--Par Mode Delivery-->
+<div *ngIf="selectedOption === 'Mode'">
+    <div class="chart-container">
+        <canvas id="salesChartmode"></canvas>
+    </div>
+    <br>
+    <br>
+    <div class="card radius-10">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <div>
+                    <h5>
+                        <i class="bx bx-basket">Sales by Mode</i>
+                    </h5>
+                </div>
+                <div class="font-22 ms-auto"><i class='bx bx-dots-horizontal-rounded'></i>
+                </div>
+            </div>
+            <hr />
+            <div class="table-responsive table-margin">
+                <table class="table align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>#</th>
+                            <th>Mode </th>
+                            <th>TOTAL </th>
+                            <th>
+                                <div (click)="sortmodeByTotalSpent()" style="cursor: pointer;">POURCENTAGE
+                                    <i class="lni" [ngClass]="sortDirectionmode === 'asc' ? 'lni-arrow-up' : 'lni-arrow-down'"></i>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            *ngFor="let mode of modes | paginate: { itemsPerPage: selectedItemsPerPage, currentPage: currentPage }; let i = index;">
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="ms-2">
+                            <td>{{ mode.orderNumber }}</td> <!-- Display the order number -->
+            </div>
+        </div>
+        </td>
+        <td>{{mode._id}}</td>
+        <td>{{mode.totalSales}} </td>
+        <td>{{ mode.percentTotalMode.toFixed(2)}}%</td>
+        </tr>
+        </tbody>
+        </table>
+    </div>
+</div>
+<div class="pagination-container">
+    <pagination-controls (pageChange)="currentPage = $event" class="pagination-controls"></pagination-controls>
+</div>
+</div>
+</div>
+
+<!--Statuse-->
+<div *ngIf="selectedOption === 'Status'">
+    <div class="chart-container">
+        <canvas id="salesChartstatus"></canvas>
+    </div>
+    <br>
+    <br>
+    <div class="card radius-10">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <div>
+                    <h5>
+                        <i class="lni lni-service">Status</i>
+                    </h5>
+                </div>
+                <div class="font-22 ms-auto"><i class='bx bx-dots-horizontal-rounded'></i>
+                </div>
+            </div>
+            <hr />
+            <div class="table-responsive table-margin">
+                <table class="table align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>#</th>
+                            <th>Status </th>
+                            <th>TOTAL </th>
+                            <th>
+                                <div (click)="sortStatusByTotalSpent()" style="cursor: pointer;">POURCENTAGE
+                                    <i class="lni" [ngClass]="sortDirectionstatus === 'asc' ? 'lni-arrow-up' : 'lni-arrow-down'"></i>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let statu of status | paginate: { itemsPerPage: selectedItemsPerPage, currentPage: currentPage }; let i = index;">
+                            <td>  <div class="d-flex align-items-center">
+                                    <div class="ms-2">
+                            <td>{{ statu.orderNumber }}</td> 
+                                   </div>
+                               </div>
+                        </td>
+                      <td>{{statu._id}}</td>
+                      <td>{{statu.totalstatus}} </td>
+                      <td>{{ statu.percentTotalStatus.toFixed(2)}}%</td>
+                     </tr>
+                 </tbody>
+                      </table>
+       </div>
+</div>
+<div class="pagination-container">
+    <pagination-controls (pageChange)="currentPage = $event" class="pagination-controls"></pagination-controls>
+</div>
+</div>
+</div>
+<!--Order-->
+<div *ngIf="selectedOption === 'Order'">
+    <div class="card radius-10">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <div>
+                    <h5>
+                        <i class="lni lni-cart-full">Orders</i>
+                    </h5>
+                </div>
+                <div class="font-22 ms-auto"><i class='bx bx-dots-horizontal-rounded'></i>
+                </div>
+            </div>
+            <hr />
+            <div class="table-responsive table-margin">
+                <table class="table align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Order#</th>
+                            
+                            <th>   <div (click)="sortmodeByorder()" style="cursor: pointer;">Created at
+                                <i class="lni" [ngClass]="sortDirectionorder === 'asc' ? 'lni-arrow-up' : 'lni-arrow-down'"></i>
+
+                            </div></th>
+                            <th>Customer Name</th>
+                            <th>Mode</th>
+                            <th>Payment</th>
+                            <th>Total</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            *ngFor="let p of order | paginate: { itemsPerPage: selectedItemsPerPage, currentPage: currentPage }; let i = index;">
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="ms-2">
+                                        <!-- Utilisez i+1 pour afficher le numéro d'ordre -->
+                            <td>{{ p.orderNumber }}</td> <!-- Display the order number -->
+
+            </div>
+        </div>
+        </td>
+        
+        <td>{{ p.createdAt | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+        <td>{{p. client_first_name }}{{p. client_last_name }}</td>
+        <td>{{p.type}}</td>
+        <td>{{p.paymentMethod}}</td>
+        <td>{{p.price_total}}</td>
+        </tr>
+        <tr>
+            <td>Total =</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td style="color:rgb(37, 163, 37);"><b>{{ calculateTotalSalesorder() }}</b></td>
+        </tr>
+        </tbody>
+        </table>
+    </div>
+</div>
+<div class="pagination-container">
+    <pagination-controls (pageChange)="currentPage = $event" class="pagination-controls"></pagination-controls>
+</div>
+</div>
+
+</div>
+<!--Categories-->
+
+<!-- Categories content -->
+<div *ngIf="selectedOption === 'Categories'">
+    <div *ngIf="loadingCategories" class="spinner-container">
+        <div class="spinner-grow text-warning" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="spinner-grow text-warning" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="spinner-grow text-warning" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+
+    <div class="chart-container">
+        <canvas id="salesChartCategorie"></canvas>
+    </div>
+    <br>
+    <br><br>
+    <div class="card radius-10">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <div>
+                    <h5>
+                        <i class="lni lni-dinner">Sales by Categories</i>
+                    </h5>
+                </div>
+                <div class="font-22 ms-auto"><i class='bx bx-dots-horizontal-rounded'></i>
+                </div>
+            </div>
+            <hr />
+            <div class="table-responsive table-margin">
+                <table class="table align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>#</th>
+                            <th>NAME</th>
+                            <th>TOTAL</th>
+                            <th>
+                                <div (click)="sortByTotalSpentCategories()" style="cursor: pointer;">POURCENTAGE
+                                    <i class="lni" [ngClass]="sortDirectioncategories === 'asc' ? 'lni-arrow-up' : 'lni-arrow-down'"></i>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            *ngFor="let category of categories | paginate: { itemsPerPage: selectedItemsPerPage, currentPage: currentPage }; let i = index;">
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="ms-2">
+                            <td>{{ category.orderNumber }}</td>
+            </div>
+        </div>
+        </td>
+        <td>{{category.name}}</td>
+        <td>{{category.totalSales}} </td>
+        <td>{{ category.percentageSales }}%</td>
+        </tr>
+        <tr>
+            <td>Total =</td>
+            <td></td>
+            <td style="color:rgb(37, 163, 37);"><b>{{ calculateTotalcategories() }}</b></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        </tbody>
+        </table>
+    </div>
+</div>
+<div class="pagination-container">
+    <pagination-controls (pageChange)="currentPage = $event" class="pagination-controls"></pagination-controls>
+</div>
+</div>
+</div>
+<!--Vente-->
+<div *ngIf="selectedOption === 'Payement'">
+    <div *ngIf="loadingCategories" class="spinner-container">
+        <div class="spinner-grow text-warning" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="spinner-grow text-warning" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="spinner-grow text-warning" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+
+    <div class="chart-container">
+        <canvas id="salesChartpayement"></canvas>
+    </div>
+    <br>
+    <br><br>
+    <div class="card radius-10">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <div>
+                    <h5>
+                   <i class="fadeIn animated bx bx-money">Payment Mode</i>   
+                    </h5>
+                </div>
+                <div class="font-22 ms-auto"><i class='bx bx-dots-horizontal-rounded'></i>
+                </div>
+            </div>
+            <hr />
+            <div class="table-responsive table-margin">
+                <table class="table align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>#</th>
+                            <th>NAME</th>
+                            <th>TOTAL</th>
+                            <th>
+                                <div (click)="sortmodeByTotalpayement()" style="cursor: pointer;">POURCENTAGE
+                                    <i class="lni" [ngClass]="sortDirectionpayement === 'asc' ? 'lni-arrow-up' : 'lni-arrow-down'"></i>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let payement of payement | paginate: { itemsPerPage: selectedItemsPerPage, currentPage: currentPage }; let i = index;">
+                            <td> <div class="d-flex align-items-center">
+                                    <div class="ms-2">
+                            <td>{{ payement.orderNumber }}</td>
+                         </div>
+                             </div>
+                                    </td>
+                              <td>{{payement._id}}</td>
+                                <td>{{payement.total}} </td>
+                          <td>{{ payement.percentage }}%</td>
+                                  </tr>
+                       <tr>
+                              <td>Total =</td>
+                              <td></td>
+                              <td style="color:rgb(37, 163, 37);"><b>{{ calculateTotalpayement() }}</b></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                         </tr>
+                      </tbody>
+                      </table>
+    </div>
+</div>
+<div class="pagination-container">
+    <pagination-controls (pageChange)="currentPage = $event" class="pagination-controls"></pagination-controls>
+</div>
+</div>
+</div>

@@ -1,0 +1,578 @@
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
+<ng-template #dangerTpl>
+  <svg xmlns="http://www.w3.org/2000/svg" fill="#fff" width="24" height="24" viewBox="0 0 24 24">
+    <path
+      d="M10.872 6.831l1.695 3.904 3.654-1.561-1.79 3.426 3.333.954-3.417 1.338 2.231 4.196-4.773-2.582-2.869 2.287.413-3.004-3.792-.726 2.93-1.74-1.885-2.512 3.427.646.843-4.626zm-.786-6.831l-1.665 9.119-6.512-1.228 3.639 4.851-5.548 3.294 7.108 1.361-.834 6.076 5.742-4.577 9.438 5.104-4.288-8.064 6.834-2.677-6.661-1.907 3.25-6.22-6.98 2.982-3.523-8.114z" />
+  </svg>
+  Danger Danger !
+</ng-template>
+<div class="row">
+  <div class="col-10">
+    <h2>Categories</h2>
+    <div cdkDropList class="accordion" id="categoryAccordion" (cdkDropListDropped)="dropCategory($event)">
+      <div class="accordion-item" *ngFor="let category of categorys; let i = index">
+        <h2 class="accordion-header" cdkDrag>
+          <div *ngIf="!(hidden && category._id===id)" (dragover)="handleDragOver($event)"
+            (drop)="handleDroptocatgory($event,category)">
+            <div class="form-check form-switch ">
+              <input class="form-check-input perso" type="checkbox" role="switch" id="flexSwitchCheckDefault"
+                (change)="toggleAvailabilityglobalecategory(category)" [checked]="category.availability">
+
+            </div>
+
+            <div class="inlineitem">
+              <div class="image-container" (mouseover)="showOverlay()" (mouseout)="hideOverlay()">
+                <img class="imagecategory image" (click)="uploadAndResizeUpdateCategory(category._id)"
+                  [src]="baseUrl + category.image" />
+                <div class="overlay" *ngIf="isHovered">
+                  <span class="overlay-text">Change</span>
+                </div>
+              </div>
+
+              <div class="productName" data-bs-toggle="collapse"
+                [attr.data-bs-target]="'#categoryCollapse' + category._id"
+                [attr.aria-controls]="'categoryCollapse' + category._id">
+
+                <span>{{ category.name }}</span>
+              </div>
+              <table>
+
+                <tr *ngFor="let availabilitys of category.availabilitys">
+                  <td>
+                    <p>{{availabilitys.mode.name}}</p>
+                  </td>
+                  <td>
+                    <div class="form-check form-switch ">
+                      <input class="form-check-input " type="checkbox"
+                        (click)="toggleAvailabilityCategory(category._id,availabilitys.mode._id,availabilitys)"
+                        role="switch" id="flexSwitchCheckDefault" [disabled]="!category.availability"
+                        [checked]="(availabilitys.availability && category.availability)">
+
+                    </div>
+                  </td>
+                </tr>
+
+              </table>
+              <table>
+                <tr> <i class=" bx bx-pencil" (click)="openupdatecategory(updatecategory,category)"></i></tr>
+                <tr> <i class=" bx bx-duplicate"></i></tr>
+
+                <tr> <i class=" bx bx-trash-alt text-danger" (click)=" deleteCategory(category._id)"></i></tr>
+              </table>
+            </div>
+          </div>
+        </h2>
+  <div [id]="'categoryCollapse' + category._id" class="accordion-collapse collapse"
+          [attr.aria-labelledby]="'categoryHeading' + category._id" data-bs-parent="#categoryAccordion">
+          <div class="accordion-body">
+            <h3>Products</h3>
+            <div></div>
+            <div *ngFor="let product of category.products ;let i = index" class="product">
+              <div class="form-check form-switch productswitech">
+                <input class="form-check-input perso switchedproduct" type="checkbox" role="switch"
+                  id="flexSwitchCheckDefault" (change)="toggleAvailabilityglobale(product)"
+                  [checked]="product.availability">
+              </div>
+              <div *ngIf="!(hiddenupdateProduct && product._id===selectedProduct._id)">
+                <div class="inlineitem" (dragover)="handleDragOver($event)"
+                  (drop)="handleDroptoproduct($event,product)">
+
+                  <div class="productName">
+                    <div class="image-container" (mouseover)="showOverlay()" (mouseout)="hideOverlay()">
+                      <img class="imagecategory image" (click)="uploadAndResizeUpdateProduct(product._id,category._id)"
+                        [src]="baseUrl + product.image" />
+                      <div class="overlay" *ngIf="isHovered">
+                        <span class="overlay-text">Change</span>
+                      </div>
+                    </div>
+                    {{ product.name }}
+                  </div>
+                  <table>
+                    <tr *ngFor="let availabilitys of product.availabilitys">
+                      <td>
+                        <p>{{availabilitys.mode.name}} </p>
+                      </td>
+                      <td>
+                        <div class="form-check form-switch ">
+                          <input class="form-check-input " type="checkbox"
+                            (click)="toggleAvailability(product._id,availabilitys.mode._id,availabilitys)" role="switch"
+                            id="flexSwitchCheckDefault" [disabled]="!product.availability"
+                            [checked]="(availabilitys.availability && product.availability)">
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                  </table>
+                  <table>
+                    <tr> <i class=" bx bx-show-alt" (click)="openviewproduct(viewproduct,product)"></i></tr>
+                    <tr> <i class=" bx bx-pencil" (click)="openupdateproduct(updateproduct,product)"></i></tr>
+                    <tr> <i class=" bx bx-duplicate" (click)="duplicateProduct(product._id)"></i></tr>
+                    <tr> <i class=" bx bx-trash-alt text-danger" (click)="deleteProduct(product)"></i></tr>
+                  </table>
+                </div>
+                <div cdkDropList cdkDropListOrientation="horizontal"
+                  (cdkDropListDropped)="dropoptionGroups(product,$event)">
+                  <div *ngFor="let optionGroup of product.optionGroups" class="chip chip-lg" cdkDrag>
+                    {{ optionGroup.name }} <span class="closebtn" (click)="deleteOptionGroupFromProduct(product._id ,optionGroup._id, $event
+ )">×</span>
+                  </div>
+                </div>
+                <hr>
+                <div *ngIf="product.size.length!=0">
+                  <div class=" " *ngFor="let size of product.size ; let i = index">
+                    <div (dragover)="handleDragOver($event)" (drop)="handleDroptosize($event,product,size._id)">
+                      <b>Taille:</b> <span> {{size.name}}</span>
+                      <br>
+                      <b>Prix :</b><span>{{size.price}}</span>
+                      <br>
+                      <div cdkDropList cdkDropListOrientation="horizontal"
+                        (cdkDropListDropped)="dropoptionGroupssize(product,i,$event)">
+                        <div *ngFor="let optionGroup of size.optionGroups" class="chip chip-lg" cdkDrag>
+                          {{ optionGroup.name }} <span class="closebtn" (click)="deleteOptionGroup(product._id,size._id, optionGroup._id, $event
+                      )">×</span>
+                        </div>
+                      </div>
+                    </div>
+                    <hr>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="center">
+              <button class="btn btn-outline-warning " (click)="openModalAddProduct(addproduct,category._id) "> add item
+                to {{category.name}} </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="center">
+      <button class="btn btn-outline-warning" (click)="openLg(content) "> add category </button>
+    </div>
+  </div>
+  <div class="col-2">
+    <div class=" stat">
+      <div class="row g-3 ">
+        <div class="card ">
+          <div class="card-body">
+            <h5 class="card-title">List Option Groupe <button class="btn btn-light btn-sm " (click)=" openLg(content)">+
+              </button></h5>
+            <hr />
+            <div class="mb-3">
+              <label for="searchInput" class="form-label">Search</label>
+              <input type="text" [(ngModel)]="searchTerm" class="form-control" placeholder="Search"
+                (input)="searchOptionGroups()">
+            </div>
+            <div *ngIf="filteredOptionGroups.length>0" class="accordion accordion-flush" id="accordionFlushExample">
+              <div class="accordion-item" *ngFor="let group of filteredOptionGroups" draggable="true"
+                (dragstart)="handleDragStart($event, group._id)">
+                <h2 class="accordion-header" [id]="'flush-heading' + group._id">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    [attr.data-bs-target]="'#flush-collapse' + group._id" aria-expanded="false"
+                    [attr.aria-controls]="'flush-collapse' + group._id">
+                    {{ group.name }}
+                    <br>
+                    {{group.description}}
+                  </button>
+
+                </h2>
+                <div [id]="'flush-collapse' + group._id" class="accordion-collapse collapse"
+                  [attr.aria-labelledby]="'flush-heading' + group._id" data-bs-parent="#accordionFlushExample">
+                  <div class="accordion-body">
+                    <div *ngFor="let option of group.options">
+                      <div class="row">
+                        <div class="col-8 optiongroupe"> {{option.name }} : {{option.price}}</div>
+                        <div class="col-4">
+                          <div class="row inline">
+                            <div class="col-6">
+                              <a href="javascript:void(0)" class="me-3 text-succes" title="add"
+                                (click)="openAddGroupeOption(contentoption ,optionGroups)">
+                                <i class="bx bx-plus font-24"></i>
+                              </a>
+                            </div>
+                            <div class="col-6">
+                              <a href="javascript:void(0)" class="me-3 text-danger" title="Delete"
+                                (click)="removeOptionFromGroup(group._id,option.option)">
+                                <i class="bx bx-trash font-24"></i>
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <button class="btn btn-light btn-sm " (click)=" openScrollableContent(longContent,group)">+
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="mt-3" *ngIf="filteredOptionGroups.length === 0">
+              No results found.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #addproduct let-modal>
+  <div class="modal-header">
+    <h5 class="mb-0 text-primary">Add Product</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <section>
+      <div *ngIf="!imgResultAfterResize" (click)="uploadAndResizeproduct()" class="upload-image">
+        <h2 class="Upload"> Upload Image</h2>
+      </div>
+      <img (click)="uploadAndResizeproduct()" width="150px" height="150px" *ngIf="imgResultAfterResize" [src]="image"
+        alt="" />
+    </section>
+    <form class="row g-3">
+      <div class="col-md-6">
+        <label for="inputFirstName" class="form-label">Name</label>
+        <input type="text" class="form-control" [(ngModel)]="productData.name" maxlength="30" name="name" (ngModelChange)="validateInputLength()" id="inputFirstName">
+        <div class="text-danger" *ngIf="validateInputLength()">{{ validateInputLength() }}</div>
+      </div>
+      <div class="col-md-6" *ngIf="isPriceHidden">
+        <label for="inputLastName" class="form-label">Price</label>
+        <input type="text" class="form-control" [(ngModel)]="productData.price" name="price" id="inputLastName">
+      </div>
+      <div class="col-12">
+      </div>
+      <div class="col-12">
+        <label for="inputAddress" class="form-label">Description</label>
+        <textarea class="form-control" id="inputAddress" [(ngModel)]="productData.description" name="description"
+          placeholder="Description..." rows="3"></textarea>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <label for="inputVendor" class="form-label">Disponibilité</label>
+          <div *ngFor="let consumationMode of ModeConsumation">
+            <input class="checkboxmodel" type="checkbox" name="check" id="consumationMode.mode._id"
+              [(ngModel)]="consumationMode.isChecked">
+            {{consumationMode.mode.name}}
+          </div>
+        </div>
+        <div class="col-4">
+          <label for="inputVendor" class="form-label">Tax</label>
+          <div *ngFor="let consumationMode of ModeConsumation">
+            <div class="row">
+              <div class="col-3">{{ consumationMode.mode.name }} :</div>
+              <div class="col-2" *ngFor="let tax of consumationMode.taxes">
+                <input class="checkboxmodel" name="checktaxs" type="checkbox" [(ngModel)]="tax.isChecked" />
+                <label> {{ tax.rate }}%</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <div id="scrollableDiv">
+          <div *ngFor="let checkboxItem of optionGroups" class="checkbox-item">
+            <input type="checkbox" class="checkboxmodel" name="checkbox" [id]="checkboxItem._id"
+              [(ngModel)]="checkboxItem.checked">
+            <label [for]="checkboxItem._id"> {{ checkboxItem.name }}</label>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <label for="inputVendor" class="form-label">Tags:</label>
+        <div id="scrollableDiv">
+          <div *ngFor="let tag of tags" class="checkbox-item">
+            <input type="checkbox" class="checkboxmodel" name="checkbox" [id]="tag._id" [(ngModel)]="tag.checked" (change)="onCheckboxChange(tag)">
+            <label [for]="tag._id">{{ tag.name }}</label>
+          </div>
+        </div>
+      </div>
+      
+    
+      <div class="col-12">
+        <input type="file" id="formFile" #formFile (change)="preview(formFile.files)" style="display:none"
+          accept="image/*">
+      </div>
+      <div class="col-12" *ngFor="let size of sizes; let i = index">
+        <div class="row">
+          <div class="col-md-5">
+            <input type="text" class="form-control" [id]="'inputSizeName_' + i" [(ngModel)]="size.name"
+              [name]="'sizeName_' + i" placeholder="Size Name">
+          </div>
+          <div class="col-md-5">
+            <input type="text" class="form-control" [id]="'inputSizePrice_' + i" [(ngModel)]="size.price"
+              [name]="'sizePrice_' + i" placeholder="Size Price">
+          </div>
+          <div class="col-1">
+            <button class="btn btn-link" (click)="removeSize(i)">
+              <i class="bx bx-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <button type="button" class="btn btn-link-secondary" (click)="addSize()">Add Size</button>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close </button>
+    <button type="submit" class="btn btn-primary" (click)="addProduct(categoryId); modal.close('Close click')"> Add  Product </button>
+  </div>
+</ng-template>
+<ng-template #updateproduct let-modal>
+  <div class="modal-header">
+    <h5 class="mb-0 text-primary">Update Product</h5>
+
+
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+
+   
+
+    <form class="row g-3">
+
+      <div class="col-md-6">
+
+        <label for="inputFirstName" class="form-label">Name</label>
+        <input type="text" class="form-control" [(ngModel)]="selectedProduct.name" name="name" id="inputFirstName">
+      </div>
+      <div class="col-md-6" *ngIf="isPriceHidden">
+        <label for="inputLastName" class="form-label">Price</label>
+        <input type="text" class="form-control" [(ngModel)]="selectedProduct.price" name="price" id="inputLastName">
+      </div>
+      <div class="col-12">
+
+      </div>
+      <div class="col-12">
+        <label for="inputAddress" class="form-label">Description</label>
+        <textarea class="form-control" id="inputAddress" [(ngModel)]="selectedProduct.description" name="description"
+          placeholder="Description..." rows="3"></textarea>
+      </div>
+      <!--<div class="col-12">
+        <div id="scrollableDiv">
+          <div *ngFor="let checkboxItem of optionGroups" class="checkbox-item">
+            <input type="checkbox" class="checkboxmodel" name="checkbox" [id]="checkboxItem._id"
+              [(ngModel)]="checkboxItem.checked">
+            <label [for]="checkboxItem._id"> {{ checkboxItem.name }}</label>
+          </div>
+        </div>
+      </div>-->
+      <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <button *ngFor="let tab of selectedProduct.size; let i = index" class="nav-link" [class.active]="i === 0"
+            [id]="'nav-' + tab.id + '-tab'" data-bs-toggle="tab" [data-bs-target]="'#nav-' + tab.id" type="button"
+            role="tab" [aria-controls]="'nav-' + tab.id" [aria-selected]="i === 0">
+            {{ tab.name }}
+          </button>
+        </div>
+      </nav>
+
+      <div class="tab-content" id="nav-tabContent">
+        <div *ngFor="let tab of selectedProduct.size; let i = index" class="tab-pane fade" [class.show]="i === 0"
+          [id]="'nav-' + tab.id" role="tabpanel" [aria-labelledby]="'nav-' + tab.id + '-tab'">
+          <div class="col-12">
+            <div id="scrollableDiv">
+              <div *ngFor="let checkboxItem of optionGroups" class="checkbox-item">
+                <input type="checkbox" class="checkboxmodel" name="checkbox" [id]="checkboxItem._id"
+                  [(ngModel)]="checkboxItem.checked">
+                <label [for]="checkboxItem._id"> {{ checkboxItem.name }}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+
+
+        <!-- <div class="col-12">
+        <label for="inputVendor" class="form-label">Tax</label>
+        <div *ngFor="let consumationMode of ModeConsumation">
+          <div class="row">
+            <div class="col-3">{{ consumationMode.mode.name }} :</div>
+            <div class="col-2" *ngFor="let tax of consumationMode.taxes ">
+              <input class="checkboxmodel" name="checktaxs" type="checkbox" [(ngModel)]="tax.isChecked"  />
+              <label> {{ tax.rate }}%</label>
+
+            </div>
+          </div>
+        </div>
+      </div> -->
+      </div>
+      <div class="col-12">
+
+
+      </div>
+      <div *ngFor="let size of selectedProduct.size ;let i = index " class="p-1">
+        <div class="row">
+
+          <div class="col-7 perso"> <span>name</span><input type="text" class="form-control perso" id="inputPrice"
+              [(ngModel)]="size.name" [name]="'sizeName_' + i"></div>
+          <div class="col-4  perso"><span>price</span><input type="text" class="form-control perso" id="inputPrice"
+              [(ngModel)]="size.price" [name]="'sizePrice_' + i"></div>
+          <div class="col-1 mt-3 perso ">
+
+            <button class="btn btn-link " (click)="removeSizeupdateproduct(i)">
+              <i class="bx bx-trash text-danger"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <label for="inputVendor" class="form-label">Tags:</label>
+        <div id="scrollableDiv">
+        <div class="checkbox-item" *ngFor="let tag of tags">
+          <input type="checkbox" [checked]="isChecked2(tag._id)" (change)="onCheckboxChange2(tag._id)" name="tag" value="tag._id" class="checkboxmodel">
+          {{tag.name}}
+        </div>
+      </div>
+      </div>
+
+      <div class="col-6">
+        <button type="button" class="btn btn-link-secondary" (click)="addSizeupdateproduct()">Add Size</button>
+      </div>
+
+
+
+
+    </form>
+
+
+
+  </div>
+  <div class="modal-footer">
+
+    <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close </button>
+    <button type="submit" class="btn btn-primary" (click)="updateProduct(selectedProduct); modal.close('Close click')">
+      Update product </button>
+
+  </div>
+</ng-template>
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">ADD Category</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <div class="col-lg">
+      <div class="border border-3 p-4 rounded">
+        <div class="mb-3">
+          <section>
+            <div *ngIf="!imgResultAfterResize" (click)="uploadAndResize()" class="upload-image">
+              <h2 class="Upload"> Upload Image</h2>
+            </div>
+            <img (click)="uploadAndResize()" width="150px" height="150px" *ngIf="imgResultAfterResize" [src]="image"
+              alt="" />
+          </section>
+          <label for="inputProductTitle" class="form-label">Category Title</label>
+          <input type="text" [(ngModel)]="category.name" name="name" class="form-control" id="inputProductTitle"
+            placeholder="Enter product title">
+          <label for="inputProductDescription" class="form-label">Description</label>
+          <textarea class="form-control" [(ngModel)]="category.description" name="description"
+            id="inputProductDescription" rows="3"></textarea>
+        </div>
+        <div class="col-12">
+          <label for="inputVendor" class="form-label">disponibilité</label>
+          <div *ngFor="let consumationMode of ModeConsumation">
+            <input class="checkboxmodel" type="checkbox" name="check" id="consumationMode.mode._id"
+              [(ngModel)]="consumationMode.isChecked">
+            {{consumationMode.mode.name}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="center">
+      <button type="submit" (click)="add() ;modal.close('Close click')" class="btn btn-primary">Save Category</button>
+    </div>
+  </div>
+  <div class="modal-footer">
+  </div>
+</ng-template>
+<ng-template #updatecategory let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Modal title</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <div class="col-lg">
+      <div class="border border-3 p-4 rounded">
+        <div class="mb-3">
+
+          <label for="inputProductTitle" class="form-label">Category Title</label>
+          <input type="text" [(ngModel)]="selectedCategory.name" name="name" class="form-control" id="inputProductTitle"
+            placeholder="Enter product title">
+          <label for="inputProductDescription" class="form-label">Description</label>
+          <textarea class="form-control" [(ngModel)]="selectedCategory.description" name="description"
+            id="inputProductDescription" rows="3"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="center">
+      <button type="submit"
+        (click)="updateCategory(selectedCategory._id,selectedCategory.name,selectedCategory.description) ;modal.close('Close click')"
+        class="btn btn-primary">Save Category</button>
+    </div>
+  </div>
+  <div class="modal-footer">
+  </div>
+</ng-template>
+<ng-template #viewproduct let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Modal title</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <div *ngFor="let option of object2">
+      <label>
+        <input type="checkbox" [value]="option.option">
+        {{ option.option }}
+      </label>
+    </div>
+    <div class="col-lg">
+      <div class="border border-3 p-4 rounded">
+        <div class="col">
+          <div class="card">
+            <div>{{selectedProduct.name}}</div>
+            <div>{{selectedProduct.description}}</div>
+            <div>{{selectedProduct.price}}</div>
+            <h6 class="mb-0 text-uppercase">Size :</h6>
+            <div class="card-body">
+              <ul class="nav nav-tabs nav-primary" role="tablist">
+                <hr />
+                <br>
+                <li class="nav-item" *ngFor="let tab of selectedProduct.size" role="presentation">
+                  <a class="nav-link" data-bs-toggle="tab" [class.active]="tab._id === 'primaryhome'"
+                    [href]="'#' + tab._id" role="tab"
+                    [attr.aria-selected]="tab._id === 'primaryhome' ? 'true' : 'false'">
+                    <div class="d-flex align-items-center">
+                      <div class="tab-icon"><i class='bx {{ tab.icon }} font-18 me-1'></i></div>
+                      <div class="tab-title">{{ tab.name }}</div>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+              <div class="tab-content py-3">
+                <div class="tab-pane fade" *ngFor="let tab of selectedProduct.size"
+                  [class.show.active]="tab._id === 'primaryhome'" [id]="tab._id" role="tabpanel">
+                  <p>prix :{{ tab.price }}</p>
+                  <div *ngFor="let option of tab.optionGroups">
+                    {{option.name}}
+                  </div>
+                  <div *ngFor=" let og of filteredOptionGroups">
+                    <input type="checkbox" /> {{og.name}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="center">
+      <button type="submit"
+        (click)="updateCategory(selectedCategory._id,selectedCategory.name,selectedCategory.description) ;modal.close('Close click')"
+        class="btn btn-primary">Save Category</button>    
+    </div>
+  </div>
+  <div class="modal-footer">
+  </div>
+</ng-template>
